@@ -1,0 +1,12 @@
+# Frontend node modules
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+
+# Backend local data & secrets
+backend/documents/
+backend/esg_report/
+backend/rag_chroma_db/
+backend/.env
+backend/.venv/
+backend/__pycache__/
