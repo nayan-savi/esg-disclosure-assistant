@@ -1,0 +1,437 @@
+import { Component, OnInit, inject, signal, computed, effect } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
+import { EsgService, EsgRequest } from '../services/esg.service';
+import { SVGS } from '../constants/svgs';
+
+@Component({
+  selector: 'app-investor-details',
+  imports: [RouterLink, CommonModule],
+  templateUrl: './investor-details.html',
+  styleUrl: './investor-details.css',
+})
+export class InvestorDetails implements OnInit {
+  svgs = SVGS;
+  private route = inject(ActivatedRoute);
+  private esgService = inject(EsgService);
+  
+  requestId = signal<string | null>(null);
+  request = signal<EsgRequest | undefined>(undefined);
+
+  constructor() {
+    effect(() => {
+      const id = this.requestId();
+      const list = this.esgService.getRequests()();
+      if (id && list.length > 0) {
+        const found = list.find(r => r.id === id);
+        if (found) {
+          this.request.set(found);
+          this.loadNormalizedJson();
+        }
+      }
+    });
+  }
+
+  isUploadModalOpen = signal(false);
+  isUploading = signal(false);
+  selectedFiles = signal<File[]>([]);
+
+  normalizedReportJson = signal<any>(null);
+  activeSectionTab = signal<'details' | 'trends'>('details');
+
+  async loadNormalizedJson() {
+    const req = this.request();
+    if (!req) return;
+    if (req.status === 'Completed' || req.status === 'Approved' || (req.reportData && req.reportData.length)) {
+      try {
+        const data = await this.esgService.getReportNormalizedJson(req.id);
+        this.normalizedReportJson.set(data);
+      } catch (err) {
+        console.warn('Failed to load normalized JSON data:', err);
+        this.normalizedReportJson.set(null);
+      }
+    } else {
+      this.normalizedReportJson.set(null);
+    }
+  }
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      const id = params['id'];
+      if (id) {
+        this.requestId.set(id);
+      }
+    });
+  }
+
+  onFileSelected(event: any) {
+    const fileList = event.target.files as FileList;
+    if (fileList && fileList.length > 0) {
+      const filesArray = Array.from(fileList);
+      this.selectedFiles.update(existing => [...existing, ...filesArray]);
+    }
+  }
+
+  removeSelectedFile(index: number) {
+    this.selectedFiles.update(files => files.filter((_, i) => i !== index));
+  }
+
+  async onUploadSubmit() {
+    const files = this.selectedFiles();
+    const req = this.request();
+    
+    if (files.length === 0) {
+      alert('Please select at least one document to upload.');
+      return;
+    }
+    
+    if (!req) {
+      alert('No active request found.');
+      return;
+    }
+
+    this.isUploading.set(true);
+    try {
+      await this.esgService.uploadDocuments(req.year, files, req.model || 'gemini-3.5', req.id);
+      // Re-fetch request data to refresh UI details
+      const updated = this.esgService.getRequestById(req.id);
+      this.request.set(updated);
+      
+      // Reset state
+      this.selectedFiles.set([]);
+      this.isUploadModalOpen.set(false);
+    } catch (err) {
+      console.error('Upload failed:', err);
+      alert('Failed to upload files. Please try again.');
+    } finally {
+      this.isUploading.set(false);
+    }
+  }
+
+  isDeleteDocModalOpen = signal(false);
+  docToDelete = signal<string | null>(null);
+
+  onDeleteDocument(filename: string) {
+    this.docToDelete.set(filename);
+    this.isDeleteDocModalOpen.set(true);
+  }
+
+  async confirmDeleteDoc() {
+    const filename = this.docToDelete();
+    const req = this.request();
+    if (req && filename) {
+      this.isDeleteDocModalOpen.set(false);
+      try {
+        await this.esgService.deleteDocument(req.id, filename);
+        // Re-fetch request data to refresh UI details
+        const updated = this.esgService.getRequestById(req.id);
+        this.request.set(updated);
+      } catch (err) {
+        console.error('Failed to delete document:', err);
+      } finally {
+        this.docToDelete.set(null);
+      }
+    }
+  }
+
+  notification = signal<{ message: string; type: 'success' | 'error' } | null>(null);
+
+  showNotification(message: string, type: 'success' | 'error' = 'error') {
+    this.notification.set({ message, type });
+    setTimeout(() => {
+      this.notification.set(null);
+    }, 6000);
+  }
+
+  isGenerating = signal(false);
+  isDownloadingPdf = signal(false);
+
+  generationStep = signal<number>(0);
+  generationProgressText = computed(() => {
+    switch (this.generationStep()) {
+      case 0: return 'Initializing RAG pipeline & parsing questionnaire module...';
+      case 1: return 'Searching ingested documents for disclosures...';
+      case 2: return 'Analyzing ESG metrics & generating compliance answers...';
+      case 3: return 'Calculating confidence scores & citations...';
+      case 4: return 'Formatting report layout & compiling professional PDF...';
+      case 5: return 'Saving generated version & finalizing status...';
+      default: return 'Processing...';
+    }
+  });
+
+  isModuleModalOpen = signal(false);
+  selectedModule = signal<'basic' | 'comprehensive'>('basic');
+
+  isChangeModelModalOpen = signal(false);
+  pendingNewModel = signal<string>('gemini-3.5');
+
+  onModelEngineChange(event: any) {
+    const newModel = event.target.value;
+    const req = this.request();
+    if (!req) return;
+
+    // Immediately revert the UI selection until they confirm the switch
+    event.target.value = req.model || 'gemini-3.5';
+
+    // Show custom modal
+    this.pendingNewModel.set(newModel);
+    this.isChangeModelModalOpen.set(true);
+  }
+
+  async confirmModelChangeSubmit() {
+    this.isChangeModelModalOpen.set(false);
+    const req = this.request();
+    const newModel = this.pendingNewModel();
+    if (!req || !newModel) return;
+
+    try {
+      await this.esgService.updateRequestModel(req.id, newModel);
+      // Refresh request state
+      const updated = this.esgService.getRequestById(req.id);
+      if (updated) {
+        this.request.set(updated);
+      }
+      this.showNotification('Model updated. Rebuilding vector index in the background...', 'success');
+    } catch (err) {
+      console.error('Failed to update request model:', err);
+      this.showNotification('Failed to change analysis model configuration. State not updated.', 'error');
+      
+      // Explicitly revert the select element value in case Angular change detection needs a fallback
+      const selectElement = document.querySelector('select') as HTMLSelectElement;
+      if (selectElement) {
+        selectElement.value = req.model || 'gemini-3.5';
+      }
+    }
+  }
+
+  onGenerateReport() {
+    this.isModuleModalOpen.set(true);
+  }
+
+  onGenerateReportSubmit() {
+    const req = this.request();
+    if (!req) return;
+    
+    this.isModuleModalOpen.set(false);
+    this.isGenerating.set(true);
+    this.generationStep.set(0);
+
+    // Smooth scroll down to the processing container once rendered
+    setTimeout(() => {
+      const element = document.getElementById('processingSection');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
+
+    const model = req.model || 'gemini-3.5';
+    const url = `http://localhost:8000/esg/report/generate/stream?requestId=${req.id}&module=${this.selectedModule()}&model=${model}`;
+    const eventSource = new EventSource(url);
+
+    eventSource.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        
+        if (data.error) {
+          eventSource.close();
+          this.isGenerating.set(false);
+          this.showNotification(`Failed to generate ESG report: ${data.text || 'Server error.'}`, 'error');
+          return;
+        }
+
+        if (data.completed) {
+          eventSource.close();
+          
+          // Reload all requests first to refresh the list state
+          this.esgService.loadRequests().then(() => {
+            const updated = this.esgService.getRequestById(req.id);
+            this.request.set(updated);
+            this.isGenerating.set(false);
+            this.loadNormalizedJson();
+            
+            if (data.pdf_generated === false) {
+              this.showNotification('Workforce metrics generated, but PDF report compilation failed on the backend.', 'error');
+            } else {
+              this.showNotification('ESG report generated and PDF compiled successfully.', 'success');
+            }
+          });
+          return;
+        }
+
+        if (typeof data.step === 'number') {
+          this.generationStep.set(data.step);
+        }
+      } catch (err) {
+        console.error('Failed to parse SSE event:', err);
+      }
+    };
+
+    eventSource.onerror = (err) => {
+      console.error('EventSource connection error:', err);
+      eventSource.close();
+      this.isGenerating.set(false);
+      this.showNotification('Failed to generate ESG report. Please check if the LLM backend is responsive.', 'error');
+    };
+  }
+  isDownloadModalOpen = signal(false);
+  selectedDownloadVersion = signal<string>('');
+
+  formatReportVersionName(filename: string): string {
+    if (!filename) return '';
+    // Expected format: esg_report-v{version}-{module}.pdf or esg_report-v{version}.pdf
+    const match = filename.match(/-v(\d+)(?:-([\w-]+))?\.pdf$/);
+    if (match) {
+      const version = match[1];
+      const module = match[2];
+      if (module) {
+        // Capitalize first letter of module
+        const capitalizedModule = module.charAt(0).toUpperCase() + module.slice(1);
+        return `Version ${version} (${capitalizedModule})`;
+      }
+      return `Version ${version}`;
+    }
+    return filename;
+  }
+
+  isDocsExpanded = signal(false);
+  visibleDocs = computed(() => {
+    const req = this.request();
+    if (!req || !req.docs) return [];
+    if (this.isDocsExpanded() || req.docs.length <= 3) {
+      return req.docs;
+    }
+    return req.docs.slice(0, 3);
+  });
+
+  getMalePercentage() {
+    const json = this.normalizedReportJson();
+    if (!json || !json.social || !json.social.employees) return 50;
+    const maleVal = parseFloat(json.social.employees.male);
+    const femaleVal = parseFloat(json.social.employees.female);
+    if (isNaN(maleVal) && isNaN(femaleVal)) return 50;
+    const total = (isNaN(maleVal) ? 0 : maleVal) + (isNaN(femaleVal) ? 0 : femaleVal);
+    if (total === 0) return 50;
+    return Math.round((isNaN(maleVal) ? 0 : maleVal) / total * 100);
+  }
+
+  getFemalePercentage() {
+    const json = this.normalizedReportJson();
+    if (!json || !json.social || !json.social.employees) return 50;
+    const maleVal = parseFloat(json.social.employees.male);
+    const femaleVal = parseFloat(json.social.employees.female);
+    if (isNaN(maleVal) && isNaN(femaleVal)) return 50;
+    const total = (isNaN(maleVal) ? 0 : maleVal) + (isNaN(femaleVal) ? 0 : femaleVal);
+    if (total === 0) return 50;
+    return Math.round((isNaN(femaleVal) ? 0 : femaleVal) / total * 100);
+  }
+
+  getPermPercentage() {
+    const json = this.normalizedReportJson();
+    if (!json || !json.social || !json.social.employees) return 100;
+    const permVal = parseFloat(json.social.employees.permanent);
+    const tempVal = parseFloat(json.social.employees.temporary);
+    if (isNaN(permVal) && isNaN(tempVal)) return 100;
+    const total = (isNaN(permVal) ? 0 : permVal) + (isNaN(tempVal) ? 0 : tempVal);
+    if (total === 0) return 100;
+    return Math.round((isNaN(permVal) ? 0 : permVal) / total * 100);
+  }
+
+  getTempPercentage() {
+    const json = this.normalizedReportJson();
+    if (!json || !json.social || !json.social.employees) return 0;
+    const permVal = parseFloat(json.social.employees.permanent);
+    const tempVal = parseFloat(json.social.employees.temporary);
+    if (isNaN(permVal) && isNaN(tempVal)) return 0;
+    const total = (isNaN(permVal) ? 0 : permVal) + (isNaN(tempVal) ? 0 : tempVal);
+    if (total === 0) return 0;
+    return Math.round((isNaN(tempVal) ? 0 : tempVal) / total * 100);
+  }
+
+  getTotalEmissions() {
+    const json = this.normalizedReportJson();
+    if (!json || !json.environment) return 0;
+    const s1 = parseFloat(json.environment.scope1?.value) || 0;
+    const s2 = parseFloat(json.environment.scope2?.value) || 0;
+    const s3 = parseFloat(json.environment.scope3?.value) || 0;
+    return s1 + s2 + s3;
+  }
+
+  getScopePercentage(scopeNum: 1 | 2 | 3) {
+    const total = this.getTotalEmissions();
+    if (total === 0) return 33;
+    const json = this.normalizedReportJson();
+    if (!json || !json.environment) return 33;
+    const scopeData = json.environment[`scope${scopeNum}`];
+    const val = parseFloat(scopeData?.value) || 0;
+    return Math.round((val / total) * 100);
+  }
+
+  onDownloadReportClick() {
+    const req = this.request();
+    if (!req) return;
+    
+    if (req.generatedReports && req.generatedReports.length > 0) {
+      this.selectedDownloadVersion.set(req.generatedReports[0]);
+      this.isDownloadModalOpen.set(true);
+    } else {
+      this.onDownloadReport();
+    }
+  }
+
+  onDownloadReportSubmit() {
+    this.isDownloadModalOpen.set(false);
+    this.onDownloadReport(this.selectedDownloadVersion());
+  }
+  async onDownloadReport(filename?: string) {
+    const req = this.request();
+    if (!req) return;
+
+    this.isDownloadingPdf.set(true);
+    try {
+      const blob = await this.esgService.downloadReportBlob(req.id, filename);
+      
+      let downloadName = `ESG_Report_${req.id}.pdf`;
+      if (filename) {
+        const match = filename.match(/-v\d+\.pdf$/);
+        if (match) {
+          downloadName = `ESG_Report_${req.id}${match[0]}`;
+        }
+      }
+      
+      // Create local URL and trigger download
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = downloadName;
+      link.click();
+      
+      window.URL.revokeObjectURL(url);
+      this.showNotification('PDF Report downloaded successfully.', 'success');
+    } catch (err: any) {
+      console.error('Failed to download PDF report:', err);
+      if (err instanceof HttpErrorResponse) {
+        if (err.status === 404) {
+          this.showNotification('No ESG report has been generated yet. Please click "Generate ESG Report" first.', 'error');
+        } else if (err.error instanceof Blob) {
+          const reader = new FileReader();
+          reader.onload = () => {
+            try {
+              const errObj = JSON.parse(reader.result as string);
+              this.showNotification(`Failed to download report: ${errObj.detail || 'Server error.'}`, 'error');
+            } catch (e) {
+              this.showNotification('Failed to download PDF report. Server returned an error.', 'error');
+            }
+          };
+          reader.readAsText(err.error);
+        } else {
+          this.showNotification(`Failed to download report: ${err.error?.detail || 'Server error.'}`, 'error');
+        }
+      } else {
+        this.showNotification('Failed to download PDF report. The document might not be ready or compiled.', 'error');
+      }
+    } finally {
+      this.isDownloadingPdf.set(false);
+    }
+  }
+}

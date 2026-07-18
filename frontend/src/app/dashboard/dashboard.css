@@ -1,0 +1,145 @@
+@import url("https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&display=swap");
+
+:root {
+    --bg: #faf8f3;
+    --bg-2: #f1eee4;
+    --ink: #1e1b16;
+    --blaze: #ff5a1f;
+    --gold: #8a6a14;
+    --line: rgba(30, 27, 22, 0.09);
+}
+
+
+
+.stage {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: "Space Mono", monospace;
+}
+
+/* topographic contour texture */
+.contours {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+/* corner map ticks */
+.tick {
+    position: absolute;
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    opacity: 0.55;
+}
+
+.tick.tl {
+    top: 28px;
+    left: 28px;
+}
+
+.tick.tr {
+    top: 28px;
+    right: 28px;
+    text-align: right;
+}
+
+.tick.bl {
+    bottom: 28px;
+    left: 28px;
+}
+
+.tick.br {
+    bottom: 28px;
+    right: 28px;
+    text-align: right;
+}
+
+.tick::before {
+    content: "";
+    display: block;
+    width: 18px;
+    height: 1px;
+    background: var(--gold);
+    margin-bottom: 6px;
+}
+
+.tick.tr::before,
+.tick.br::before {
+    margin-left: auto;
+}
+
+.wordmark {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    font-family: "Anton", sans-serif;
+    font-weight: 400;
+    line-height: 0.82;
+    color: var(--ink);
+    font-size: 30px;
+    letter-spacing: -0.01em;
+    text-transform: none;
+    user-select: none;
+}
+
+.blaze-mark {
+    position: relative;
+    display: inline-block;
+    margin: 0 0.01em;
+}
+
+.blaze-mark .chip {
+    position: absolute;
+    z-index: -1;
+    background: var(--blaze);
+    border-radius: 3px 7px 4px 8px/6px 4px 8px 3px;
+    top: 0.16em;
+    left: -0.04em;
+    width: 1.1em;
+    height: 0.62em;
+    transform: rotate(-2deg);
+    box-shadow: 0 0.02em 0 rgba(30, 27, 22, 0.12);
+}
+
+.blaze-mark span {
+    position: relative;
+    color: #2c88ad;
+    padding: 0 0.08em;
+}
+
+.tagline {
+    position: relative;
+    z-index: 2;
+    margin-top: 1.6rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.42em;
+    color: var(--gold);
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.rule {
+    position: relative;
+    z-index: 2;
+    margin-top: 1.1rem;
+    width: 64px;
+    height: 2px;
+    background: var(--blaze);
+}
+
+@media (max-width: 520px) {
+    .tick {
+        font-size: 9px;
+    }
+
+    .tagline {
+        letter-spacing: 0.28em;
+        font-size: 0.62rem;
+    }
+}
