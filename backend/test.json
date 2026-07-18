@@ -1,0 +1,47 @@
+[
+  {
+    "question": "Total employees",
+    "answer": "180",
+    "score": 1.0
+  },
+  {
+    "question": "Female employees",
+    "answer": "68",
+    "score": 1.0
+  },
+  {
+    "question": "Male employees",
+    "answer": "112",
+    "score": 1.0
+  },
+  {
+    "question": "Permanent employees",
+    "answer": "160",
+    "score": 1.0
+  },
+  {
+    "question": "Temporary employees",
+    "answer": "20",
+    "score": 1.0
+  },
+  {
+    "question": "Full-time employees",
+    "answer": "missing",
+    "score": 0.0
+  },
+  {
+    "question": "Part-time employees",
+    "answer": "missing",
+    "score": 0.0
+  },
+  {
+    "question": "Employee turnover",
+    "answer": "missing",
+    "score": 0.0
+  },
+  {
+    "question": "Average employee age",
+    "answer": "missing",
+    "score": 0.0
+  }
+]

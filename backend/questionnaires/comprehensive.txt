@@ -1,0 +1,158 @@
+Basic Module Questionnaire
+B1. Basis for Preparation
+What is your company name?
+What is your registered address?
+What is your registration number?
+What industry does your company operate in?
+What reporting period does this report cover?
+Which legal entity/entities are included?
+How many employees does the company have?
+Does this report cover the entire organization?
+Has the information been prepared using the VSME Standard?
+Who approved this report?
+B2. Practices for Transitioning Towards a Sustainable Economy
+Does your company have sustainability objectives?
+Do you have environmental policies?
+Do you have social responsibility policies?
+Do you have governance or ethics policies?
+Have sustainability initiatives been implemented during the reporting period?
+Are sustainability responsibilities assigned to employees?
+Do you monitor sustainability performance?
+What future sustainability initiatives are planned?
+B3. Energy and Greenhouse Gas Emissions
+Total electricity consumed (kWh)
+Total fuel consumed
+Renewable electricity percentage
+Scope 1 GHG emissions
+Scope 2 GHG emissions
+Method used to calculate emissions
+Energy reduction initiatives implemented
+Target for reducing energy consumption
+B4. Pollution of Air, Water and Soil
+Does your company emit pollutants?
+Do you hold environmental permits?
+Have pollution incidents occurred?
+Were any environmental fines received?
+Measures taken to reduce pollution
+Wastewater treatment methods
+Air emission monitoring process
+B5. Biodiversity
+Are operations located near protected areas?
+Does the company impact biodiversity?
+Biodiversity protection measures
+Restoration activities performed
+Environmental impact assessments completed
+B6. Water
+Total water withdrawn
+Water source
+Water consumption
+Water recycled
+Water saving initiatives
+Water discharge management
+B7. Resource Use, Circular Economy and Waste Management
+Total waste generated
+Hazardous waste generated
+Waste recycled
+Materials reused
+Circular economy initiatives
+Packaging reduction measures
+Recycling targets
+B8. Workforce – General Characteristics
+Total employees
+Female employees
+Male employees
+Permanent employees
+Temporary employees
+Full-time employees
+Part-time employees
+Employee turnover
+Average employee age
+B9. Workforce – Health and Safety
+Number of workplace accidents
+Fatalities
+Lost-time injuries
+Health and safety training conducted
+Health and safety policy available?
+Occupational health programs
+B10. Workforce – Remuneration, Collective Bargaining and Training
+Average employee remuneration
+Gender pay gap
+Employees covered by collective agreements
+Training hours per employee
+Employee development programs
+Performance review process
+B11. Convictions and Fines for Corruption and Bribery
+Any corruption convictions?
+Any bribery convictions?
+Fines received?
+Anti-corruption policy?
+Employee anti-corruption training?
+Whistleblower mechanism available?
+Comprehensive Module Questionnaire
+C1. Strategy – Business Model and Sustainability Initiatives
+Describe your business model.
+How does sustainability influence your strategy?
+What sustainability risks affect the business?
+What sustainability opportunities exist?
+Long-term sustainability objectives.
+Stakeholder engagement process.
+C2. Sustainability Policies
+Environmental policies
+Climate policy
+Human rights policy
+Diversity policy
+Supplier sustainability policy
+Governance policy
+Monitoring process
+C3. Greenhouse Gas Reduction Targets and Climate Transition
+Net Zero target?
+Carbon reduction target
+Baseline year
+Current emissions
+Planned reduction initiatives
+Renewable energy targets
+Progress against targets
+C4. Climate Risks
+Physical climate risks
+Transition risks
+Financial impact
+Risk mitigation plan
+Climate scenario analysis
+Business continuity planning
+C5. Additional Workforce Characteristics
+Age distribution
+Diversity statistics
+Disability representation
+Nationality breakdown
+Employee engagement
+Retention rate
+C6. Human Rights
+Human rights policy
+Human rights due diligence
+Supply chain assessment
+Forced labour prevention
+Child labour prevention
+Human rights training
+Grievance mechanism
+C7. Severe Human Rights Incidents
+Human rights incidents reported
+Severity
+Investigations conducted
+Corrective actions
+Legal proceedings
+Preventive measures
+C8. Revenue from High-Impact Sectors
+Revenue from fossil fuels
+Revenue from mining
+Revenue from chemicals
+Revenue from high-carbon sectors
+Revenue from sustainable activities
+Investment in sustainable products
+C9. Gender Diversity in Governance
+Total board members
+Female board members
+Male board members
+Independent directors
+Diversity policy
+Gender diversity targets
+Progress against targets

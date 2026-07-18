@@ -1,0 +1,90 @@
+Basic Module Questionnaire
+B1. Basis for Preparation
+What is your company name?
+What is your registered address?
+What is your registration number?
+What industry does your company operate in?
+What reporting period does this report cover?
+Which legal entity/entities are included?
+How many employees does the company have?
+Does this report cover the entire organization?
+Has the information been prepared using the VSME Standard?
+Who approved this report?
+B2. Practices for Transitioning Towards a Sustainable Economy
+Does your company have sustainability objectives?
+Do you have environmental policies?
+Do you have social responsibility policies?
+Do you have governance or ethics policies?
+Have sustainability initiatives been implemented during the reporting period?
+Are sustainability responsibilities assigned to employees?
+Do you monitor sustainability performance?
+What future sustainability initiatives are planned?
+B3. Energy and Greenhouse Gas Emissions
+Total electricity consumed (kWh)
+Total fuel consumed
+Renewable electricity percentage
+Scope 1 GHG emissions
+Scope 2 GHG emissions
+Method used to calculate emissions
+Energy reduction initiatives implemented
+Target for reducing energy consumption
+B4. Pollution of Air, Water and Soil
+Does your company emit pollutants?
+Do you hold environmental permits?
+Have pollution incidents occurred?
+Were any environmental fines received?
+Measures taken to reduce pollution
+Wastewater treatment methods
+Air emission monitoring process
+B5. Biodiversity
+Are operations located near protected areas?
+Does the company impact biodiversity?
+Biodiversity protection measures
+Restoration activities performed
+Environmental impact assessments completed
+B6. Water
+Total water withdrawn
+Water source
+Water consumption
+Water recycled
+Water saving initiatives
+Water discharge management
+B7. Resource Use, Circular Economy and Waste Management
+Total waste generated
+Hazardous waste generated
+Waste recycled
+Materials reused
+Circular economy initiatives
+Packaging reduction measures
+Recycling targets
+B8. Workforce – General Characteristics
+Total employees
+Female employees
+Male employees
+Permanent employees
+Temporary employees
+Full-time employees
+Part-time employees
+Employee turnover
+Average employee age
+B9. Workforce – Health and Safety
+Number of workplace accidents
+Fatalities
+Lost-time injuries
+Health and safety training conducted
+Health and safety policy available?
+Occupational health programs
+B10. Workforce – Remuneration, Collective Bargaining and Training
+Average employee remuneration
+Gender pay gap
+Employees covered by collective agreements
+Training hours per employee
+Employee development programs
+Performance review process
+B11. Convictions and Fines for Corruption and Bribery
+Any corruption convictions?
+Any bribery convictions?
+Fines received?
+Anti-corruption policy?
+Employee anti-corruption training?
+Whistleblower mechanism available?

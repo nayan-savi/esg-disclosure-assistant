@@ -1,0 +1,5 @@
+# Local data folders
+documents/
+esg_report/
+rag_chroma_db/
+.env
