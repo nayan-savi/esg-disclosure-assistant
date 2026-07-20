@@ -42,6 +42,29 @@ export class InvestorDetails implements OnInit {
   normalizedReportJson = signal<any>(null);
   activeSectionTab = signal<'details' | 'trends'>('details');
 
+  searchQuery = signal<string>('');
+
+  filteredReportData = computed(() => {
+    const query = this.searchQuery().toLowerCase().trim();
+    const req = this.request();
+    if (!req || !req.reportData) return [];
+    
+    const dataList = Array.isArray(req.reportData) 
+      ? req.reportData 
+      : ((req.reportData as any).questionnaire_data || []);
+      
+    if (!query) return dataList;
+    
+    return dataList.filter((item: any) => 
+      (item?.question && item.question.toLowerCase().includes(query)) ||
+      (item?.answer && item.answer.toLowerCase().includes(query))
+    );
+  });
+
+  onSearchQueryChange(event: any) {
+    this.searchQuery.set(event.target.value);
+  }
+
   reportStats = computed(() => {
     const req = this.request();
     if (!req || !req.reportData) {
