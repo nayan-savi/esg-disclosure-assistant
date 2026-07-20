@@ -3,3 +3,4 @@ documents/
 esg_report/
 rag_chroma_db/
 .env
+**/__pycache__/**

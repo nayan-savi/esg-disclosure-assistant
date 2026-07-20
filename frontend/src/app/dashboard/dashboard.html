@@ -3,31 +3,53 @@
   <aside class="w-64 bg-white border-r border-gray-200 flex flex-col hidden md:flex z-10 shadow-sm">
     <div class="h-16 flex items-center px-6 border-b border-gray-200">
       <div class="flex items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-          class="w-7 h-7 text-emerald-600">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="w-7 h-7 text-emerald-600"
+        >
           @for (path of svgs.pieChart; track $index) {
-          <path fill-rule="evenodd" [attr.d]="path" clip-rule="evenodd" />
+            <path fill-rule="evenodd" [attr.d]="path" clip-rule="evenodd" />
           }
         </svg>
-        <span class="text-xl font-bold text-gray-800 tracking-tight">DB REPORTING AI</span>
+        <span class="text-xl font-bold text-gray-800 tracking-tight">ESG Disclosure Assistant</span>
       </div>
     </div>
     <nav class="flex-1 py-6 px-4 space-y-2">
-      <a routerLink="/dashboard/investors" routerLinkActive="bg-emerald-50 text-emerald-700 font-semibold"
-        class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-all duration-200 group">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-          class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform">
+      <a
+        routerLink="/dashboard/investors"
+        routerLinkActive="bg-emerald-50 text-emerald-700 font-semibold"
+        class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-all duration-200 group"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform"
+        >
           <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.investorsNav" />
         </svg>
         SME's
       </a>
-      <a routerLink="/dashboard/bankers" routerLinkActive="bg-emerald-50 text-emerald-700 font-semibold"
-        class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-all duration-200 group">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-          class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform">
+      <a
+        routerLink="/dashboard/bankers"
+        routerLinkActive="bg-emerald-50 text-emerald-700 font-semibold"
+        class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-all duration-200 group"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform"
+        >
           <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.bankersNav" />
         </svg>
-        Bankers
+        Admin
       </a>
     </nav>
   </aside>
@@ -36,13 +58,14 @@
   <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
     <!-- Top Navigation Bar -->
     <header
-      class="bg-white shadow-sm border-b border-gray-200 px-8 h-16 flex items-center justify-between z-10 relative">
+      class="bg-white shadow-sm border-b border-gray-200 px-8 h-16 flex items-center justify-between z-10 relative"
+    >
       <div class="text-xl font-bold text-gray-800 lg:hidden">ESG AI</div>
       <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div class="stage pointer-events-auto">
           <div class="wordmark">
-            <span>TR</span><span class="blaze-mark"><span
-                class="chip"></span><span>ai</span></span><span>LBLAZERS</span>
+            <span>TR</span><span class="blaze-mark"><span class="chip"></span><span>ai</span></span
+            ><span>LBLAZERS</span>
           </div>
         </div>
       </div>
@@ -53,7 +76,5 @@
     <main class="flex-grow p-8 overflow-y-auto">
       <router-outlet></router-outlet>
     </main>
-
-
   </div>
 </div>
