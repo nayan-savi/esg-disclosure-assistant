@@ -133,9 +133,29 @@ class ReportUtility:
         gas = env["naturalGas"]
         if gas.get("consumption") is None or str(gas.get("consumption")).lower() in ["none", "null", ""]:
             val = find_val(["natural gas consumed"]) or find_val(["natural gas"])
+            unit_str = None
+            if not val:
+                # Fallback to parsing from "Total fuel consumed" question
+                fuel_val = find_val(["fuel", "consumed"]) or find_val(["fuel", "consumption"])
+                if fuel_val:
+                    import re
+                    cleaned_fuel = str(fuel_val).replace(",", "")
+                    match = re.search(r'(?:natural\s+)?gas(?:[^\d]*?)(\d+(?:\.\d+)?)\s*(\w+)?', cleaned_fuel, re.IGNORECASE)
+                    if match:
+                        num_str = match.group(1)
+                        parsed_val = int(float(num_str)) if "." not in num_str else float(num_str)
+                        val = str(parsed_val)
+                        unit_str = match.group(2)
+                    else:
+                        match = re.search(r'(\d+(?:\.\d+)?)\s*(\w+)?(?:[^\w]*?)(?:natural\s+)?gas', cleaned_fuel, re.IGNORECASE)
+                        if match:
+                            num_str = match.group(1)
+                            parsed_val = int(float(num_str)) if "." not in num_str else float(num_str)
+                            val = str(parsed_val)
+                            unit_str = match.group(2)
             if val:
                 gas["consumption"] = parse_number(val) or val
-                gas["unit"] = "kWh" if "kwh" in str(val).lower() else "m3"
+                gas["unit"] = unit_str if unit_str else ("kWh" if "kwh" in str(val).lower() else "m3")
 
         # water
         if "water" not in env:
