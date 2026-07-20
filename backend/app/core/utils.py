@@ -26,6 +26,7 @@ class ReportUtility:
             
         # Helper to parse number from string (e.g. "180 employees" -> 180, "1,240,000 kWh" -> 1240000)
         def parse_number(val, suffix_keywords=None):
+            import re
             if val is None:
                 return None
             try:
@@ -99,16 +100,17 @@ class ReportUtility:
                 social["workplaceAccidents"] = parse_number(val) or 0
                 
         # Training hours
-        if social.get("trainingHours") is None or str(social.get("trainingHours")).lower() in ["none", "null", ""]:
+        th = social.get("trainingHours")
+        if th is not None and th != "" and str(th).lower() not in ["none", "null"]:
+            parsed_hours = parse_number(th, suffix_keywords=["hours", "hrs"])
+            if parsed_hours is not None:
+                social["trainingHours"] = parsed_hours
+        else:
             val = find_val(["training hours"]) or find_val(["training"])
             if val:
                 parsed_hours = parse_number(val, suffix_keywords=["hours", "hrs"])
-                if parsed_hours:
-                    if parsed_hours < 100 and "per employee" in val.lower():
-                        total_emp = parse_number(emp.get("total")) or 180
-                        social["trainingHours"] = int(parsed_hours * total_emp)
-                    else:
-                        social["trainingHours"] = parsed_hours
+                if parsed_hours is not None:
+                    social["trainingHours"] = parsed_hours
                 else:
                     social["trainingHours"] = val
 
