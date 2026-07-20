@@ -40,13 +40,42 @@ def query_report_for_request(requestId: str, module: str = "basic", model: str =
 
         db = Chroma(persist_directory=chroma_dir, embedding_function=embeddings)
 
-        # 2. Convert database to a retriever object
-        retriever = db.as_retriever(search_kwargs={"k": 5})
+        # 2. Compile targeted queries based on ESG sections and key terms to ensure full context coverage
+        targeted_queries = [
+            "sustainability objectives and environmental policies",
+            "electricity natural gas fuel consumption energy reduction",
+            "Scope 1 Scope 2 Scope 3 greenhouse gas GHG emissions",
+            "water consumption withdrawn recycled saving discharge wastewater",
+            "waste generated recycled circular economy materials reused",
+            "employees workforce female male permanent temporary turnover",
+            "workplace accidents fatalities injuries training hours",
+            "collective bargaining remuneration gender pay gap",
+            "supplier sustainability screening code of conduct",
+            "data protection anti-corruption policies human rights"
+        ]
+        # Append section headers from questionnaire text to ensure matching structures are pulled
+        for line in questionnaire_text.split("\n"):
+            line = line.strip()
+            if line and (line.startswith("B") and "." in line[:4]):
+                targeted_queries.append(line)
 
-        # 3. Initialize LLM based on user selection
+        # 3. Retrieve top matches from Chroma for each keyword query to build a unified context
+        unique_docs = {}
+        for q_str in targeted_queries:
+            docs = db.similarity_search(q_str, k=2)
+            for doc in docs:
+                unique_docs[doc.page_content] = doc
+
+        retrieved_docs = list(unique_docs.values())
+        
+        # Keep top 15 most relevant chunks to stay within model context size limits and keep retrieval crisp
+        if len(retrieved_docs) > 15:
+            retrieved_docs = retrieved_docs[:15]
+
+        # 4. Initialize LLM based on user selection
         llm = provider.get_llm(temperature=0.0)
 
-        # 4. Prompt
+        # 5. Prompt Setup
         with open(base_dir+"/prompts/query.txt", "r", encoding="utf-8") as f:
             system_prompt = f.read()
 
@@ -55,15 +84,14 @@ def query_report_for_request(requestId: str, module: str = "basic", model: str =
             ("human", "{input}"),
         ])
 
+        # 6. Invoke stuff-documents chain directly with the combined context chunks list
         question_answer_chain = create_stuff_documents_chain(llm, prompt)
-        rag_chain = create_retrieval_chain(retriever, question_answer_chain)
-
-        # Invoke the chain using the loaded questionnaire text
-        response = rag_chain.invoke({
+        response = question_answer_chain.invoke({
+            "context": retrieved_docs,
             "input": f"Please answer the following questionnaire:\n\n{questionnaire_text}"
         })
 
-        raw_answer = response.get("answer", "").strip()
+        raw_answer = response.strip()
 
         # Parse using json_repair to be extremely robust
         import json_repair
