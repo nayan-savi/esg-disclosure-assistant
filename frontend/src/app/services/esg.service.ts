@@ -9,7 +9,7 @@ export interface EsgRequest {
   numDocs: number;
   docs: { name: string; size: string }[];
   dateUploaded: string;
-  reportData?: Array<{ question: string, answer: string, confidence_score: number }> | null;
+  reportData?: any;
   generatedReports?: string[];
   model?: string;
   name?: string;

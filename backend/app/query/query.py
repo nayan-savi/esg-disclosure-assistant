@@ -69,6 +69,13 @@ def query_report_for_request(requestId: str, module: str = "basic", model: str =
         import json_repair
         try:
             parsed_json = json_repair.loads(raw_answer)
+            # If the LLM wrapped the JSON array in a dictionary, unpack it
+            if isinstance(parsed_json, dict):
+                for key in ["questionnaire_data", "data", "results", "answers", "questions"]:
+                    if key in parsed_json and isinstance(parsed_json[key], list):
+                        parsed_json = parsed_json[key]
+                        break
+            
             if isinstance(parsed_json, list):
                 # Ensure the keys are mapped to what Angular template expects (question, answer, score)
                 # Angular template uses item.question, item.answer, item.score (or confidence_score)

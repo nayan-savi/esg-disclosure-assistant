@@ -1,5 +1,5 @@
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Depends, BackgroundTasks
-from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.responses import FileResponse, StreamingResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from db.session import verify_connection, init_db, get_db
 from sqlalchemy import text
@@ -402,13 +402,109 @@ def download_request_file(requestId: str, filename: str, db: Session = Depends(g
         file_path = os.path.join(base_dir, folder_path, filename)
         
         if os.path.exists(file_path) and os.path.isfile(file_path):
-            return FileResponse(file_path, filename=filename)
+            return FileResponse(file_path, filename=filename, content_disposition_type="inline")
         else:
             raise HTTPException(status_code=404, detail=f"File '{filename}' not found on disk")
     except HTTPException as he:
         raise he
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to download document: {str(e)}")
+
+@app.get("/esg/requests/{requestId}/files/{filename}/view")
+def view_request_file(requestId: str, filename: str, db: Session = Depends(get_db)):
+    # Convert string ID to numeric
+    try:
+        numeric_request_id = int(requestId.replace("req_", ""))
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid request ID format")
+        
+    try:
+        # 1. Fetch record to get folder path so we can locate the file
+        query = text("""
+            SELECT folder_path FROM upload_request WHERE request_id = :request_id
+        """)
+        row = db.execute(query, {"request_id": numeric_request_id}).fetchone()
+        
+        if not row:
+            raise HTTPException(status_code=404, detail="Request not found")
+            
+        folder_path = row.folder_path
+        
+        # 2. Resolve absolute path of file
+        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+        file_path = os.path.join(base_dir, folder_path, filename)
+        
+        if not os.path.exists(file_path) or not os.path.isfile(file_path):
+            raise HTTPException(status_code=404, detail=f"File '{filename}' not found on disk")
+            
+        ext = os.path.splitext(filename)[1].lower()
+        
+        if ext == ".pdf":
+            return FileResponse(file_path, media_type="application/pdf", content_disposition_type="inline")
+        elif ext in [".txt", ".log", ".csv"]:
+            return FileResponse(file_path, media_type="text/plain", content_disposition_type="inline")
+        elif ext == ".docx":
+            try:
+                import docx2txt
+                text_content = docx2txt.process(file_path)
+                import html
+                escaped_text = html.escape(text_content)
+                paragraphs = escaped_text.split("\n\n")
+                formatted_paragraphs = "".join([
+                    f"<p style='margin-bottom: 16px;'>{p.strip().replace(chr(10), '<br>')}</p>" 
+                    for p in paragraphs if p.strip()
+                ])
+                
+                html_content = f"""
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>{html.escape(filename)}</title>
+                    <style>
+                        body {{
+                            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                            line-height: 1.6;
+                            color: #1f2937;
+                            max-width: 800px;
+                            margin: 0 auto;
+                            padding: 30px 20px;
+                            background-color: #f9fafb;
+                        }}
+                        .container {{
+                            background: #ffffff;
+                            padding: 40px;
+                            border-radius: 12px;
+                            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                            border: 1px solid #e5e7eb;
+                        }}
+                        h1 {{
+                            font-size: 22px;
+                            font-weight: 700;
+                            color: #111827;
+                            margin-bottom: 24px;
+                            border-bottom: 2px solid #059669;
+                            padding-bottom: 12px;
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <h1>{html.escape(filename)}</h1>
+                        {formatted_paragraphs}
+                    </div>
+                </body>
+                </html>
+                """
+                return HTMLResponse(content=html_content)
+            except Exception as e:
+                raise HTTPException(status_code=500, detail=f"Failed to read docx document: {str(e)}")
+        else:
+            return FileResponse(file_path, filename=filename, content_disposition_type="inline")
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to view document: {str(e)}")
 
 @app.delete("/esg/requests/{requestId}/files/{filename}")
 def delete_request_file(requestId: str, filename: str, background_tasks: BackgroundTasks = None, db: Session = Depends(get_db)):
@@ -801,32 +897,39 @@ def get_report_json(requestId: str, db: Session = Depends(get_db)):
     pdf_dir = os.path.join(base_dir, "esg_report", requestId)
     json_path = os.path.join(pdf_dir, "report_data.json")
     
+    # Parse database report data if present for enrichment
+    db_report_data = []
+    if row.report_data:
+        try:
+            import json as py_json
+            parsed = py_json.loads(row.report_data)
+            if isinstance(parsed, dict) and "questionnaire_data" in parsed:
+                db_report_data = parsed["questionnaire_data"]
+            elif isinstance(parsed, list):
+                db_report_data = parsed
+        except Exception as pe:
+            print(f"Warning: Failed to parse db report_data: {pe}")
+
     if os.path.exists(json_path):
         try:
             with open(json_path, "r", encoding="utf-8") as jf:
                 import json as py_json
-                return py_json.load(jf)
+                report_json = py_json.load(jf)
+                # Enrich cached report json with database questionnaire answers using utility class
+                from app.core.utils import ReportUtility
+                return ReportUtility.enrich_report_json_from_db(report_json, db_report_data)
         except Exception as e:
             print(f"Warning: Failed to read cached report_data.json: {e}")
-        
-    try:
-        # Try to resolve module from files or fallback to basic
-        module_val = "basic"
-        if os.path.exists(pdf_dir):
-            existing_pdfs = glob.glob(os.path.join(pdf_dir, "esg_report-v*.pdf"))
-            if existing_pdfs:
-                latest_file = max(existing_pdfs, key=os.path.getmtime)
-                fname = os.path.basename(latest_file)
-                match = re.search(r'-v\d+-([\w-]+)\.pdf$', fname)
-                if match:
-                    module_val = match.group(1)
 
-        from app.query.report_generator import generate_report_json
-        report_json = generate_report_json(requestId, module=module_val, model=model_val)
-        return report_json
-    except Exception as e:
-        print(f"Warning: Failed to load ESG normalized JSON dynamically: {str(e)}")
-        return {}
+    # Fetch from database report_data column if disk cache is missing
+    if row.report_data:
+        try:
+            import json as py_json
+            return py_json.loads(row.report_data)
+        except Exception:
+            return row.report_data
+
+    return {}
 
 @app.get("/esg/questionnaires")
 def get_questionnaires():

@@ -1,16 +1,35 @@
 <div class="max-w-7xl mx-auto space-y-6">
   <!-- Back Link & Model Selection Toolbar -->
-  <div class="flex justify-between items-center bg-white p-4 rounded-xl border border-gray-200/80 shadow-sm font-sans">
-    <a routerLink="/dashboard/investors" class="inline-flex items-center text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition-colors gap-1.5 group cursor-pointer decoration-none">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform">
+  <div
+    class="flex justify-between items-center bg-white p-4 rounded-xl border border-gray-200/80 shadow-sm font-sans"
+  >
+    <a
+      routerLink="/dashboard/investors"
+      class="inline-flex items-center text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition-colors gap-1.5 group cursor-pointer decoration-none"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="2.5"
+        stroke="currentColor"
+        class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform"
+      >
         <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.backArrow" />
       </svg>
       Back to Disclosures
     </a>
 
     <div class="flex items-center gap-2">
-      <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Analysis LLM Model:</span>
-      <select [disabled]="isGenerating()" [value]="request()?.model || 'gemini-3.5'" (change)="onModelEngineChange($event)" class="text-xs font-bold text-gray-750 bg-gray-50 border border-gray-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer">
+      <span class="text-xs font-bold text-gray-500 uppercase tracking-wider"
+        >Analysis LLM Model:</span
+      >
+      <select
+        [disabled]="isGenerating()"
+        [value]="request()?.model || 'gemini-3.5'"
+        (change)="onModelEngineChange($event)"
+        class="text-xs font-bold text-gray-750 bg-gray-50 border border-gray-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
+      >
         <option value="gemini-3.5">Gemini 3.5 (Recommended)</option>
         <option value="llama3">Llama 3</option>
       </select>
@@ -20,14 +39,26 @@
   @if (request()) {
     <!-- Top Tabs Switcher Card -->
     <div class="flex border border-gray-200/80 bg-white p-1 rounded-xl shadow-sm font-sans mb-6">
-      <button (click)="activeSectionTab.set('details')"
-              [ngClass]="{'border-emerald-500 text-emerald-600 bg-emerald-50/10 font-bold': activeSectionTab() === 'details', 'border-transparent text-gray-500 hover:text-gray-700': activeSectionTab() !== 'details'}"
-              class="flex-1 py-3 text-center text-sm font-semibold border-b-2 transition-all cursor-pointer bg-transparent border-none">
+      <button
+        (click)="activeSectionTab.set('details')"
+        [ngClass]="{
+          'border-emerald-500 text-emerald-600 bg-emerald-50/10 font-bold':
+            activeSectionTab() === 'details',
+          'border-transparent text-gray-500 hover:text-gray-700': activeSectionTab() !== 'details',
+        }"
+        class="flex-1 py-3 text-center text-sm font-semibold border-b-2 transition-all cursor-pointer bg-transparent border-none"
+      >
         Disclosure Details
       </button>
-      <button (click)="activeSectionTab.set('trends')"
-              [ngClass]="{'border-emerald-500 text-emerald-600 bg-emerald-50/10 font-bold': activeSectionTab() === 'trends', 'border-transparent text-gray-500 hover:text-gray-700': activeSectionTab() !== 'trends'}"
-              class="flex-1 py-3 text-center text-sm font-semibold border-b-2 transition-all cursor-pointer bg-transparent border-none">
+      <button
+        (click)="activeSectionTab.set('trends')"
+        [ngClass]="{
+          'border-emerald-500 text-emerald-600 bg-emerald-50/10 font-bold':
+            activeSectionTab() === 'trends',
+          'border-transparent text-gray-500 hover:text-gray-700': activeSectionTab() !== 'trends',
+        }"
+        class="flex-1 py-3 text-center text-sm font-semibold border-b-2 transition-all cursor-pointer bg-transparent border-none"
+      >
         Interactive Analysis & Trends
       </button>
     </div>
@@ -36,24 +67,36 @@
       <!-- Main Detail Card -->
       <div class="bg-white rounded-xl border border-gray-200/80 shadow-sm overflow-hidden">
         <!-- Card Header -->
-        <div class="px-8 py-6 border-b border-gray-100 bg-gray-50/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div
+          class="px-8 py-6 border-b border-gray-100 bg-gray-50/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+        >
           <div>
-            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Disclosure Details</span>
-            <h1 class="text-2xl font-bold text-gray-900 mt-1">{{ request()?.name || 'ESG Request - ' + request()?.year }}</h1>
+            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+              >Disclosure Details</span
+            >
+            <h1 class="text-2xl font-bold text-gray-900 mt-1">
+              {{ request()?.name || 'ESG Request - ' + request()?.year }}
+            </h1>
           </div>
           <div>
             @if (request()?.status === 'Completed' || request()?.status === 'Approved') {
-              <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+              <span
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100"
+              >
                 <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
                 {{ request()?.status }}
               </span>
             } @else if (request()?.status === 'Pending Review') {
-              <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full bg-amber-50 text-amber-700 border border-amber-100">
+              <span
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full bg-amber-50 text-amber-700 border border-amber-100"
+              >
                 <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
                 Pending Review
               </span>
             } @else {
-              <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full bg-gray-50 text-gray-700 border border-gray-100">
+              <span
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full bg-gray-50 text-gray-700 border border-gray-100"
+              >
                 <span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
                 {{ request()?.status }}
               </span>
@@ -63,256 +106,590 @@
 
         <!-- Detail Body -->
         <div class="p-8 space-y-8">
-        <!-- Metadata Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 bg-gray-50 p-5 rounded-lg border border-gray-100">
-          <div>
-            <div class="text-xs font-medium text-gray-500 uppercase">Submission Date</div>
-            <div class="text-sm font-semibold text-gray-800 mt-1">{{ request()?.dateUploaded }}</div>
-          </div>
-          <div>
-            <div class="text-xs font-medium text-gray-500 uppercase">Request ID</div>
-            <div class="text-sm font-mono text-gray-700 mt-1">{{ request()?.id }}</div>
-          </div>
-          <div>
-            <div class="text-xs font-medium text-gray-500 uppercase">Number of Files</div>
-            <div class="text-sm font-semibold text-gray-800 mt-1">{{ request()?.numDocs }}</div>
-          </div>
-        </div>
-
-        <!-- Uploaded Documents -->
-        <div>
-          <div class="flex justify-between items-center mb-4">
-            <h2 class="text-lg font-bold text-gray-900">Uploaded Documents</h2>
-            <div class="flex items-center gap-2">
-              <button [disabled]="isGenerating()" (click)="onGenerateReport()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed rounded-lg shadow-sm transition-all cursor-pointer border-none font-sans">
-                @if (isGenerating()) {
-                  <svg class="animate-spin h-3.5 w-3.5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" [attr.d]="svgs.spinner"></path>
-                  </svg>
-                  Generating...
-                } @else {
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.sparkles" />
-                  </svg>
-                  {{ (request()?.reportData && request()?.reportData?.length) ? 'Re-generate ESG Report' : 'Generate ESG Report' }}
-                }
-              </button>
-              <button (click)="isUploadModalOpen.set(true)" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition-colors cursor-pointer border-none font-sans">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                  <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.plus" />
-                </svg>
-                Upload Documents
-              </button>
+          <!-- Metadata Grid -->
+          <div
+            class="grid grid-cols-1 sm:grid-cols-3 gap-6 bg-gray-50 p-5 rounded-lg border border-gray-100"
+          >
+            <div>
+              <div class="text-xs font-medium text-gray-500 uppercase">Submission Date</div>
+              <div class="text-sm font-semibold text-gray-800 mt-1">
+                {{ request()?.dateUploaded }}
+              </div>
+            </div>
+            <div>
+              <div class="text-xs font-medium text-gray-500 uppercase">Request ID</div>
+              <div class="text-sm font-mono text-gray-700 mt-1">{{ request()?.id }}</div>
+            </div>
+            <div>
+              <div class="text-xs font-medium text-gray-500 uppercase">Number of Files</div>
+              <div class="text-sm font-semibold text-gray-800 mt-1">{{ request()?.numDocs }}</div>
             </div>
           </div>
-          <div class="grid grid-cols-1 gap-3">
-            @for (doc of visibleDocs(); track doc.name) {
-              <div class="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-emerald-200 hover:bg-emerald-50/20 transition-all group">
-                <div class="flex items-center gap-3">
-                  <div class="p-2 bg-emerald-50 rounded-lg text-emerald-600 group-hover:scale-105 transition-transform">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                      <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.document" />
+
+          <!-- Uploaded Documents -->
+          <div>
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="text-lg font-bold text-gray-900">Uploaded Documents</h2>
+              <div class="flex items-center gap-2">
+                <button
+                  [disabled]="isGenerating()"
+                  (click)="onGenerateReport()"
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed rounded-lg shadow-sm transition-all cursor-pointer border-none font-sans"
+                >
+                  @if (isGenerating()) {
+                    <svg
+                      class="animate-spin h-3.5 w-3.5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        class="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        stroke-width="4"
+                      ></circle>
+                      <path class="opacity-75" fill="currentColor" [attr.d]="svgs.spinner"></path>
                     </svg>
+                    Generating...
+                  } @else {
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="2.5"
+                      stroke="currentColor"
+                      class="w-3.5 h-3.5"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        [attr.d]="svgs.sparkles"
+                      />
+                    </svg>
+                    {{
+                    (request()?.reportData && (request()?.reportData?.length || request()?.reportData?.questionnaire_data))
+                        ? 'Re-generate ESG Report'
+                        : 'Generate ESG Report'
+                    }}
+                  }
+                </button>
+                <button
+                  (click)="isUploadModalOpen.set(true)"
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition-colors cursor-pointer border-none font-sans"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2.5"
+                    stroke="currentColor"
+                    class="w-4 h-4"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.plus" />
+                  </svg>
+                  Upload Documents
+                </button>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 gap-3">
+              @for (doc of visibleDocs(); track doc.name) {
+                <div
+                  class="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-emerald-200 hover:bg-emerald-50/20 transition-all group"
+                >
+                  <div class="flex items-center gap-3">
+                    <div
+                      class="p-2 bg-emerald-50 rounded-lg text-emerald-600 group-hover:scale-105 transition-transform"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-6 h-6"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          [attr.d]="svgs.document"
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <div class="text-sm font-semibold text-gray-900 break-all">
+                        {{ doc.name }}
+                      </div>
+                      <div class="text-xs text-gray-500 mt-0.5">{{ doc.size }}</div>
+                    </div>
                   </div>
-                  <div>
-                    <div class="text-sm font-semibold text-gray-900 break-all">{{ doc.name }}</div>
-                    <div class="text-xs text-gray-500 mt-0.5">{{ doc.size }}</div>
+                  <div class="flex items-center gap-2">
+                    <!-- View button -->
+                    <button
+                      (click)="onViewDocument(doc.name)"
+                      class="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer border-none bg-transparent inline-flex items-center justify-center"
+                      title="View Document"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        class="w-4.5 h-4.5"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          [attr.d]="svgs.eye"
+                        />
+                      </svg>
+                    </button>
+                     <a
+                      [href]="
+                        'http://localhost:8000/esg/requests/' + request()?.id + '/files/' + doc.name
+                      "
+                      [download]="doc.name"
+                      class="p-1.5 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors cursor-pointer inline-flex items-center justify-center"
+                      title="Download Document"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        class="w-4.5 h-4.5"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          [attr.d]="svgs.download"
+                        />
+                      </svg>
+                    </a>
+                    <button
+                      (click)="onDeleteDocument(doc.name)"
+                      class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer border-none bg-transparent"
+                      title="Delete Document"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        class="w-4.5 h-4.5"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          [attr.d]="svgs.trash"
+                        />
+                      </svg>
+                    </button>
                   </div>
                 </div>
-                <div class="flex items-center gap-2">
-                  <a [href]="'http://localhost:8000/esg/requests/' + request()?.id + '/files/' + doc.name" [download]="doc.name" class="p-1.5 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors cursor-pointer inline-flex items-center justify-center" title="Download Document">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4.5 h-4.5">
-                      <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.download" />
+              }
+            </div>
+            @if (request()?.docs && request()!.docs!.length > 3) {
+              <div class="flex justify-center mt-4 font-sans">
+                <button
+                  (click)="isDocsExpanded.set(!isDocsExpanded())"
+                  class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-lg shadow-sm transition-colors cursor-pointer"
+                >
+                  @if (isDocsExpanded()) {
+                    Show Less
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="2.5"
+                      stroke="currentColor"
+                      class="w-3.5 h-3.5"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        [attr.d]="svgs.chevronUp"
+                      />
                     </svg>
-                  </a>
-                  <button (click)="onDeleteDocument(doc.name)" class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer border-none bg-transparent" title="Delete Document">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4.5 h-4.5">
-                      <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.trash" />
+                  } @else {
+                    Show All ({{ request()!.docs.length }} files)
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="2.5"
+                      stroke="currentColor"
+                      class="w-3.5 h-3.5"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        [attr.d]="svgs.chevronDown"
+                      />
                     </svg>
-                  </button>
-                </div>
+                  }
+                </button>
               </div>
             }
           </div>
-          @if (request()?.docs && request()!.docs!.length > 3) {
-            <div class="flex justify-center mt-4 font-sans">
-              <button (click)="isDocsExpanded.set(!isDocsExpanded())" class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-lg shadow-sm transition-colors cursor-pointer">
-                @if (isDocsExpanded()) {
-                  Show Less
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.chevronUp" />
+
+          <!-- Processing Timeline -->
+          <div>
+            <h2 class="text-lg font-bold text-gray-900 mb-6">Processing History</h2>
+            <div class="relative pl-6 border-l border-gray-200 space-y-6">
+              <!-- Step 2 -->
+              <div class="relative">
+                <span
+                  class="absolute -left-[31px] top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 ring-4 ring-white"
+                >
+                  <svg
+                    class="h-2.5 w-2.5 text-white"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="3"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      [attr.d]="svgs.checkmark"
+                    />
                   </svg>
+                </span>
+                <div class="text-sm font-semibold text-emerald-700">
+                  RAG Document Analysis in Progress
+                </div>
+                <div class="text-xs text-emerald-600/80 mt-0.5">
+                  Extracting key ESG indicators and screening disclosures
+                </div>
+              </div>
+              <!-- Step 1 -->
+              <div class="relative font-sans">
+                <span
+                  class="absolute -left-[31px] top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 ring-4 ring-white"
+                >
+                  <svg
+                    class="h-2.5 w-2.5 text-white"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="3"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      [attr.d]="svgs.checkmark"
+                    />
+                  </svg>
+                </span>
+                <div class="text-sm font-semibold text-emerald-700">
+                  Documents Uploaded & Ingested
+                </div>
+                <div class="text-xs text-emerald-600/80 mt-0.5">
+                  Submitted via ESG Request console on {{ request()?.dateUploaded }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Generated ESG Report Section -->
+      @if (isGenerating()) {
+        <div
+          id="processingSection"
+          class="bg-white rounded-xl border border-gray-200/80 shadow-sm p-12 text-center space-y-6 mt-8 transition-all animate-fadeIn font-sans"
+        >
+          <div class="flex flex-col items-center justify-center space-y-4">
+            <!-- Circular loader with pulse -->
+            <div
+              class="relative w-16 h-16 flex items-center justify-center bg-indigo-50 text-indigo-600 rounded-full"
+            >
+              <svg
+                class="animate-spin h-10 w-10 text-indigo-600"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path class="opacity-75" fill="currentColor" [attr.d]="svgs.spinner"></path>
+              </svg>
+            </div>
+            <div class="space-y-2">
+              <h3 class="text-base font-bold text-gray-900">Generating ESG Disclosure Report</h3>
+              <p class="text-sm text-gray-500 animate-pulse font-medium">
+                {{ generationProgressText() }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Simulated progress steps list -->
+          <div
+            class="max-w-md mx-auto text-left space-y-3 bg-gray-50 p-5 rounded-xl border border-gray-200 text-xs"
+          >
+            <div
+              class="flex items-center gap-2.5"
+              [class.text-indigo-600]="generationStep() >= 0"
+              [class.text-gray-400]="generationStep() < 0"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                class="w-4 h-4"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <span [class.font-bold]="generationStep() === 0"
+                >Module selection & query initialization</span
+              >
+            </div>
+            <div
+              class="flex items-center gap-2.5"
+              [class.text-indigo-600]="generationStep() >= 1"
+              [class.text-gray-400]="generationStep() < 1"
+            >
+              @if (generationStep() > 1) {
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  class="w-4 h-4"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              } @else {
+                <span
+                  class="w-4 h-4 rounded-full border-2 border-gray-300 flex items-center justify-center font-bold text-[8px]"
+                  [class.border-indigo-600]="generationStep() === 1"
+                  >2</span
+                >
+              }
+              <span [class.font-bold]="generationStep() === 1"
+                >Searching ingested PDF documents via RAG</span
+              >
+            </div>
+            <div
+              class="flex items-center gap-2.5"
+              [class.text-indigo-600]="generationStep() >= 2"
+              [class.text-gray-400]="generationStep() < 2"
+            >
+              @if (generationStep() > 2) {
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  class="w-4 h-4"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              } @else {
+                <span
+                  class="w-4 h-4 rounded-full border-2 border-gray-300 flex items-center justify-center font-bold text-[8px]"
+                  [class.border-indigo-600]="generationStep() === 2"
+                  >3</span
+                >
+              }
+              <span [class.font-bold]="generationStep() === 2"
+                >Synthesizing ESG answer data & scores</span
+              >
+            </div>
+            <div
+              class="flex items-center gap-2.5"
+              [class.text-indigo-600]="generationStep() >= 4"
+              [class.text-gray-400]="generationStep() < 4"
+            >
+              @if (generationStep() > 4) {
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  class="w-4 h-4"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              } @else {
+                <span
+                  class="w-4 h-4 rounded-full border-2 border-gray-300 flex items-center justify-center font-bold text-[8px]"
+                  [class.border-indigo-600]="generationStep() === 4"
+                  >4</span
+                >
+              }
+              <span [class.font-bold]="generationStep() === 4"
+                >Generating professional PDF & versioning</span
+              >
+            </div>
+          </div>
+        </div>
+      } @else if (request()?.reportData && (request()?.reportData?.length || request()?.reportData?.questionnaire_data)) {
+        <div
+          class="bg-white rounded-xl border border-gray-200/80 shadow-sm overflow-hidden mt-8 p-8 transition-all animate-fadeIn font-sans"
+        >
+          <div class="flex items-center justify-between border-b border-gray-200 pb-4 mb-6">
+            <div class="flex items-center gap-2.5">
+              <div class="p-2 bg-indigo-50 rounded-lg text-indigo-600">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.document" />
+                </svg>
+              </div>
+              <div>
+                <div class="flex items-center gap-2.5">
+                  <h2 class="text-xl font-bold text-gray-900 font-sans">Generated ESG Report</h2>
+                  @if (reportStats()) {
+                    <span
+                      class="inline-flex items-center gap-1 px-2 py-0.5 text-[11px] font-semibold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100/80 font-mono"
+                    >
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      {{ reportStats()?.answered }}/{{ reportStats()?.total }} ({{ reportStats()?.percentage }}%) answered
+                    </span>
+                  }
+                </div>
+                <p class="text-xs text-gray-500 mt-0.5 font-medium">
+                  Workforce – General Characteristics
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button
+                [disabled]="isDownloadingPdf()"
+                (click)="onDownloadReportClick()"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed rounded-lg shadow-sm transition-all cursor-pointer border-none font-sans"
+              >
+                @if (isDownloadingPdf()) {
+                  <svg
+                    class="animate-spin h-3.5 w-3.5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      class="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      stroke-width="4"
+                    ></circle>
+                    <path class="opacity-75" fill="currentColor" [attr.d]="svgs.spinner"></path>
+                  </svg>
+                  Downloading...
                 } @else {
-                  Show All ({{ request()!.docs.length }} files)
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.chevronDown" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2.5"
+                    stroke="currentColor"
+                    class="w-3.5 h-3.5"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.download" />
                   </svg>
+                  Download ESG Report (PDF)
                 }
               </button>
             </div>
-          }
-        </div>
+          </div>
 
-        <!-- Processing Timeline -->
-        <div>
-          <h2 class="text-lg font-bold text-gray-900 mb-6">Processing History</h2>
-          <div class="relative pl-6 border-l border-gray-200 space-y-6">
-            <!-- Step 2 -->
-            <div class="relative">
-              <span class="absolute -left-[31px] top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 ring-4 ring-white">
-                <svg class="h-2.5 w-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                  <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.checkmark" />
-                </svg>
-              </span>
-              <div class="text-sm font-semibold text-emerald-700">RAG Document Analysis in Progress</div>
-              <div class="text-xs text-emerald-600/80 mt-0.5">Extracting key ESG indicators and screening disclosures</div>
-            </div>
-            <!-- Step 1 -->
-            <div class="relative font-sans">
-              <span class="absolute -left-[31px] top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 ring-4 ring-white">
-                <svg class="h-2.5 w-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                  <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.checkmark" />
-                </svg>
-              </span>
-              <div class="text-sm font-semibold text-emerald-700">Documents Uploaded & Ingested</div>
-              <div class="text-xs text-emerald-600/80 mt-0.5">Submitted via ESG Request console on {{ request()?.dateUploaded }}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Generated ESG Report Section -->
-    @if (isGenerating()) {
-      <div id="processingSection" class="bg-white rounded-xl border border-gray-200/80 shadow-sm p-12 text-center space-y-6 mt-8 transition-all animate-fadeIn font-sans">
-        <div class="flex flex-col items-center justify-center space-y-4">
-          <!-- Circular loader with pulse -->
-          <div class="relative w-16 h-16 flex items-center justify-center bg-indigo-50 text-indigo-600 rounded-full">
-            <svg class="animate-spin h-10 w-10 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" [attr.d]="svgs.spinner"></path>
-            </svg>
-          </div>
-          <div class="space-y-2">
-            <h3 class="text-base font-bold text-gray-900">Generating ESG Disclosure Report</h3>
-            <p class="text-sm text-gray-500 animate-pulse font-medium">{{ generationProgressText() }}</p>
-          </div>
-        </div>
-
-        <!-- Simulated progress steps list -->
-        <div class="max-w-md mx-auto text-left space-y-3 bg-gray-50 p-5 rounded-xl border border-gray-200 text-xs">
-          <div class="flex items-center gap-2.5" [class.text-indigo-600]="generationStep() >= 0" [class.text-gray-400]="generationStep() < 0">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
-            </svg>
-            <span [class.font-bold]="generationStep() === 0">Module selection & query initialization</span>
-          </div>
-          <div class="flex items-center gap-2.5" [class.text-indigo-600]="generationStep() >= 1" [class.text-gray-400]="generationStep() < 1">
-            @if (generationStep() > 1) {
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
-              </svg>
-            } @else {
-              <span class="w-4 h-4 rounded-full border-2 border-gray-300 flex items-center justify-center font-bold text-[8px]" [class.border-indigo-600]="generationStep() === 1">2</span>
-            }
-            <span [class.font-bold]="generationStep() === 1">Searching ingested PDF documents via RAG</span>
-          </div>
-          <div class="flex items-center gap-2.5" [class.text-indigo-600]="generationStep() >= 2" [class.text-gray-400]="generationStep() < 2">
-            @if (generationStep() > 2) {
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
-              </svg>
-            } @else {
-              <span class="w-4 h-4 rounded-full border-2 border-gray-300 flex items-center justify-center font-bold text-[8px]" [class.border-indigo-600]="generationStep() === 2">3</span>
-            }
-            <span [class.font-bold]="generationStep() === 2">Synthesizing ESG answer data & scores</span>
-          </div>
-          <div class="flex items-center gap-2.5" [class.text-indigo-600]="generationStep() >= 4" [class.text-gray-400]="generationStep() < 4">
-            @if (generationStep() > 4) {
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
-              </svg>
-            } @else {
-              <span class="w-4 h-4 rounded-full border-2 border-gray-300 flex items-center justify-center font-bold text-[8px]" [class.border-indigo-600]="generationStep() === 4">4</span>
-            }
-            <span [class.font-bold]="generationStep() === 4">Generating professional PDF & versioning</span>
-          </div>
-        </div>
-      </div>
-    } @else if (request()?.reportData && request()?.reportData?.length) {
-      <div class="bg-white rounded-xl border border-gray-200/80 shadow-sm overflow-hidden mt-8 p-8 transition-all animate-fadeIn font-sans">
-        <div class="flex items-center justify-between border-b border-gray-200 pb-4 mb-6">
-          <div class="flex items-center gap-2.5">
-            <div class="p-2 bg-indigo-50 rounded-lg text-indigo-600">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.document" />
-              </svg>
-            </div>
-            <div>
-              <h2 class="text-xl font-bold text-gray-900">Generated ESG Report</h2>
-              <p class="text-xs text-gray-500 mt-0.5 font-medium">Workforce – General Characteristics</p>
-            </div>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
-              <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
-              RAG Verified
-            </span>
-            <button [disabled]="isDownloadingPdf()" (click)="onDownloadReportClick()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed rounded-lg shadow-sm transition-all cursor-pointer border-none font-sans">
-              @if (isDownloadingPdf()) {
-                <svg class="animate-spin h-3.5 w-3.5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" [attr.d]="svgs.spinner"></path>
-                </svg>
-                Downloading...
-              } @else {
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.download" />
-                </svg>
-                Download ESG Report (PDF)
-              }
-            </button>
-          </div>
-        </div>
-
-        <div class="overflow-x-auto mt-6">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="border-b border-gray-200">
-                <th class="pb-3 text-xs font-bold text-gray-400 uppercase tracking-wider w-1/2">Metric / Question</th>
-                <th class="pb-3 text-xs font-bold text-gray-400 uppercase tracking-wider w-1/3">Extracted Disclosure Value</th>
-                <th class="pb-3 text-xs font-bold text-gray-400 uppercase tracking-wider w-1/6 text-right">Confidence</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-100">
-              @for (item of request()?.reportData; track item.question) {
-                <tr class="hover:bg-gray-50/50 transition-colors">
-                  <td class="py-4 text-sm font-semibold text-gray-700">{{ item.question }}</td>
-                  <td class="py-4 text-sm">
-                    @if (item.answer.toLowerCase() === 'missing' || item.answer.toLowerCase() === 'not specified' || item.answer.toLowerCase() === 'error querying document rag') {
-                      <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full bg-red-50 text-red-700 border border-red-100">
-                        Missing from disclosures
-                      </span>
-                    } @else {
-                      <span class="text-gray-950 font-medium break-all">{{ item.answer }}</span>
-                    }
-                  </td>
-                  <td class="py-4 text-sm text-right">
-                    <span class="inline-flex items-center gap-1.5 justify-end">
-                      <span class="text-xs font-bold font-mono" [class.text-emerald-600]="item.confidence_score >= 0.8" [class.text-amber-600]="item.confidence_score < 0.8 && item.confidence_score >= 0.5" [class.text-red-600]="item.confidence_score < 0.5">
-                        {{ (item.confidence_score * 100) | number:'1.0-0' }}%
-                      </span>
-                      <span class="w-1.5 h-1.5 rounded-full" [class.bg-emerald-500]="item.confidence_score >= 0.8" [class.bg-amber-500]="item.confidence_score < 0.8 && item.confidence_score >= 0.5" [class.bg-red-500]="item.confidence_score < 0.5"></span>
-                    </span>
-                  </td>
+          <div class="overflow-x-auto mt-6">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-gray-200">
+                  <th class="pb-3 text-xs font-bold text-gray-400 uppercase tracking-wider w-1/2">
+                    Metric / Question
+                  </th>
+                  <th class="pb-3 text-xs font-bold text-gray-400 uppercase tracking-wider w-1/3">
+                    Extracted Disclosure Value
+                  </th>
+                  <th
+                    class="pb-3 text-xs font-bold text-gray-400 uppercase tracking-wider w-1/6 text-right"
+                  >
+                    Confidence
+                  </th>
                 </tr>
-              }
-            </tbody>
-          </table>
+              </thead>
+              <tbody class="divide-y divide-gray-100">
+                @for (item of (request()?.reportData?.questionnaire_data || request()?.reportData); track item.question) {
+                  <tr class="hover:bg-gray-50/50 transition-colors">
+                    <td class="py-4 text-sm font-semibold text-gray-700">{{ item.question }}</td>
+                    <td class="py-4 text-sm">
+                      @if (
+                        item.answer.toLowerCase() === 'missing' ||
+                        item.answer.toLowerCase() === 'not specified' ||
+                        item.answer.toLowerCase() === 'error querying document rag'
+                      ) {
+                        <span
+                          class="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full bg-red-50 text-red-700 border border-red-100"
+                        >
+                          Missing from disclosures
+                        </span>
+                      } @else {
+                        <span class="text-gray-950 font-medium break-all">{{ item.answer }}</span>
+                      }
+                    </td>
+                    <td class="py-4 text-sm text-right">
+                      <span class="inline-flex items-center gap-1.5 justify-end">
+                        <span
+                          class="text-xs font-bold font-mono"
+                          [class.text-emerald-600]="item.confidence_score >= 0.8"
+                          [class.text-amber-600]="
+                            item.confidence_score < 0.8 && item.confidence_score >= 0.5
+                          "
+                          [class.text-red-600]="item.confidence_score < 0.5"
+                        >
+                          {{ item.confidence_score * 100 | number: '1.0-0' }}%
+                        </span>
+                        <span
+                          class="w-1.5 h-1.5 rounded-full"
+                          [class.bg-emerald-500]="item.confidence_score >= 0.8"
+                          [class.bg-amber-500]="
+                            item.confidence_score < 0.8 && item.confidence_score >= 0.5
+                          "
+                          [class.bg-red-500]="item.confidence_score < 0.5"
+                        ></span>
+                      </span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-    }
+      }
     }
 
     <!-- Trends & Analysis Tab -->
@@ -320,18 +697,40 @@
       <div class="p-8 space-y-8 animate-fadeIn">
         @if (!normalizedReportJson()) {
           <!-- Empty/Pending State -->
-          <div class="flex flex-col items-center justify-center py-16 bg-white space-y-4 font-sans text-center">
+          <div
+            class="flex flex-col items-center justify-center py-16 bg-white space-y-4 font-sans text-center"
+          >
             <div class="p-4 bg-gray-50 rounded-full text-gray-400">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-10 h-10"
+              >
                 <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.clock" />
               </svg>
             </div>
             <div class="space-y-1">
               <h3 class="text-base font-bold text-gray-800">No Analysis Available</h3>
-              <p class="text-xs text-gray-500 max-w-sm">Please generate the ESG Report under the "Disclosure Details" tab to visualize performance trends and compliance metrics.</p>
+              <p class="text-xs text-gray-500 max-w-sm">
+                Please generate the ESG Report under the "Disclosure Details" tab to visualize
+                performance trends and compliance metrics.
+              </p>
             </div>
-            <button (click)="onGenerateReport()" class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm transition-all cursor-pointer border-none font-sans">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+            <button
+              (click)="onGenerateReport()"
+              class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm transition-all cursor-pointer border-none font-sans"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                class="w-3.5 h-3.5"
+              >
                 <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.sparkles" />
               </svg>
               Generate ESG Report
@@ -341,15 +740,28 @@
           <!-- Interactive Charts Grid -->
           <div class="space-y-8 font-sans">
             <!-- Company Header Summary -->
-            <div class="bg-indigo-50/30 p-6 rounded-xl border border-indigo-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div
+              class="bg-indigo-50/30 p-6 rounded-xl border border-indigo-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+            >
               <div>
-                <span class="text-[10px] font-bold text-indigo-500 uppercase tracking-widest">Reporting Entity</span>
-                <h2 class="text-lg font-bold text-gray-900 mt-0.5">{{ normalizedReportJson().company?.name || request()?.id }}</h2>
-                <p class="text-xs text-gray-500 mt-1">Sector: {{ normalizedReportJson().company?.industry || 'Not Disclosed' }} | Location: {{ normalizedReportJson().company?.location || 'Not Disclosed' }}</p>
+                <span class="text-[10px] font-bold text-indigo-500 uppercase tracking-widest"
+                  >Reporting Entity</span
+                >
+                <h2 class="text-lg font-bold text-gray-900 mt-0.5">
+                  {{ normalizedReportJson().company?.name || request()?.id }}
+                </h2>
+                <p class="text-xs text-gray-500 mt-1">
+                  Sector: {{ normalizedReportJson().company?.industry || 'Not Disclosed' }} |
+                  Location: {{ normalizedReportJson().company?.location || 'Not Disclosed' }}
+                </p>
               </div>
               <div class="text-right">
-                <span class="text-[10px] font-bold text-indigo-500 uppercase tracking-widest block">Reporting Cycle</span>
-                <span class="text-sm font-extrabold text-indigo-950 mt-1 block">FY {{ normalizedReportJson().company?.reportingYear || request()?.year }}</span>
+                <span class="text-[10px] font-bold text-indigo-500 uppercase tracking-widest block"
+                  >Reporting Cycle</span
+                >
+                <span class="text-sm font-extrabold text-indigo-950 mt-1 block"
+                  >FY {{ normalizedReportJson().company?.reportingYear || request()?.year }}</span
+                >
               </div>
             </div>
 
@@ -359,23 +771,50 @@
               <div class="bg-white border border-gray-200/80 rounded-xl p-6 shadow-sm space-y-5">
                 <div>
                   <h3 class="text-sm font-bold text-gray-900">Carbon Footprint Breakdown</h3>
-                  <p class="text-[11px] text-gray-400 mt-0.5">Scope 1 (Direct), Scope 2 (Indirect), & Scope 3 (Value Chain) Emissions in tCO2e</p>
+                  <p class="text-[11px] text-gray-400 mt-0.5">
+                    Scope 1 (Direct), Scope 2 (Indirect), & Scope 3 (Value Chain) Emissions in tCO2e
+                  </p>
                 </div>
-                
+
                 @if (getTotalEmissions() === 0) {
-                  <div class="py-10 text-center text-xs text-gray-400">Carbon emissions data not disclosed.</div>
+                  <div class="py-10 text-center text-xs text-gray-400">
+                    Carbon emissions data not disclosed.
+                  </div>
                 } @else {
                   <!-- Stacked Proportional Bar -->
                   <div class="space-y-4">
-                    <div class="h-6 w-full rounded-full overflow-hidden flex bg-gray-100 shadow-inner">
-                      <div [style.width.%]="getScopePercentage(1)" class="bg-emerald-500 hover:opacity-90 transition-all duration-300 relative group cursor-help" title="Scope 1">
-                        <span class="absolute inset-0 flex items-center justify-center text-[10px] font-extrabold text-white">{{ getScopePercentage(1) }}%</span>
+                    <div
+                      class="h-6 w-full rounded-full overflow-hidden flex bg-gray-100 shadow-inner"
+                    >
+                      <div
+                        [style.width.%]="getScopePercentage(1)"
+                        class="bg-emerald-500 hover:opacity-90 transition-all duration-300 relative group cursor-help"
+                        title="Scope 1"
+                      >
+                        <span
+                          class="absolute inset-0 flex items-center justify-center text-[10px] font-extrabold text-white"
+                          >{{ getScopePercentage(1) }}%</span
+                        >
                       </div>
-                      <div [style.width.%]="getScopePercentage(2)" class="bg-blue-500 hover:opacity-90 transition-all duration-300 relative group cursor-help" title="Scope 2">
-                        <span class="absolute inset-0 flex items-center justify-center text-[10px] font-extrabold text-white">{{ getScopePercentage(2) }}%</span>
+                      <div
+                        [style.width.%]="getScopePercentage(2)"
+                        class="bg-blue-500 hover:opacity-90 transition-all duration-300 relative group cursor-help"
+                        title="Scope 2"
+                      >
+                        <span
+                          class="absolute inset-0 flex items-center justify-center text-[10px] font-extrabold text-white"
+                          >{{ getScopePercentage(2) }}%</span
+                        >
                       </div>
-                      <div [style.width.%]="getScopePercentage(3)" class="bg-amber-500 hover:opacity-90 transition-all duration-300 relative group cursor-help" title="Scope 3">
-                        <span class="absolute inset-0 flex items-center justify-center text-[10px] font-extrabold text-white">{{ getScopePercentage(3) }}%</span>
+                      <div
+                        [style.width.%]="getScopePercentage(3)"
+                        class="bg-amber-500 hover:opacity-90 transition-all duration-300 relative group cursor-help"
+                        title="Scope 3"
+                      >
+                        <span
+                          class="absolute inset-0 flex items-center justify-center text-[10px] font-extrabold text-white"
+                          >{{ getScopePercentage(3) }}%</span
+                        >
                       </div>
                     </div>
 
@@ -386,21 +825,27 @@
                           <span class="w-2.5 h-2.5 bg-emerald-500 rounded-sm"></span>
                           Scope 1
                         </div>
-                        <div class="text-xs font-bold text-gray-900">{{ normalizedReportJson().environment.scope1?.value || 0 }} t</div>
+                        <div class="text-xs font-bold text-gray-900">
+                          {{ normalizedReportJson().environment.scope1?.value || 0 }} t
+                        </div>
                       </div>
                       <div class="space-y-0.5">
                         <div class="inline-flex items-center gap-1.5 text-xs text-gray-500">
                           <span class="w-2.5 h-2.5 bg-blue-500 rounded-sm"></span>
                           Scope 2
                         </div>
-                        <div class="text-xs font-bold text-gray-900">{{ normalizedReportJson().environment.scope2?.value || 0 }} t</div>
+                        <div class="text-xs font-bold text-gray-900">
+                          {{ normalizedReportJson().environment.scope2?.value || 0 }} t
+                        </div>
                       </div>
                       <div class="space-y-0.5">
                         <div class="inline-flex items-center gap-1.5 text-xs text-gray-500">
                           <span class="w-2.5 h-2.5 bg-amber-500 rounded-sm"></span>
                           Scope 3
                         </div>
-                        <div class="text-xs font-bold text-gray-900">{{ normalizedReportJson().environment.scope3?.value || 0 }} t</div>
+                        <div class="text-xs font-bold text-gray-900">
+                          {{ normalizedReportJson().environment.scope3?.value || 0 }} t
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -411,37 +856,76 @@
               <div class="bg-white border border-gray-200/80 rounded-xl p-6 shadow-sm space-y-4">
                 <div>
                   <h3 class="text-sm font-bold text-gray-900">Circularity & Waste Management</h3>
-                  <p class="text-[11px] text-gray-400 mt-0.5">Generated waste vs recycled materials percentage</p>
+                  <p class="text-[11px] text-gray-400 mt-0.5">
+                    Generated waste vs recycled materials percentage
+                  </p>
                 </div>
 
                 <div class="flex items-center justify-around gap-4 py-2">
                   <!-- Gauge Meter -->
                   <div class="relative flex items-center justify-center">
                     <svg class="w-24 h-24 transform -rotate-90">
-                      <circle cx="48" cy="48" r="38" stroke="#f3f4f6" stroke-width="8" fill="transparent" />
-                      <circle cx="48" cy="48" r="38" stroke="#10b981" stroke-width="8" fill="transparent"
-                              [attr.stroke-dasharray]="238.76"
-                              [attr.stroke-dashoffset]="238.76 - (238.76 * (normalizedReportJson().environment.waste?.recycledPercentage || 0)) / 100"
-                              stroke-linecap="round" class="transition-all duration-500" />
+                      <circle
+                        cx="48"
+                        cy="48"
+                        r="38"
+                        stroke="#f3f4f6"
+                        stroke-width="8"
+                        fill="transparent"
+                      />
+                      <circle
+                        cx="48"
+                        cy="48"
+                        r="38"
+                        stroke="#10b981"
+                        stroke-width="8"
+                        fill="transparent"
+                        [attr.stroke-dasharray]="238.76"
+                        [attr.stroke-dashoffset]="
+                          238.76 -
+                          (238.76 *
+                            (normalizedReportJson().environment.waste?.recycledPercentage || 0)) /
+                            100
+                        "
+                        stroke-linecap="round"
+                        class="transition-all duration-500"
+                      />
                     </svg>
                     <div class="absolute text-center">
-                      <span class="text-lg font-black text-gray-900 block leading-none">{{ normalizedReportJson().environment.waste?.recycledPercentage || 0 }}%</span>
-                      <span class="text-[8px] text-gray-400 uppercase tracking-wider mt-0.5 block leading-none">Recycled</span>
+                      <span class="text-lg font-black text-gray-900 block leading-none"
+                        >{{
+                          normalizedReportJson().environment.waste?.recycledPercentage || 0
+                        }}%</span
+                      >
+                      <span
+                        class="text-[8px] text-gray-400 uppercase tracking-wider mt-0.5 block leading-none"
+                        >Recycled</span
+                      >
                     </div>
                   </div>
 
                   <!-- Details list -->
                   <div class="space-y-3">
                     <div>
-                      <span class="text-[10px] text-gray-400 uppercase font-semibold">Total Waste Generated</span>
+                      <span class="text-[10px] text-gray-400 uppercase font-semibold"
+                        >Total Waste Generated</span
+                      >
                       <span class="block text-sm font-extrabold text-gray-800 mt-0.5">
-                        {{ normalizedReportJson().environment.waste?.generated || 'Not Disclosed' }} 
-                        {{ normalizedReportJson().environment.waste?.generated ? normalizedReportJson().environment.waste?.unit : '' }}
+                        {{ normalizedReportJson().environment.waste?.generated || 'Not Disclosed' }}
+                        {{
+                          normalizedReportJson().environment.waste?.generated
+                            ? normalizedReportJson().environment.waste?.unit
+                            : ''
+                        }}
                       </span>
                     </div>
                     <div>
-                      <span class="text-[10px] text-gray-400 uppercase font-semibold">Verification Status</span>
-                      <span class="block text-xs font-semibold text-emerald-700 mt-0.5 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100/50 inline-block">
+                      <span class="text-[10px] text-gray-400 uppercase font-semibold"
+                        >Verification Status</span
+                      >
+                      <span
+                        class="block text-xs font-semibold text-emerald-700 mt-0.5 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100/50 inline-block"
+                      >
                         {{ normalizedReportJson().environment.scope1?.status || 'Self-Declared' }}
                       </span>
                     </div>
@@ -456,29 +940,51 @@
               <div class="bg-white border border-gray-200/80 rounded-xl p-6 shadow-sm space-y-5">
                 <div>
                   <h3 class="text-sm font-bold text-gray-900">Workforce Diversity</h3>
-                  <p class="text-[11px] text-gray-400 mt-0.5">Comparison of reported Male vs Female employee metrics</p>
+                  <p class="text-[11px] text-gray-400 mt-0.5">
+                    Comparison of reported Male vs Female employee metrics
+                  </p>
                 </div>
 
                 <div class="space-y-4">
                   <div class="flex justify-between items-center text-xs text-gray-500 font-bold">
-                    <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-indigo-500 rounded-sm"></span>Male ({{ getMalePercentage() }}%)</span>
-                    <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-rose-400 rounded-sm"></span>Female ({{ getFemalePercentage() }}%)</span>
+                    <span class="inline-flex items-center gap-1.5"
+                      ><span class="w-2.5 h-2.5 bg-indigo-500 rounded-sm"></span>Male ({{
+                        getMalePercentage()
+                      }}%)</span
+                    >
+                    <span class="inline-flex items-center gap-1.5"
+                      ><span class="w-2.5 h-2.5 bg-rose-400 rounded-sm"></span>Female ({{
+                        getFemalePercentage()
+                      }}%)</span
+                    >
                   </div>
 
                   <!-- Side by Side Slider -->
                   <div class="h-4 w-full rounded-full overflow-hidden flex bg-gray-105">
-                    <div [style.width.%]="getMalePercentage()" class="bg-indigo-500 transition-all duration-300"></div>
-                    <div [style.width.%]="getFemalePercentage()" class="bg-rose-400 transition-all duration-300"></div>
+                    <div
+                      [style.width.%]="getMalePercentage()"
+                      class="bg-indigo-500 transition-all duration-300"
+                    ></div>
+                    <div
+                      [style.width.%]="getFemalePercentage()"
+                      class="bg-rose-400 transition-all duration-300"
+                    ></div>
                   </div>
 
-                  <div class="grid grid-cols-2 gap-2 text-center text-xs border-t border-gray-100 pt-3">
+                  <div
+                    class="grid grid-cols-2 gap-2 text-center text-xs border-t border-gray-100 pt-3"
+                  >
                     <div>
                       <span class="text-gray-400">Male Staff</span>
-                      <span class="block font-bold text-gray-900 text-sm mt-0.5">{{ normalizedReportJson().social.employees?.male || 'Not Disclosed' }}</span>
+                      <span class="block font-bold text-gray-900 text-sm mt-0.5">{{
+                        normalizedReportJson().social.employees?.male || 'Not Disclosed'
+                      }}</span>
                     </div>
                     <div>
                       <span class="text-gray-400">Female Staff</span>
-                      <span class="block font-bold text-gray-900 text-sm mt-0.5">{{ normalizedReportJson().social.employees?.female || 'Not Disclosed' }}</span>
+                      <span class="block font-bold text-gray-900 text-sm mt-0.5">{{
+                        normalizedReportJson().social.employees?.female || 'Not Disclosed'
+                      }}</span>
                     </div>
                   </div>
                 </div>
@@ -488,29 +994,51 @@
               <div class="bg-white border border-gray-200/80 rounded-xl p-6 shadow-sm space-y-5">
                 <div>
                   <h3 class="text-sm font-bold text-gray-900">Employment Stability</h3>
-                  <p class="text-[11px] text-gray-400 mt-0.5">Permanent vs Temporary / Contract workforce split</p>
+                  <p class="text-[11px] text-gray-400 mt-0.5">
+                    Permanent vs Temporary / Contract workforce split
+                  </p>
                 </div>
 
                 <div class="space-y-4">
                   <div class="flex justify-between items-center text-xs text-gray-500 font-bold">
-                    <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-blue-500 rounded-sm"></span>Permanent ({{ getPermPercentage() }}%)</span>
-                    <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 bg-amber-400 rounded-sm"></span>Temporary ({{ getTempPercentage() }}%)</span>
+                    <span class="inline-flex items-center gap-1.5"
+                      ><span class="w-2.5 h-2.5 bg-blue-500 rounded-sm"></span>Permanent ({{
+                        getPermPercentage()
+                      }}%)</span
+                    >
+                    <span class="inline-flex items-center gap-1.5"
+                      ><span class="w-2.5 h-2.5 bg-amber-400 rounded-sm"></span>Temporary ({{
+                        getTempPercentage()
+                      }}%)</span
+                    >
                   </div>
 
                   <!-- Side by Side Slider -->
                   <div class="h-4 w-full rounded-full overflow-hidden flex bg-gray-105">
-                    <div [style.width.%]="getPermPercentage()" class="bg-blue-500 transition-all duration-300"></div>
-                    <div [style.width.%]="getTempPercentage()" class="bg-amber-400 transition-all duration-300"></div>
+                    <div
+                      [style.width.%]="getPermPercentage()"
+                      class="bg-blue-500 transition-all duration-300"
+                    ></div>
+                    <div
+                      [style.width.%]="getTempPercentage()"
+                      class="bg-amber-400 transition-all duration-300"
+                    ></div>
                   </div>
 
-                  <div class="grid grid-cols-2 gap-2 text-center text-xs border-t border-gray-100 pt-3">
+                  <div
+                    class="grid grid-cols-2 gap-2 text-center text-xs border-t border-gray-100 pt-3"
+                  >
                     <div>
                       <span class="text-gray-400">Permanent Employees</span>
-                      <span class="block font-bold text-gray-900 text-sm mt-0.5">{{ normalizedReportJson().social.employees?.permanent || 'Not Disclosed' }}</span>
+                      <span class="block font-bold text-gray-900 text-sm mt-0.5">{{
+                        normalizedReportJson().social.employees?.permanent || 'Not Disclosed'
+                      }}</span>
                     </div>
                     <div>
                       <span class="text-gray-400">Temporary Employees</span>
-                      <span class="block font-bold text-gray-900 text-sm mt-0.5">{{ normalizedReportJson().social.employees?.temporary || 'Not Disclosed' }}</span>
+                      <span class="block font-bold text-gray-900 text-sm mt-0.5">{{
+                        normalizedReportJson().social.employees?.temporary || 'Not Disclosed'
+                      }}</span>
                     </div>
                   </div>
                 </div>
@@ -521,53 +1049,111 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
               <!-- Training Card -->
               <div class="bg-white border border-gray-200/80 rounded-xl p-5 shadow-sm space-y-3">
-                <span class="text-[10px] font-extrabold text-indigo-500 uppercase tracking-widest block">Workforce Development</span>
+                <span
+                  class="text-[10px] font-extrabold text-indigo-500 uppercase tracking-widest block"
+                  >Workforce Development</span
+                >
                 <h4 class="text-xs font-bold text-gray-700">Average Training Hours</h4>
                 <div class="flex items-baseline gap-2">
-                  <span class="text-2xl font-black text-gray-900">{{ normalizedReportJson().social.trainingHours !== null ? normalizedReportJson().social.trainingHours : 'Not Disclosed' }}</span>
+                  <span class="text-2xl font-black text-gray-900">{{
+                    normalizedReportJson().social.trainingHours !== null
+                      ? normalizedReportJson().social.trainingHours
+                      : 'Not Disclosed'
+                  }}</span>
                   <span class="text-xs text-gray-500">hours/year</span>
                 </div>
                 <div class="w-full bg-gray-105 h-2 rounded-full overflow-hidden">
-                  <div class="bg-indigo-600 h-full rounded-full" [style.width.%]="normalizedReportJson().social.trainingHours ? 75 : 0"></div>
+                  <div
+                    class="bg-indigo-600 h-full rounded-full"
+                    [style.width.%]="normalizedReportJson().social.trainingHours ? 75 : 0"
+                  ></div>
                 </div>
               </div>
 
               <!-- Accidents Card -->
               <div class="bg-white border border-gray-200/80 rounded-xl p-5 shadow-sm space-y-3">
-                <span class="text-[10px] font-extrabold text-indigo-500 uppercase tracking-widest block">Health & Safety</span>
+                <span
+                  class="text-[10px] font-extrabold text-indigo-500 uppercase tracking-widest block"
+                  >Health & Safety</span
+                >
                 <h4 class="text-xs font-bold text-gray-700">Workplace Accidents</h4>
                 <div class="flex items-baseline gap-2">
-                  <span class="text-2xl font-black" [class.text-red-600]="normalizedReportJson().social.workplaceAccidents > 0" [class.text-emerald-600]="normalizedReportJson().social.workplaceAccidents === 0 || normalizedReportJson().social.workplaceAccidents === '0'">
-                    {{ normalizedReportJson().social.workplaceAccidents !== null ? normalizedReportJson().social.workplaceAccidents : 'Not Disclosed' }}
+                  <span
+                    class="text-2xl font-black"
+                    [class.text-red-600]="normalizedReportJson().social.workplaceAccidents > 0"
+                    [class.text-emerald-600]="
+                      normalizedReportJson().social.workplaceAccidents === 0 ||
+                      normalizedReportJson().social.workplaceAccidents === '0'
+                    "
+                  >
+                    {{
+                      normalizedReportJson().social.workplaceAccidents !== null
+                        ? normalizedReportJson().social.workplaceAccidents
+                        : 'Not Disclosed'
+                    }}
                   </span>
                   <span class="text-xs text-gray-500">incidents</span>
                 </div>
                 <span class="text-[10px] text-gray-400 block">
-                  {{ normalizedReportJson().social.workplaceAccidents > 0 ? 'Requires safety performance audit.' : 'Zero incident report compliance.' }}
+                  {{
+                    normalizedReportJson().social.workplaceAccidents > 0
+                      ? 'Requires safety performance audit.'
+                      : 'Zero
+            incident report compliance.'
+                  }}
                 </span>
               </div>
 
               <!-- Governance Compliance Checklist -->
               <div class="bg-white border border-gray-200/80 rounded-xl p-5 shadow-sm space-y-3">
-                <span class="text-[10px] font-extrabold text-indigo-500 uppercase tracking-widest block">Business Integrity</span>
+                <span
+                  class="text-[10px] font-extrabold text-indigo-500 uppercase tracking-widest block"
+                  >Business Integrity</span
+                >
                 <h4 class="text-xs font-bold text-gray-700">Governance Policies</h4>
-                
+
                 <div class="space-y-2 pt-1">
                   <div class="flex items-center justify-between text-xs">
                     <span class="text-gray-600 font-medium">Supplier Screening</span>
-                    <span class="px-2 py-0.5 rounded-full font-bold" [class.bg-emerald-50]="normalizedReportJson().governance?.supplierSustainability" [class.text-emerald-700]="normalizedReportJson().governance?.supplierSustainability" [class.bg-gray-100]="!normalizedReportJson().governance?.supplierSustainability" [class.text-gray-500]="!normalizedReportJson().governance?.supplierSustainability">
+                    <span
+                      class="px-2 py-0.5 rounded-full font-bold"
+                      [class.bg-emerald-50]="
+                        normalizedReportJson().governance?.supplierSustainability
+                      "
+                      [class.text-emerald-700]="
+                        normalizedReportJson().governance?.supplierSustainability
+                      "
+                      [class.bg-gray-100]="
+                        !normalizedReportJson().governance?.supplierSustainability
+                      "
+                      [class.text-gray-500]="
+                        !normalizedReportJson().governance?.supplierSustainability
+                      "
+                    >
                       {{ normalizedReportJson().governance?.supplierSustainability ? 'YES' : 'NO' }}
                     </span>
                   </div>
                   <div class="flex items-center justify-between text-xs">
                     <span class="text-gray-600 font-medium">Data Protection Policy</span>
-                    <span class="px-2 py-0.5 rounded-full font-bold" [class.bg-emerald-50]="normalizedReportJson().governance?.dataProtection" [class.text-emerald-700]="normalizedReportJson().governance?.dataProtection" [class.bg-gray-100]="!normalizedReportJson().governance?.dataProtection" [class.text-gray-500]="!normalizedReportJson().governance?.dataProtection">
+                    <span
+                      class="px-2 py-0.5 rounded-full font-bold"
+                      [class.bg-emerald-50]="normalizedReportJson().governance?.dataProtection"
+                      [class.text-emerald-700]="normalizedReportJson().governance?.dataProtection"
+                      [class.bg-gray-100]="!normalizedReportJson().governance?.dataProtection"
+                      [class.text-gray-500]="!normalizedReportJson().governance?.dataProtection"
+                    >
                       {{ normalizedReportJson().governance?.dataProtection ? 'YES' : 'NO' }}
                     </span>
                   </div>
                   <div class="flex items-center justify-between text-xs">
                     <span class="text-gray-600 font-medium">Anti-Corruption Rules</span>
-                    <span class="px-2 py-0.5 rounded-full font-bold" [class.bg-emerald-50]="normalizedReportJson().governance?.antiCorruption" [class.text-emerald-700]="normalizedReportJson().governance?.antiCorruption" [class.bg-gray-100]="!normalizedReportJson().governance?.antiCorruption" [class.text-gray-500]="!normalizedReportJson().governance?.antiCorruption">
+                    <span
+                      class="px-2 py-0.5 rounded-full font-bold"
+                      [class.bg-emerald-50]="normalizedReportJson().governance?.antiCorruption"
+                      [class.text-emerald-700]="normalizedReportJson().governance?.antiCorruption"
+                      [class.bg-gray-100]="!normalizedReportJson().governance?.antiCorruption"
+                      [class.text-gray-500]="!normalizedReportJson().governance?.antiCorruption"
+                    >
                       {{ normalizedReportJson().governance?.antiCorruption ? 'YES' : 'NO' }}
                     </span>
                   </div>
@@ -581,16 +1167,30 @@
   } @else {
     <!-- Empty State -->
     <div class="bg-white rounded-xl border border-gray-200/80 shadow-sm p-12 text-center space-y-4">
-      <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+      <div
+        class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
           <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.warningCircle" />
         </svg>
       </div>
       <div class="space-y-1">
         <h2 class="text-lg font-bold text-gray-900">Request Not Found</h2>
-        <p class="text-sm text-gray-500">The disclosure request you are trying to view does not exist or has been deleted.</p>
+        <p class="text-sm text-gray-500">
+          The disclosure request you are trying to view does not exist or has been deleted.
+        </p>
       </div>
-      <a routerLink="/dashboard/investors" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition-colors cursor-pointer">
+      <a
+        routerLink="/dashboard/investors"
+        class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition-colors cursor-pointer"
+      >
         Back to Dashboard
       </a>
     </div>
@@ -598,88 +1198,185 @@
 
   <!-- Document Upload Modal -->
   @if (isUploadModalOpen()) {
-  <div class="fixed inset-0 z-50 flex items-center justify-center">
-    <div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity" (click)="isUploadModalOpen.set(false)"></div>
-    <div class="bg-white rounded-xl shadow-xl border border-gray-200 w-full max-w-lg mx-4 relative z-10 overflow-hidden">
-      <!-- Header -->
-      <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-        <h3 class="text-lg font-semibold text-gray-800">Upload ESG Documents</h3>
-        <button [disabled]="isUploading()" class="text-gray-400 hover:text-gray-600 transition-colors rounded-full p-1 hover:bg-gray-200 cursor-pointer border-none bg-transparent disabled:opacity-50" (click)="isUploadModalOpen.set(false)">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-            <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.close" />
-          </svg>
-        </button>
-      </div>
-
-      <!-- Body -->
-      <div class="p-6 space-y-4">
-        <!-- Drag & Drop Area -->
-        <div class="flex justify-center items-center w-full">
-          <label class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-emerald-500 hover:bg-emerald-50/10 transition-all select-none">
-            <div class="flex flex-col items-center justify-center pt-5 pb-6">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-gray-400 mb-2">
-                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.bigCloudUpload" />
-              </svg>
-              <p class="text-xs font-semibold text-gray-700">Click to upload or drag and drop</p>
-              <p class="text-[10px] text-gray-500 mt-1">PDF, DOCX, or Excel (MAX. 20MB)</p>
-            </div>
-            <input [disabled]="isUploading()" type="file" class="hidden" multiple (change)="onFileSelected($event)" />
-          </label>
+    <div class="fixed inset-0 z-50 flex items-center justify-center">
+      <div
+        class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity"
+        (click)="isUploadModalOpen.set(false)"
+      ></div>
+      <div
+        class="bg-white rounded-xl shadow-xl border border-gray-200 w-full max-w-lg mx-4 relative z-10 overflow-hidden"
+      >
+        <!-- Header -->
+        <div
+          class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50"
+        >
+          <h3 class="text-lg font-semibold text-gray-800">Upload ESG Documents</h3>
+          <button
+            [disabled]="isUploading()"
+            class="text-gray-400 hover:text-gray-600 transition-colors rounded-full p-1 hover:bg-gray-200 cursor-pointer border-none bg-transparent disabled:opacity-50"
+            (click)="isUploadModalOpen.set(false)"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="w-5 h-5"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.close" />
+            </svg>
+          </button>
         </div>
 
-        <!-- Selected Files Queue Display -->
-        @if (selectedFiles().length > 0) {
-        <div class="space-y-2">
-          <div class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Selected Files ({{ selectedFiles().length }})</div>
-          <div class="max-h-36 overflow-y-auto space-y-1.5 border border-gray-100 rounded-lg p-2 bg-gray-50">
-            @for (file of selectedFiles(); track file.name; let idx = $index) {
-            <div class="flex items-center justify-between bg-white px-2.5 py-1.5 rounded border border-gray-200 text-xs text-gray-700">
-              <span class="truncate font-semibold max-w-[220px]" [title]="file.name">{{ file.name }}</span>
-              <div class="flex items-center gap-2 shrink-0">
-                <span class="text-[10px] text-gray-400 font-normal">{{ (file.size / (1024 * 1024)).toFixed(2) }} MB</span>
-                <button [disabled]="isUploading()" (click)="removeSelectedFile(idx)" class="text-gray-400 hover:text-red-500 transition-colors p-0.5 rounded cursor-pointer disabled:opacity-50 border-none bg-transparent" title="Remove File">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.close" />
-                  </svg>
-                </button>
+        <!-- Body -->
+        <div class="p-6 space-y-4">
+          <!-- Drag & Drop Area -->
+          <div class="flex justify-center items-center w-full">
+            <label
+              class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-emerald-500 hover:bg-emerald-50/10 transition-all select-none"
+            >
+              <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-10 h-10 text-gray-400 mb-2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    [attr.d]="svgs.bigCloudUpload"
+                  />
+                </svg>
+                <p class="text-xs font-semibold text-gray-700">Click to upload or drag and drop</p>
+                <p class="text-[10px] text-gray-500 mt-1">PDF, DOCX, or Excel (MAX. 20MB)</p>
+              </div>
+              <input
+                [disabled]="isUploading()"
+                type="file"
+                class="hidden"
+                multiple
+                (change)="onFileSelected($event)"
+              />
+            </label>
+          </div>
+
+          <!-- Selected Files Queue Display -->
+          @if (selectedFiles().length > 0) {
+            <div class="space-y-2">
+              <div class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                Selected Files ({{ selectedFiles().length }})
+              </div>
+              <div
+                class="max-h-36 overflow-y-auto space-y-1.5 border border-gray-100 rounded-lg p-2 bg-gray-50"
+              >
+                @for (file of selectedFiles(); track file.name; let idx = $index) {
+                  <div
+                    class="flex items-center justify-between bg-white px-2.5 py-1.5 rounded border border-gray-200 text-xs text-gray-700"
+                  >
+                    <span class="truncate font-semibold max-w-[220px]" [title]="file.name">{{
+                      file.name
+                    }}</span>
+                    <div class="flex items-center gap-2 shrink-0">
+                      <span class="text-[10px] text-gray-400 font-normal"
+                        >{{ (file.size / (1024 * 1024)).toFixed(2) }} MB</span
+                      >
+                      <button
+                        [disabled]="isUploading()"
+                        (click)="removeSelectedFile(idx)"
+                        class="text-gray-400 hover:text-red-500 transition-colors p-0.5 rounded cursor-pointer disabled:opacity-50 border-none bg-transparent"
+                        title="Remove File"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="2.5"
+                          stroke="currentColor"
+                          class="w-3.5 h-3.5"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            [attr.d]="svgs.close"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                }
               </div>
             </div>
-            }
-          </div>
-        </div>
-        }
-      </div>
-
-      <!-- Footer -->
-      <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
-        <button [disabled]="isUploading()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer disabled:opacity-50" (click)="isUploadModalOpen.set(false)">Cancel</button>
-        <button [disabled]="isUploading() || selectedFiles().length === 0" (click)="onUploadSubmit()" class="px-4 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors shadow-sm flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed border-none">
-          @if (isUploading()) {
-          <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" [attr.d]="svgs.spinner"></path>
-          </svg>
-          Uploading...
-          } @else {
-          Upload Files
           }
-        </button>
+        </div>
+
+        <!-- Footer -->
+        <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
+          <button
+            [disabled]="isUploading()"
+            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer disabled:opacity-50"
+            (click)="isUploadModalOpen.set(false)"
+          >
+            Cancel
+          </button>
+          <button
+            [disabled]="isUploading() || selectedFiles().length === 0"
+            (click)="onUploadSubmit()"
+            class="px-4 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors shadow-sm flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed border-none"
+          >
+            @if (isUploading()) {
+              <svg
+                class="animate-spin h-4 w-4 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path class="opacity-75" fill="currentColor" [attr.d]="svgs.spinner"></path>
+              </svg>
+              Uploading...
+            } @else {
+              Upload Files
+            }
+          </button>
+        </div>
       </div>
     </div>
-  </div>
   }
 
   <!-- ESG Report Module Selection Modal -->
   @if (isModuleModalOpen()) {
     <div class="fixed inset-0 z-50 flex items-center justify-center">
       <!-- Backdrop -->
-      <div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity" (click)="isModuleModalOpen.set(false)"></div>
-      
+      <div
+        class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity"
+        (click)="isModuleModalOpen.set(false)"
+      ></div>
+
       <!-- Content Container -->
-      <div class="bg-white rounded-xl shadow-xl border border-gray-200 p-8 max-w-md w-full mx-4 relative z-10 space-y-6 font-sans">
+      <div
+        class="bg-white rounded-xl shadow-xl border border-gray-200 p-8 max-w-md w-full mx-4 relative z-10 space-y-6 font-sans"
+      >
         <div class="flex items-center gap-3 text-indigo-600 border-b border-gray-100 pb-4">
           <div class="p-2 bg-indigo-50 rounded-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
               <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.sparkles" />
             </svg>
           </div>
@@ -690,34 +1387,62 @@
         </div>
 
         <div class="space-y-4">
-          <label class="flex items-start gap-3.5 p-4 rounded-xl border border-gray-200 hover:border-indigo-200 hover:bg-indigo-50/10 cursor-pointer transition-all">
-            <input type="radio" name="selectedModule" value="basic" 
-                   [checked]="selectedModule() === 'basic'"
-                   (change)="selectedModule.set('basic')"
-                   class="mt-1 accent-indigo-600 cursor-pointer w-4 h-4" />
+          <label
+            class="flex items-start gap-3.5 p-4 rounded-xl border border-gray-200 hover:border-indigo-200 hover:bg-indigo-50/10 cursor-pointer transition-all"
+          >
+            <input
+              type="radio"
+              name="selectedModule"
+              value="basic"
+              [checked]="selectedModule() === 'basic'"
+              (change)="selectedModule.set('basic')"
+              class="mt-1 accent-indigo-600 cursor-pointer w-4 h-4"
+            />
             <div class="space-y-1">
-              <span class="block text-sm font-bold text-gray-950">OPTION A: Basic Module (only)</span>
-              <span class="block text-xs text-gray-500 leading-relaxed">Runs RAG analysis only on VSME Basic indicators (Company basis, transition practices, emissions, resource use, and general workforce).</span>
+              <span class="block text-sm font-bold text-gray-950"
+                >OPTION A: Basic Module (only)</span
+              >
+              <span class="block text-xs text-gray-500 leading-relaxed"
+                >Runs RAG analysis only on VSME Basic indicators (Company basis, transition
+                practices, emissions, resource use, and general workforce).</span
+              >
             </div>
           </label>
 
-          <label class="flex items-start gap-3.5 p-4 rounded-xl border border-gray-200 hover:border-indigo-200 hover:bg-indigo-50/10 cursor-pointer transition-all">
-            <input type="radio" name="selectedModule" value="comprehensive" 
-                   [checked]="selectedModule() === 'comprehensive'"
-                   (change)="selectedModule.set('comprehensive')"
-                   class="mt-1 accent-indigo-600 cursor-pointer w-4 h-4" />
+          <label
+            class="flex items-start gap-3.5 p-4 rounded-xl border border-gray-200 hover:border-indigo-200 hover:bg-indigo-50/10 cursor-pointer transition-all"
+          >
+            <input
+              type="radio"
+              name="selectedModule"
+              value="comprehensive"
+              [checked]="selectedModule() === 'comprehensive'"
+              (change)="selectedModule.set('comprehensive')"
+              class="mt-1 accent-indigo-600 cursor-pointer w-4 h-4"
+            />
             <div class="space-y-1">
-              <span class="block text-sm font-bold text-gray-950">OPTION B: Basic and Comprehensive Module</span>
-              <span class="block text-xs text-gray-500 leading-relaxed">Runs RAG analysis across all Basic indicators plus Comprehensive modules (Strategy influence, climate transition plans, human rights, and governance diversity).</span>
+              <span class="block text-sm font-bold text-gray-950"
+                >OPTION B: Basic and Comprehensive Module</span
+              >
+              <span class="block text-xs text-gray-500 leading-relaxed"
+                >Runs RAG analysis across all Basic indicators plus Comprehensive modules (Strategy
+                influence, climate transition plans, human rights, and governance diversity).</span
+              >
             </div>
           </label>
         </div>
 
         <div class="flex justify-end gap-3 pt-2">
-          <button (click)="isModuleModalOpen.set(false)" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
+          <button
+            (click)="isModuleModalOpen.set(false)"
+            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+          >
             Cancel
           </button>
-          <button (click)="onGenerateReportSubmit()" class="px-5 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm transition-colors cursor-pointer border-none flex items-center gap-1.5">
+          <button
+            (click)="onGenerateReportSubmit()"
+            class="px-5 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm transition-colors cursor-pointer border-none flex items-center gap-1.5"
+          >
             Submit & Generate
           </button>
         </div>
@@ -729,31 +1454,53 @@
   @if (isDownloadModalOpen()) {
     <div class="fixed inset-0 z-50 flex items-center justify-center">
       <!-- Backdrop -->
-      <div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity" (click)="isDownloadModalOpen.set(false)"></div>
-      
+      <div
+        class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity"
+        (click)="isDownloadModalOpen.set(false)"
+      ></div>
+
       <!-- Content Container -->
-      <div class="bg-white rounded-xl shadow-xl border border-gray-200 p-8 max-w-md w-full mx-4 relative z-10 space-y-6 font-sans">
+      <div
+        class="bg-white rounded-xl shadow-xl border border-gray-200 p-8 max-w-md w-full mx-4 relative z-10 space-y-6 font-sans"
+      >
         <div class="flex items-center gap-3 text-indigo-600 border-b border-gray-100 pb-4">
           <div class="p-2 bg-indigo-50 rounded-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
               <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.download" />
             </svg>
           </div>
           <div>
             <h3 class="text-lg font-bold text-gray-900">Download ESG Report Version</h3>
-            <p class="text-xs text-gray-500 mt-0.5">Select a historical compiled PDF report version</p>
+            <p class="text-xs text-gray-500 mt-0.5">
+              Select a historical compiled PDF report version
+            </p>
           </div>
         </div>
 
         <div class="max-h-60 overflow-y-auto space-y-3 pr-1">
           @for (rep of request()?.generatedReports; track rep; let idx = $index) {
-            <label class="flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 hover:border-indigo-200 hover:bg-indigo-50/10 cursor-pointer transition-all">
-              <input type="radio" name="selectedDownloadVersion" [value]="rep" 
-                     [checked]="selectedDownloadVersion() === rep"
-                     (change)="selectedDownloadVersion.set(rep)"
-                     class="mt-1 accent-indigo-600 cursor-pointer w-4 h-4" />
+            <label
+              class="flex items-start gap-3 p-3.5 rounded-xl border border-gray-200 hover:border-indigo-200 hover:bg-indigo-50/10 cursor-pointer transition-all"
+            >
+              <input
+                type="radio"
+                name="selectedDownloadVersion"
+                [value]="rep"
+                [checked]="selectedDownloadVersion() === rep"
+                (change)="selectedDownloadVersion.set(rep)"
+                class="mt-1 accent-indigo-600 cursor-pointer w-4 h-4"
+              />
               <div class="space-y-0.5">
-                <span class="block text-sm font-bold text-gray-950">{{ formatReportVersionName(rep) }}</span>
+                <span class="block text-sm font-bold text-gray-950">{{
+                  formatReportVersionName(rep)
+                }}</span>
                 <span class="block text-[10.5px] text-gray-500 font-mono">{{ rep }}</span>
               </div>
             </label>
@@ -761,11 +1508,24 @@
         </div>
 
         <div class="flex justify-end gap-3 pt-2">
-          <button (click)="isDownloadModalOpen.set(false)" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
+          <button
+            (click)="isDownloadModalOpen.set(false)"
+            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+          >
             Cancel
           </button>
-          <button (click)="onDownloadReportSubmit()" class="px-5 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm transition-colors cursor-pointer border-none flex items-center gap-1.5">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+          <button
+            (click)="onDownloadReportSubmit()"
+            class="px-5 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm transition-colors cursor-pointer border-none flex items-center gap-1.5"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2.5"
+              stroke="currentColor"
+              class="w-3.5 h-3.5"
+            >
               <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.download" />
             </svg>
             Download Report
@@ -778,24 +1538,48 @@
   <!-- Delete Document Confirmation Modal -->
   @if (isDeleteDocModalOpen()) {
     <div class="fixed inset-0 z-50 flex items-center justify-center">
-      <div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity" (click)="isDeleteDocModalOpen.set(false)"></div>
-      <div class="bg-white rounded-xl shadow-xl border border-gray-200 p-6 max-w-md w-full mx-4 relative z-10 space-y-4">
+      <div
+        class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity"
+        (click)="isDeleteDocModalOpen.set(false)"
+      ></div>
+      <div
+        class="bg-white rounded-xl shadow-xl border border-gray-200 p-6 max-w-md w-full mx-4 relative z-10 space-y-4"
+      >
         <div class="flex items-center gap-3 text-red-600">
           <div class="p-2 bg-red-50 rounded-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.warningTriangle" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                [attr.d]="svgs.warningTriangle"
+              />
             </svg>
           </div>
           <h3 class="text-lg font-bold text-gray-900 font-sans">Delete Document</h3>
         </div>
-        <p class="text-sm text-gray-500">
-          Are you sure you want to delete the document <span class="font-semibold text-gray-850">"{{ docToDelete() }}"</span>? This action cannot be undone.
+        <p class="text-sm text-gray-500 break-words">
+          Are you sure you want to delete the document
+          <span class="font-semibold text-gray-900 break-all">"{{ docToDelete() }}"</span>? This action cannot
+          be undone.
         </p>
         <div class="flex justify-end gap-3 pt-2">
-          <button (click)="isDeleteDocModalOpen.set(false)" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
+          <button
+            (click)="isDeleteDocModalOpen.set(false)"
+            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+          >
             Cancel
           </button>
-          <button (click)="confirmDeleteDoc()" class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg shadow-sm transition-colors cursor-pointer border-none">
+          <button
+            (click)="confirmDeleteDoc()"
+            class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg shadow-sm transition-colors cursor-pointer border-none"
+          >
             Delete
           </button>
         </div>
@@ -807,17 +1591,32 @@
   @if (isChangeModelModalOpen()) {
     <div class="fixed inset-0 z-50 flex items-center justify-center font-sans">
       <!-- Backdrop -->
-      <div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity animate-fadeIn"
-        (click)="isChangeModelModalOpen.set(false)"></div>
+      <div
+        class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity animate-fadeIn"
+        (click)="isChangeModelModalOpen.set(false)"
+      ></div>
 
       <!-- Modal Panel -->
-      <div class="bg-white rounded-xl shadow-2xl w-full max-w-md z-10 overflow-hidden flex flex-col relative animate-scaleIn border border-gray-200">
+      <div
+        class="bg-white rounded-xl shadow-2xl w-full max-w-md z-10 overflow-hidden flex flex-col relative animate-scaleIn border border-gray-200"
+      >
         <!-- Header -->
-        <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+        <div
+          class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50"
+        >
           <h3 class="text-base font-bold text-gray-800">Confirm Model Transition</h3>
-          <button class="text-gray-400 hover:text-gray-600 transition-colors rounded-full p-1 hover:bg-gray-200 cursor-pointer border-none bg-transparent flex items-center justify-center"
-            (click)="isChangeModelModalOpen.set(false)">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+          <button
+            class="text-gray-400 hover:text-gray-600 transition-colors rounded-full p-1 hover:bg-gray-200 cursor-pointer border-none bg-transparent flex items-center justify-center"
+            (click)="isChangeModelModalOpen.set(false)"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="w-5 h-5"
+            >
               <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.close" />
             </svg>
           </button>
@@ -825,26 +1624,50 @@
 
         <!-- Body -->
         <div class="p-6 space-y-3">
-          <div class="flex items-center gap-3 text-amber-600 bg-amber-50 p-3 rounded-lg border border-amber-200">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 shrink-0">
-              <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.warningTriangle" />
+          <div
+            class="flex items-center gap-3 text-amber-600 bg-amber-50 p-3 rounded-lg border border-amber-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="w-5 h-5 shrink-0"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                [attr.d]="svgs.warningTriangle"
+              />
             </svg>
             <span class="text-xs font-semibold">Reindexing Required</span>
           </div>
           <p class="text-sm text-gray-600 leading-relaxed">
-            Are you sure you want to change the analysis model to <span class="font-bold text-gray-900">{{ pendingNewModel() === 'gemini-3.5' ? 'Gemini 3.5' : 'Llama 3' }}</span>?
+            Are you sure you want to change the analysis model to
+            <span class="font-bold text-gray-900">{{
+              pendingNewModel() === 'gemini-3.5' ? 'Gemini 3.5' : 'Llama 3'
+            }}</span
+            >?
           </p>
           <p class="text-xs text-gray-500">
-            This will trigger a rebuild of the vector database in the background using the matching embedding specifications.
+            This will trigger a rebuild of the vector database in the background using the matching
+            embedding specifications.
           </p>
         </div>
 
         <!-- Footer -->
         <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
-          <button class="px-4 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
-            (click)="isChangeModelModalOpen.set(false)">Cancel</button>
-          <button (click)="confirmModelChangeSubmit()"
-            class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors shadow-sm cursor-pointer border-none">
+          <button
+            class="px-4 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+            (click)="isChangeModelModalOpen.set(false)"
+          >
+            Cancel
+          </button>
+          <button
+            (click)="confirmModelChangeSubmit()"
+            class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors shadow-sm cursor-pointer border-none"
+          >
             Confirm Switch
           </button>
         </div>
@@ -854,22 +1677,40 @@
 
   <!-- Toast Notification -->
   @if (notification(); as note) {
-    <div class="fixed top-6 right-6 z-[9999] flex items-center gap-3 px-4 py-3.5 rounded-xl border shadow-lg transition-all transform translate-y-0 scale-100 animate-fadeIn max-w-sm w-full font-sans"
-         [ngClass]="{
-           'bg-red-50 border-red-200 text-red-800': note.type === 'error',
-           'bg-emerald-50 border-emerald-200 text-emerald-800': note.type === 'success'
-         }">
-      <div class="p-1.5 rounded-lg flex items-center justify-center"
-           [ngClass]="{
-             'bg-red-100 text-red-600': note.type === 'error',
-             'bg-emerald-100 text-emerald-600': note.type === 'success'
-           }">
+    <div
+      class="fixed top-6 right-6 z-[9999] flex items-center gap-3 px-4 py-3.5 rounded-xl border shadow-lg transition-all transform translate-y-0 scale-100 animate-fadeIn max-w-sm w-full font-sans"
+      [ngClass]="{
+        'bg-red-50 border-red-200 text-red-800': note.type === 'error',
+        'bg-emerald-50 border-emerald-200 text-emerald-800': note.type === 'success',
+      }"
+    >
+      <div
+        class="p-1.5 rounded-lg flex items-center justify-center"
+        [ngClass]="{
+          'bg-red-100 text-red-600': note.type === 'error',
+          'bg-emerald-100 text-emerald-600': note.type === 'success',
+        }"
+      >
         @if (note.type === 'error') {
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2.5"
+            stroke="currentColor"
+            class="w-5 h-5"
+          >
             <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.warningTriangle" />
           </svg>
         } @else {
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2.5"
+            stroke="currentColor"
+            class="w-5 h-5"
+          >
             <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.checkmark" />
           </svg>
         }
@@ -877,11 +1718,86 @@
       <div class="flex-1 text-sm font-semibold leading-relaxed">
         {{ note.message }}
       </div>
-      <button (click)="notification.set(null)" class="text-gray-400 hover:text-gray-600 focus:outline-none bg-transparent border-none cursor-pointer p-1 flex items-center justify-center">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+      <button
+        (click)="notification.set(null)"
+        class="text-gray-400 hover:text-gray-600 focus:outline-none bg-transparent border-none cursor-pointer p-1 flex items-center justify-center"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2.5"
+          stroke="currentColor"
+          class="w-4 h-4"
+        >
           <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.close" />
         </svg>
       </button>
     </div>
   }
 </div>
+
+<!-- ===== Document Viewer Modal ===== -->
+@if (isViewDocModalOpen()) {
+  <div
+    class="fixed inset-0 z-[1000] flex items-center justify-center p-4"
+    (click)="closeViewDocModal()"
+  >
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+
+    <!-- Modal panel -->
+    <div
+      class="relative z-10 bg-white rounded-2xl shadow-2xl flex flex-col"
+      style="width: min(90vw, 1000px); height: min(90vh, 800px);"
+      (click)="$event.stopPropagation()"
+    >
+      <!-- Header -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-blue-50 rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-blue-600">
+              <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.eye" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-gray-900">Document Preview</h3>
+            <p class="text-xs text-gray-500 mt-0.5 truncate max-w-xs">{{ viewDocumentName() }}</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <!-- Open in new tab -->
+          <a
+            [href]="viewDocumentRawUrl()!"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+            </svg>
+            Open in new tab
+          </a>
+          <!-- Close -->
+          <button
+            (click)="closeViewDocModal()"
+            class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors border-none bg-transparent cursor-pointer"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.close" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- iframe viewer -->
+      <div class="flex-1 overflow-hidden rounded-b-2xl">
+        <iframe
+          [src]="viewDocumentUrl()!"
+          class="w-full h-full border-0"
+          title="Document Preview"
+        ></iframe>
+      </div>
+    </div>
+  </div>
+}

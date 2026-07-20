@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal, computed, effect } from '@angular/co
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { EsgService, EsgRequest } from '../services/esg.service';
 import { SVGS } from '../constants/svgs';
 
@@ -15,6 +16,7 @@ export class InvestorDetails implements OnInit {
   svgs = SVGS;
   private route = inject(ActivatedRoute);
   private esgService = inject(EsgService);
+  private sanitizer = inject(DomSanitizer);
   
   requestId = signal<string | null>(null);
   request = signal<EsgRequest | undefined>(undefined);
@@ -40,10 +42,51 @@ export class InvestorDetails implements OnInit {
   normalizedReportJson = signal<any>(null);
   activeSectionTab = signal<'details' | 'trends'>('details');
 
+  reportStats = computed(() => {
+    const req = this.request();
+    if (!req || !req.reportData) {
+      return null;
+    }
+    
+    const dataList = Array.isArray(req.reportData) 
+      ? req.reportData 
+      : ((req.reportData as any).questionnaire_data || null);
+      
+    if (!dataList || !dataList.length) {
+      return null;
+    }
+    
+    const total = dataList.length;
+    const answered = dataList.filter((item: any) => {
+      if (!item.answer) return false;
+      const ans = item.answer.toLowerCase().trim();
+      return ans !== '' && 
+             ans !== 'missing' && 
+             ans !== 'not specified' && 
+             ans !== 'error querying document rag' &&
+             ans !== 'not disclosed';
+    }).length;
+    
+    const percentage = total > 0 ? Math.round((answered / total) * 100) : 0;
+    
+    return {
+      answered,
+      total,
+      percentage
+    };
+  });
+
   async loadNormalizedJson() {
     const req = this.request();
     if (!req) return;
-    if (req.status === 'Completed' || req.status === 'Approved' || (req.reportData && req.reportData.length)) {
+    
+    const hasReportData = req.reportData && (
+      Array.isArray(req.reportData) 
+        ? req.reportData.length > 0 
+        : !!(req.reportData as any).questionnaire_data
+    );
+
+    if (req.status === 'Completed' || req.status === 'Approved' || hasReportData) {
       try {
         const data = await this.esgService.getReportNormalizedJson(req.id);
         this.normalizedReportJson.set(data);
@@ -52,6 +95,7 @@ export class InvestorDetails implements OnInit {
         this.normalizedReportJson.set(null);
       }
     } else {
+      this.sanitizer.bypassSecurityTrustResourceUrl(''); // dummy reference
       this.normalizedReportJson.set(null);
     }
   }
@@ -134,6 +178,30 @@ export class InvestorDetails implements OnInit {
       }
     }
   }
+
+  // Document viewer modal
+  isViewDocModalOpen = signal(false);
+  viewDocumentUrl = signal<SafeResourceUrl | null>(null);
+  viewDocumentRawUrl = signal<string | null>(null);
+  viewDocumentName = signal<string | null>(null);
+
+  onViewDocument(filename: string) {
+    const req = this.request();
+    if (!req) return;
+    const rawUrl = `http://localhost:8000/esg/requests/${req.id}/files/${encodeURIComponent(filename)}/view`;
+    this.viewDocumentRawUrl.set(rawUrl);
+    this.viewDocumentUrl.set(this.sanitizer.bypassSecurityTrustResourceUrl(rawUrl));
+    this.viewDocumentName.set(filename);
+    this.isViewDocModalOpen.set(true);
+  }
+
+  closeViewDocModal() {
+    this.isViewDocModalOpen.set(false);
+    this.viewDocumentUrl.set(null);
+    this.viewDocumentRawUrl.set(null);
+    this.viewDocumentName.set(null);
+  }
+
 
   notification = signal<{ message: string; type: 'success' | 'error' } | null>(null);
 
