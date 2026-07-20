@@ -40,23 +40,12 @@ def query_report_for_request(requestId: str, module: str = "basic", model: str =
 
         db = Chroma(persist_directory=chroma_dir, embedding_function=embeddings)
 
-        # 2. Compile targeted queries based on ESG sections and key terms to ensure full context coverage
-        targeted_queries = [
-            "sustainability objectives and environmental policies",
-            "electricity natural gas fuel consumption energy reduction",
-            "Scope 1 Scope 2 Scope 3 greenhouse gas GHG emissions",
-            "water consumption withdrawn recycled saving discharge wastewater",
-            "waste generated recycled circular economy materials reused",
-            "employees workforce female male permanent temporary turnover",
-            "workplace accidents fatalities injuries training hours",
-            "collective bargaining remuneration gender pay gap",
-            "supplier sustainability screening code of conduct",
-            "data protection anti-corruption policies human rights"
-        ]
-        # Append section headers from questionnaire text to ensure matching structures are pulled
+        # 2. Compile targeted queries directly from questionnaire text to ensure full context coverage
+        targeted_queries = []
         for line in questionnaire_text.split("\n"):
             line = line.strip()
-            if line and (line.startswith("B") and "." in line[:4]):
+            # Skip empty lines, the module title line, and very short labels
+            if line and not line.endswith("Questionnaire") and len(line) > 5:
                 targeted_queries.append(line)
 
         # 3. Retrieve top matches from Chroma for each keyword query to build a unified context
