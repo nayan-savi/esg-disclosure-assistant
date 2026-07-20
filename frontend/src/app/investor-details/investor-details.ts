@@ -435,6 +435,17 @@ export class InvestorDetails implements OnInit {
     return Math.round((val / total) * 100);
   }
 
+  formatConsumption(val: any): string {
+    if (val === null || val === undefined || val === 'null' || val === '') {
+      return 'Not Disclosed';
+    }
+    const num = parseFloat(val);
+    if (isNaN(num)) {
+      return val.toString();
+    }
+    return num.toLocaleString();
+  }
+
   onDownloadReportClick() {
     const req = this.request();
     if (!req) return;
