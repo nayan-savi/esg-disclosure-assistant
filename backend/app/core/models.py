@@ -25,7 +25,7 @@ class GeminiProvider(BaseModelProvider):
     def get_llm(self, temperature: float = 0.0):
         from langchain_google_genai import ChatGoogleGenerativeAI
         api_key = os.getenv("GEMINI_API_KEY")
-        return ChatGoogleGenerativeAI(model="gemini-3.5-flash", temperature=temperature, google_api_key=api_key)
+        return ChatGoogleGenerativeAI(model="gemini-3.6-flash", temperature=temperature, google_api_key=api_key)
 
 class OllamaProvider(BaseModelProvider):
     def get_embeddings(self):

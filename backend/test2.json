@@ -1,36 +1,818 @@
-{
-  'error': {
-    'code': 429,
-    'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/embed_content_free_tier_requests, limit: 100, model: gemini-embedding-1.0\nPlease retry in 27.223456516s.',
-    'status': 'RESOURCE_EXHAUSTED',
-    'details': [
-      {
-        '@type': 'type.googleapis.com/google.rpc.Help',
-        'links': [
-          {
-            'description': 'Learn more about Gemini API quotas',
-            'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'
-          }
-        ]
-      },
-      {
-        '@type': 'type.googleapis.com/google.rpc.QuotaFailure',
-        'violations': [
-          {
-            'quotaMetric': 'generativelanguage.googleapis.com/embed_content_free_tier_requests',
-            'quotaId': 'EmbedContentRequestsPerMinutePerUserPerProjectPerModel-FreeTier',
-            'quotaDimensions': {
-              'location': 'global',
-              'model': 'gemini-embedding-1.0'
-            },
-            'quotaValue': '100'
-          }
-        ]
-      },
-      {
-        '@type': 'type.googleapis.com/google.rpc.RetryInfo',
-        'retryDelay': '27s'
-      }
-    ]
+[
+  {
+    "question": "What is your company name?",
+    "answer": "GreenPack Manufacturing GmbH",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "What is your registered address?",
+    "answer": "Cologne, Germany",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "What is your registration number?",
+    "answer": "HRB 458921",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "What industry does your company operate in?",
+    "answer": "Packaging Manufacturing",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "What reporting period does this report cover?",
+    "answer": "FY2025",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Which legal entity/entities are included?",
+    "answer": "GreenPack Manufacturing GmbH",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "How many employees does the company have?",
+    "answer": "180",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Does this report cover the entire organization?",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Has the information been prepared using the VSME Standard?",
+    "answer": "Yes, the report aligns with the VSME Standard.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Who approved this report?",
+    "answer": "Managing Director",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Does your company have sustainability objectives?",
+    "answer": "Yes, including reducing Scope 1 and Scope 2 emissions by 30% by 2030, sourcing at least 75% recycled paper raw materials by 2028, reducing freshwater consumption by 20% by 2030, maintaining zero major health and safety incidents, and providing ESG awareness training to 100% of employees annually.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Do you have environmental policies?",
+    "answer": "Yes, an approved Environmental Policy which is reviewed annually.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Do you have social responsibility policies?",
+    "answer": "Yes, including an approved Health & Safety Policy, Code of Conduct, and Human Rights Policy.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Do you have governance or ethics policies?",
+    "answer": "Yes, including an approved Code of Conduct and Anti-Corruption Policy.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Have sustainability initiatives been implemented during the reporting period?",
+    "answer": "Yes, initiatives have been implemented across energy reduction, pollution prevention, biodiversity conservation, water conservation, and circular economy.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Are sustainability responsibilities assigned to employees?",
+    "answer": "Yes, responsibilities are assigned to the Board, ESG Manager, HR, Operations, and Finance.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Do you monitor sustainability performance?",
+    "answer": "Yes, the company monitors performance across energy, emissions, pollution, biodiversity, water, resource use, waste, and workforce metrics.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "What future sustainability initiatives are planned?",
+    "answer": "Future initiatives include reducing NOx emissions by 5%, reducing wastewater volume by 8%, increasing sustainably certified raw material procurement to 85%, expanding the native tree planting programme to 1,500 trees, completing biodiversity screening for strategic suppliers, and conducting annual biodiversity impact assessments.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Total electricity consumed (kWh)",
+    "answer": "1,240,000 kWh",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Total fuel consumed",
+    "answer": "285,000 kWh of Natural Gas and 18,500 litres of Diesel",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Renewable electricity percentage",
+    "answer": "42%",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Scope 1 GHG emissions",
+    "answer": "185 tCO\u2082e",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Scope 2 GHG emissions",
+    "answer": "220 tCO\u2082e",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Method used to calculate emissions",
+    "answer": "Scope 1 emissions were calculated from diesel combustion using national emission factors. Scope 2 emissions were calculated using the location-based electricity grid emission factor.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Energy reduction initiatives implemented",
+    "answer": "Installed LED lighting, replaced compressed air compressors with high-efficiency models, installed smart energy meters, conducted an employee awareness campaign, and purchased 42% renewable electricity.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Target for reducing energy consumption",
+    "answer": "20% energy intensity reduction target by 2030",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Does your company emit pollutants?",
+    "answer": "Yes, the company monitors emissions of NOx and VOCs, as well as wastewater discharges.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Do you hold environmental permits?",
+    "answer": "Yes, the company holds active Air Emissions, Wastewater Discharge, and Waste Storage permits.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Have pollution incidents occurred?",
+    "answer": "Yes, one minor hydraulic oil leak of low severity occurred on 14-May-2025.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Were any environmental fines received?",
+    "answer": "No",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Measures taken to reduce pollution",
+    "answer": "Quarterly emissions monitoring, closed-loop wastewater treatment, secondary containment for chemical storage, preventive maintenance, and annual environmental compliance training.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Wastewater treatment methods",
+    "answer": "Closed-loop wastewater treatment process",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Air emission monitoring process",
+    "answer": "Quarterly emissions monitoring program for NOx and VOCs.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Are operations located near protected areas?",
+    "answer": "No",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Does the company impact biodiversity?",
+    "answer": "The company has low risk of impact on biodiversity, with 0 protected areas affected and 0 environmental incidents affecting biodiversity in FY2025.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Biodiversity protection measures",
+    "answer": "Planted 500 native trees, installed pollinator-friendly flowering plants, maintained green buffer zones around stormwater drains, sourced 100% FSC-certified paper for key products, and conducted an annual biodiversity awareness campaign.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Restoration activities performed",
+    "answer": "Planted 500 native trees around the facility boundary.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Environmental impact assessments completed",
+    "answer": "Completed 38 supplier biodiversity assessments, with plans to conduct annual biodiversity impact assessments starting 2026-2030.",
+    "score": 0.9,
+    "confidence_score": 0.9
+  },
+  {
+    "question": "Total water withdrawn",
+    "answer": "18,500 m3",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Water source",
+    "answer": "Municipal water supply (92%) and Rainwater harvesting (8%)",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Water consumption",
+    "answer": "14,300 m3",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Water recycled",
+    "answer": "4,200 m3",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Water saving initiatives",
+    "answer": "Low-flow fixtures, leak detection program, rainwater harvesting, closed-loop cooling, and employee awareness.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Water discharge management",
+    "answer": "Wastewater discharged was 13,900 m3, managed in compliance with active discharge permits and monitored quarterly.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Total waste generated",
+    "answer": "96 t",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Hazardous waste generated",
+    "answer": "4 t",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Waste recycled",
+    "answer": "75 t (78%)",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Materials reused",
+    "answer": "Production scrap is returned to the process.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Circular economy initiatives",
+    "answer": "72% recycled fiber in products, returning production scrap to the process, redesigning packaging to reduce material by 8%, waste segregation, and using certified recyclers.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Packaging reduction measures",
+    "answer": "Packaging redesigned to reduce material by 8%.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Recycling targets",
+    "answer": "Source at least 75% recycled paper raw materials by 2028.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Total employees",
+    "answer": "180",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Female employees",
+    "answer": "68",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Male employees",
+    "answer": "112",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Permanent employees",
+    "answer": "160",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Temporary employees",
+    "answer": "20",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Full-time employees",
+    "answer": "170",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Part-time employees",
+    "answer": "10",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Employee turnover",
+    "answer": "8.9%",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Average employee age",
+    "answer": "39 years",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Number of workplace accidents",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Fatalities",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Lost-time injuries",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Health and safety training conducted",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Health and safety policy available?",
+    "answer": "Yes, an approved Health & Safety Policy is available and reviewed annually.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Occupational health programs",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Average employee remuneration",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Gender pay gap",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Employees covered by collective agreements",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Training hours per employee",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Employee development programs",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Performance review process",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Any corruption convictions?",
+    "answer": "0",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Any bribery convictions?",
+    "answer": "0",
+    "score": 0.9,
+    "confidence_score": 0.9
+  },
+  {
+    "question": "Fines received?",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Anti-corruption policy?",
+    "answer": "Yes, an approved Anti-Corruption Policy is available and reviewed annually.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Employee anti-corruption training?",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Whistleblower mechanism available?",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Describe your business model.",
+    "answer": "GreenPack Manufacturing GmbH manufactures sustainable paper and cardboard packaging for food and consumer goods industries, operating one production facility and one warehouse in Germany.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "How does sustainability influence your strategy?",
+    "answer": "GreenPack integrates sustainability into business decisions through environmental stewardship, employee wellbeing, ethical governance, and continuous improvement, with annual ESG objectives reviewed by management.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "What sustainability risks affect the business?",
+    "answer": "Identified risks include habitat disturbance, chemical spills, waste generation, and supplier deforestation.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "What sustainability opportunities exist?",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Long-term sustainability objectives.",
+    "answer": "Reduce Scope 1 and Scope 2 emissions by 30% by 2030, source at least 75% recycled paper raw materials by 2028, and reduce freshwater consumption by 20% by 2030.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Stakeholder engagement process.",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Environmental policies",
+    "answer": "Approved Environmental Policy, reviewed annually.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Climate policy",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Human rights policy",
+    "answer": "Approved Human Rights Policy, reviewed biennially.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Diversity policy",
+    "answer": "Equal employment opportunity policy is implemented.",
+    "score": 0.9,
+    "confidence_score": 0.9
+  },
+  {
+    "question": "Supplier sustainability policy",
+    "answer": "Approved Supplier Code of Conduct, reviewed annually.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Governance policy",
+    "answer": "Approved Code of Conduct and Anti-Corruption Policy.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Monitoring process",
+    "answer": "Sustainability policies are reviewed periodically, implemented through measurable objectives, and monitored by designated roles (Board, ESG Manager, HR, Operations, Finance).",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Net Zero target?",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Carbon reduction target",
+    "answer": "Reduce Scope 1 and Scope 2 greenhouse gas emissions by 30% by 2030.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Baseline year",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Current emissions",
+    "answer": "405 tCO\u2082e (Scope 1: 185 tCO\u2082e, Scope 2: 220 tCO\u2082e)",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Planned reduction initiatives",
+    "answer": "LED lighting installation, replacing compressed air compressors with high-efficiency models, installing smart energy meters, employee awareness campaigns, and purchasing renewable electricity.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Renewable energy targets",
+    "answer": "75% renewable electricity by 2030",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Progress against targets",
+    "answer": "Renewable electricity reached 42% in FY2025 towards the 75% target by 2030.",
+    "score": 0.9,
+    "confidence_score": 0.9
+  },
+  {
+    "question": "Physical climate risks",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Transition risks",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Financial impact",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Risk mitigation plan",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Climate scenario analysis",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Business continuity planning",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Age distribution",
+    "answer": "18\u201325: 18 employees, 26\u201335: 54 employees, 36\u201345: 61 employees, 46\u201355: 34 employees, 56+: 13 employees",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Diversity statistics",
+    "answer": "Gender breakdown: 112 Male, 68 Female. Female representation by department: Production (28%), Warehouse & Logistics (21%), Sales (44%), Finance (58%), Human Resources (75%), Quality (50%), Management (33%).",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Disability representation",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Nationality breakdown",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Employee engagement",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Retention rate",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Human rights policy",
+    "answer": "Approved Human Rights Policy, reviewed biennially.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Human rights due diligence",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Supply chain assessment",
+    "answer": "Completed 42 supplier ESG assessments and 38 supplier biodiversity assessments in FY2025.",
+    "score": 1.0,
+    "confidence_score": 1.0
+  },
+  {
+    "question": "Forced labour prevention",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Child labour prevention",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Human rights training",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Grievance mechanism",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Human rights incidents reported",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Severity",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Investigations conducted",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Corrective actions",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Legal proceedings",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Preventive measures",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Revenue from fossil fuels",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Revenue from mining",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Revenue from chemicals",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Revenue from high-carbon sectors",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Revenue from sustainable activities",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Investment in sustainable products",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Total board members",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Female board members",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Male board members",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Independent directors",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Diversity policy",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Gender diversity targets",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
+  },
+  {
+    "question": "Progress against targets",
+    "answer": "missing",
+    "score": 0.0,
+    "confidence_score": 0.0
   }
-}
+]

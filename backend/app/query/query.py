@@ -43,26 +43,37 @@ def query_report_for_request(requestId: str, module: str = "basic", model: str =
         # 2. Compile targeted queries directly from questionnaire text to ensure full context coverage
         ignore_headings = ("B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10", "B11", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9")
         targeted_queries = []
+        grouped_queries = []
         for line in questionnaire_text.split("\n"):
             line = line.strip()
             # Skip empty lines, the module title line, and very short labels
             if line and not line.startswith(ignore_headings) and not line.endswith("Questionnaire") and len(line) > 5:
-                targeted_queries.append(line)
+                grouped_queries.append(line)
+            else:
+                print(f"Skipping line: {line}")
+                if len(grouped_queries) > 0:
+                    targeted_queries.append(" ".join(grouped_queries))
+                    grouped_queries = []
+
+        if len(grouped_queries) > 0:
+            targeted_queries.append(" ".join(grouped_queries))
 
         # 3. Retrieve top matches from Chroma for each keyword query to build a unified context
         unique_docs = {}
-        for q_str in targeted_queries:
+        for index, q_str in enumerate(targeted_queries):
             docs = db.similarity_search_with_score(q_str, k=2)
             for doc, score in docs:
-                print(f"Question: {q_str} Score: {score}")
+                print(f"Question {index + 1}: {q_str}")
+                print(f"Score: {score}")
                 print(f"Source: {doc.metadata['source']}")
+                print("-" * 160)
                 unique_docs[doc.page_content] = doc
 
         retrieved_docs = list(unique_docs.values())
 
         # Keep top 15 most relevant chunks to stay within model context size limits and keep retrieval crisp
-        if len(retrieved_docs) > 15:
-            retrieved_docs = retrieved_docs[:15]
+        # if len(retrieved_docs) > 15:
+        #     retrieved_docs = retrieved_docs[:15]
 
         # 4. Initialize LLM based on user selection
         llm = provider.get_llm(temperature=0.0)
