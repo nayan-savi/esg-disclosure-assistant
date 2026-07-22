@@ -595,7 +595,9 @@ def generate_esg_report_stream(requestId: str, module: str = "basic", db: Sessio
             pdf_generated = True
             try:
                 from app.query.report_generator import generate_report_json, create_pdf_from_json
+                from app.core.utils import ReportUtility
                 report_json = await loop.run_in_executor(None, generate_report_json, requestId, module, model_val)
+                report_json = ReportUtility.enrich_report_json_from_db(report_json, report_data)
                 
                 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
                 pdf_dir = os.path.join(base_dir, "esg_report", requestId)
@@ -692,7 +694,9 @@ def generate_esg_report(requestId: str, module: str = "basic", db: Session = Dep
         pdf_generated = True
         try:
             from app.query.report_generator import generate_report_json, create_pdf_from_json
+            from app.core.utils import ReportUtility
             report_json = generate_report_json(requestId, module=module, model=model_val)
+            report_json = ReportUtility.enrich_report_json_from_db(report_json, report_data)
             
             base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
             pdf_dir = os.path.join(base_dir, "esg_report", requestId)

@@ -8,6 +8,8 @@ from langchain_ollama import OllamaEmbeddings, ChatOllama
 # from langchain_community.vectorstores import Chroma
 from langchain_chroma import Chroma
 
+from app.common.spinner import Spinner
+
 
 def query_report_for_request(requestId: str, module: str = "basic", model: str = "llama3"):
     print(f"Querying Report for request {requestId} using module {module} and model {model}")
@@ -61,7 +63,7 @@ def query_report_for_request(requestId: str, module: str = "basic", model: str =
         # 3. Retrieve top matches from Chroma for each keyword query to build a unified context
         unique_docs = {}
         for index, q_str in enumerate(targeted_queries):
-            docs = db.similarity_search_with_score(q_str, k=1)
+            docs = db.similarity_search_with_score(q_str, k=3)
             for doc, score in docs:
                 print(f"Question {index + 1}: {q_str}")
                 print(f"Score: {score}")
@@ -87,7 +89,12 @@ def query_report_for_request(requestId: str, module: str = "basic", model: str =
             ("human", "{input}"),
         ])
 
-        print("LLM Invoke stuff-documents chain directly with the combined context chunks list")
+
+        spinner = Spinner(
+            "LLM Invoke stuff-documents chain directly with the combined context chunks list",
+            "LLM is answered"
+        )
+        spinner.start()
         # 6. Invoke stuff-documents chain directly with the combined context chunks list
         question_answer_chain = create_stuff_documents_chain(llm, prompt)
         response = question_answer_chain.invoke({
@@ -96,7 +103,7 @@ def query_report_for_request(requestId: str, module: str = "basic", model: str =
         })
 
         raw_answer = response.strip()
-        print("LLM answer:", raw_answer)
+        spinner.stop()
         # Parse using json_repair to be extremely robust
         import json_repair
         try:

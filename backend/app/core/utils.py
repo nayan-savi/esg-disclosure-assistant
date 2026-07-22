@@ -168,36 +168,58 @@ class ReportUtility:
             if val:
                 wat["consumption"] = parse_number(val) or val
                 wat["unit"] = "m3"
+
+        # waste
+        if "waste" not in env:
+            env["waste"] = {}
+        wst = env["waste"]
+        if wst.get("generated") is None or str(wst.get("generated")).lower() in ["none", "null", ""]:
+            val = find_val(["waste generated"]) or find_val(["total waste"]) or find_val(["waste"])
+            if val:
+                wst["generated"] = parse_number(val) or val
+                wst["unit"] = "tonnes" if "tonne" in str(val).lower() else "kg"
+        if wst.get("recycledPercentage") is None or str(wst.get("recycledPercentage")).lower() in ["none", "null", ""]:
+            val = find_val(["recycled"]) or find_val(["waste recycled"])
+            if val:
+                parsed_pct = parse_number(val)
+                if parsed_pct is not None:
+                    wst["recycledPercentage"] = parsed_pct
                 
         # Scope 1
         if "scope1" not in env:
             env["scope1"] = {}
         s1 = env["scope1"]
         if s1.get("value") is None or str(s1.get("value")).lower() in ["none", "null", ""]:
-            val = find_val(["scope 1"])
+            val = find_val(["scope 1"]) or find_val(["scope1"]) or find_val(["direct emissions"])
             if val:
                 s1["value"] = val
-                s1["status"] = "Reported"
+                s1["status"] = s1.get("status") or "Reported"
+        elif s1.get("value") and not s1.get("status"):
+            s1["status"] = "Reported"
                 
         # Scope 2
         if "scope2" not in env:
             env["scope2"] = {}
         s2 = env["scope2"]
         if s2.get("value") is None or str(s2.get("value")).lower() in ["none", "null", ""]:
-            val = find_val(["scope 2"])
+            val = find_val(["scope 2"]) or find_val(["scope2"]) or find_val(["location-based"]) or find_val(["indirect emissions"])
             if val:
                 s2["value"] = val
-                s2["status"] = "Reported"
+                s2["status"] = s2.get("status") or "Reported"
+        elif s2.get("value") and not s2.get("status"):
+            s2["status"] = "Reported"
 
         # Scope 3
         if "scope3" not in env:
             env["scope3"] = {}
         s3 = env["scope3"]
         if s3.get("value") is None or str(s3.get("value")).lower() in ["none", "null", ""]:
-            val = find_val(["scope 3"])
+            val = find_val(["scope 3"]) or find_val(["scope3"]) or find_val(["value-chain emissions"])
             if val:
                 s3["value"] = val
-                s3["status"] = "Reported"
+                s3["status"] = s3.get("status") or "Reported"
+        elif s3.get("value") and not s3.get("status"):
+            s3["status"] = "Reported"
 
         # Enrich Governance Policies
         if "governance" not in report_json:

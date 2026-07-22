@@ -229,7 +229,7 @@ def generate_report_json(requestId: str, module: str = "basic", model: str = "ll
     embeddings = provider.get_embeddings()
 
     db = Chroma(persist_directory=chroma_dir, embedding_function=embeddings)
-    retriever = db.as_retriever(search_kwargs={"k": 8})
+    retriever = db.as_retriever(search_kwargs={"k": 12})
     
     llm = provider.get_llm(temperature=0.0)
 
@@ -269,18 +269,12 @@ Return ONLY valid raw JSON without code fences or extra text."""),
     if module == "basic":
         module_instructions = """
 ## Basic Report Constraints
-You are generating a BASIC ESG report. Please exclude advanced metrics by setting them to null or 0:
-- Under environment: set naturalGas, water, waste, and scope3 to null/0.
-- Under social: set permanent, temporary, and trainingHours to null/0.
-- Under governance: set supplierSustainability and dataProtection to false.
+You are generating a BASIC ESG report. Focus on essential core metrics. Extract all available metrics mentioned in the facts context across environment, social, and governance. If a metric is not present in the facts, mark it as null.
 """
     else:
         module_instructions = """
 ## Comprehensive Report Requirements
-You are generating a COMPREHENSIVE ESG report. Please extract and populate all available advanced metrics:
-- Under environment: include naturalGas, water, waste, and scope3.
-- Under social: include permanent, temporary, and trainingHours splits.
-- Under governance: include supplier sustainability and data protection assessments.
+You are generating a COMPREHENSIVE ESG report. Please extract and populate all available metrics across environment, social, and governance.
 """
 
     report_template = report_template.replace("Return ONLY the transformed JSON.", f"{module_instructions}\n\nReturn ONLY the transformed JSON.")
@@ -291,12 +285,11 @@ You are generating a COMPREHENSIVE ESG report. Please extract and populate all a
 
     try:
         final_report_json = extract_json_block(formatted_response.content)
-        return final_report_json
     except Exception as e:
         print(f"Error parsing final formatted ESG report: {str(e)}")
         content_str = get_message_text(formatted_response.content)
         # Return fallback structure
-        return {
+        final_report_json = {
             "company": {"name": "Unknown", "reportingYear": "Unknown"},
             "executiveSummary": "Failed to compile report: " + content_str,
             "environment": {},
@@ -305,6 +298,37 @@ You are generating a COMPREHENSIVE ESG report. Please extract and populate all a
             "findings": [],
             "recommendations": []
         }
+
+    # Automatically enrich generated JSON with database questionnaire facts if available
+    try:
+        from db.session import SessionLocal
+        from sqlalchemy import text
+        from app.core.utils import ReportUtility
+
+        db_session = SessionLocal()
+        try:
+            try:
+                num_id = int(str(requestId).replace("req_", ""))
+            except ValueError:
+                num_id = 0
+            if num_id:
+                db_row = db_session.execute(
+                    text("SELECT report_data FROM upload_request WHERE request_id = :req_id"),
+                    {"req_id": num_id}
+                ).fetchone()
+                if db_row and db_row.report_data:
+                    import json as py_json
+                    parsed_db_data = py_json.loads(db_row.report_data)
+                    if isinstance(parsed_db_data, list):
+                        final_report_json = ReportUtility.enrich_report_json_from_db(final_report_json, parsed_db_data)
+                    elif isinstance(parsed_db_data, dict) and "questionnaire_data" in parsed_db_data:
+                        final_report_json = ReportUtility.enrich_report_json_from_db(final_report_json, parsed_db_data["questionnaire_data"])
+        finally:
+            db_session.close()
+    except Exception as enrich_err:
+        print(f"Warning: Automatic report JSON enrichment failed: {enrich_err}")
+
+    return final_report_json
 
 
 def format_value(val):
