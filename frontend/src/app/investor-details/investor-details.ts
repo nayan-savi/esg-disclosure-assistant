@@ -634,6 +634,56 @@ export class InvestorDetails implements OnInit {
     return num.toLocaleString();
   }
 
+  getMonthlyElectricityData() {
+    const json = this.normalizedReportJson();
+    return json?.environment?.electricity?.monthlyElectricityConsumption || [];
+  }
+
+  getMaxMonthlyElectricity(): number {
+    const list = this.getMonthlyElectricityData();
+    if (!list.length) return 100000;
+    const max = Math.max(...list.map((item: any) => parseFloat(item.consumption) || 0));
+    return max > 0 ? max : 100000;
+  }
+
+  getElectricityBarHeight(val: any): number {
+    const num = parseFloat(val) || 0;
+    const max = this.getMaxMonthlyElectricity();
+    return Math.round((num / max) * 100);
+  }
+
+  getMonthlyWaterData() {
+    const json = this.normalizedReportJson();
+    return json?.environment?.water?.monthlyWaterConsumption || [];
+  }
+
+  getMaxMonthlyWater(): number {
+    const list = this.getMonthlyWaterData();
+    if (!list.length) return 1000;
+    const max = Math.max(...list.map((item: any) => Math.max(
+      parseFloat(item.withdrawn) || 0,
+      parseFloat(item.consumption) || 0,
+      parseFloat(item.recycled) || 0,
+      parseFloat(item.discharged) || 0
+    )));
+    return max > 0 ? max : 1000;
+  }
+
+  getWaterBarHeight(val: any): number {
+    const num = parseFloat(val) || 0;
+    const max = this.getMaxMonthlyWater();
+    return Math.round((num / max) * 100);
+  }
+
+  getIncidentsCount(): number {
+    const json = this.normalizedReportJson();
+    if (!json || !json.social) return 0;
+    const val = json.social.incidents;
+    if (val === undefined || val === null || val === '') return 0;
+    const parsed = parseInt(val, 10);
+    return isNaN(parsed) ? 0 : parsed;
+  }
+
   onDownloadReportClick() {
     const req = this.request();
     if (!req) return;

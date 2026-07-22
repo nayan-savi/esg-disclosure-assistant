@@ -2,7 +2,7 @@ import re
 
 class ReportUtility:
     @staticmethod
-    def enrich_report_json_from_db(report_json: dict, report_data_list: list) -> dict:
+    def enrich_report_json_from_db(report_json: dict, report_data_list: list, request_id: str = None) -> dict:
         """
         Enriches the LLM-generated structured report JSON with verified questionnaire metrics 
         from the database (report_data_list) when those fields are null or missing.
@@ -97,7 +97,40 @@ class ReportUtility:
         if social.get("workplaceAccidents") is None or str(social.get("workplaceAccidents")).lower() in ["none", "null", ""]:
             val = find_val(["workplace accidents"]) or find_val(["accidents"])
             if val:
-                social["workplaceAccidents"] = parse_number(val) or 0
+                social["workplaceAccidents"] = parse_number(val) if parse_number(val) is not None else 0
+
+        # Incidents
+        doc_incidents = None
+        if request_id:
+            import os, docx
+            req_str = str(request_id)
+            base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "documents", req_str if req_str.startswith("req_") else f"req_{req_str}"))
+            if os.path.exists(base_dir):
+                for f in os.listdir(base_dir):
+                    if "incident" in f.lower() and f.endswith(".docx"):
+                        filepath = os.path.join(base_dir, f)
+                        try:
+                            doc = docx.Document(filepath)
+                            count = 0
+                            for table in doc.tables:
+                                for row in table.rows:
+                                    cells = [c.text.strip() for c in row.cells]
+                                    if len(cells) >= 2 and (cells[0].lower().startswith("hr-") or cells[0].lower().startswith("inc-") or "2026-" in cells[0]):
+                                        count += 1
+                            if count > 0:
+                                doc_incidents = count
+                        except Exception:
+                            pass
+
+        if doc_incidents is not None:
+            social["incidents"] = doc_incidents
+        elif social.get("incidents") is None or str(social.get("incidents")).lower() in ["none", "null", ""]:
+            val = find_val(["incidents occurred"]) or find_val(["environmental incidents"]) or find_val(["incidents"])
+            if val:
+                parsed_inc = parse_number(val)
+                social["incidents"] = parsed_inc if parsed_inc is not None else (0 if "no" in str(val).lower() or "zero" in str(val).lower() else 1)
+            else:
+                social["incidents"] = 0
                 
         # Training hours
         th = social.get("trainingHours")
@@ -128,6 +161,24 @@ class ReportUtility:
             if val:
                 elec["consumption"] = parse_number(val) or val
                 elec["unit"] = "kWh" if "kwh" in str(val).lower() else "MWh"
+
+        # Parse monthly electricity consumption
+        if not elec.get("monthlyElectricityConsumption") or len(elec.get("monthlyElectricityConsumption")) == 0:
+            month_val = find_val(["monthly report"]) or find_val(["monthly electricity"]) or find_val(["electricity", "jan"])
+            if month_val:
+                import re
+                months_data = []
+                pattern = r"(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[^\d]*([\d,]+)(?:\s*kWh)?(?:\s*\(([\d\.]+)%\)?)?"
+                for m in re.finditer(pattern, str(month_val), re.IGNORECASE):
+                    month = m.group(1).capitalize()
+                    cons = int(m.group(2).replace(",", ""))
+                    ren = float(m.group(3)) if m.group(3) else None
+                    item = {"month": month, "consumption": cons}
+                    if ren is not None:
+                        item["renewablePercentage"] = ren
+                    months_data.append(item)
+                if months_data:
+                    elec["monthlyElectricityConsumption"] = months_data
                 
         # naturalGas
         if "naturalGas" not in env:
@@ -168,6 +219,56 @@ class ReportUtility:
             if val:
                 wat["consumption"] = parse_number(val) or val
                 wat["unit"] = "m3"
+
+        # Parse monthly water consumption
+        existing_water = wat.get("monthlyWaterConsumption") or []
+        is_water_invalid = any((item.get("withdrawn") or 0) > 10000 for item in existing_water) or len(existing_water) < 12
+
+        if is_water_invalid:
+            water_months = []
+            # Try loading directly from document files if request_id is available
+            if request_id:
+                import os, docx
+                req_str = str(request_id)
+                base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "documents", req_str if req_str.startswith("req_") else f"req_{req_str}"))
+                if os.path.exists(base_dir):
+                    for f in os.listdir(base_dir):
+                        if "water" in f.lower() and f.endswith(".docx"):
+                            filepath = os.path.join(base_dir, f)
+                            try:
+                                doc = docx.Document(filepath)
+                                for table in doc.tables:
+                                    for row in table.rows:
+                                        cells = [c.text.strip() for c in row.cells]
+                                        if len(cells) >= 4 and cells[0] in ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]:
+                                            try:
+                                                m = cells[0]
+                                                w = int(cells[1].replace(",", ""))
+                                                c = int(cells[2].replace(",", ""))
+                                                r = int(cells[3].replace(",", ""))
+                                                d = int(cells[4].replace(",", "")) if len(cells) > 4 else 0
+                                                water_months.append({"month": m, "withdrawn": w, "consumption": c, "recycled": r, "discharged": d})
+                                            except Exception:
+                                                pass
+                            except Exception:
+                                pass
+
+            if water_months and len(water_months) == 12:
+                wat["monthlyWaterConsumption"] = water_months
+            else:
+                month_water_val = find_val(["monthly water"]) or find_val(["water", "jan"])
+                if month_water_val:
+                    import re
+                    w_months = []
+                    pattern = r"(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[^\d]*([\d,]+)[^\d]+([\d,]+)[^\d]+([\d,]+)"
+                    for m in re.finditer(pattern, str(month_water_val), re.IGNORECASE):
+                        month = m.group(1).capitalize()
+                        w = int(m.group(2).replace(",", ""))
+                        c = int(m.group(3).replace(",", ""))
+                        r = int(m.group(4).replace(",", ""))
+                        w_months.append({"month": month, "withdrawn": w, "consumption": c, "recycled": r})
+                    if w_months:
+                        wat["monthlyWaterConsumption"] = w_months
 
         # waste
         if "waste" not in env:

@@ -89,12 +89,7 @@ def query_report_for_request(requestId: str, module: str = "basic", model: str =
             ("human", "{input}"),
         ])
 
-
-        spinner = Spinner(
-            "LLM Invoke stuff-documents chain directly with the combined context chunks list",
-            "LLM is answered"
-        )
-        spinner.start()
+        print("LLM Invoke stuff-documents chain directly with the combined context chunks list")
         # 6. Invoke stuff-documents chain directly with the combined context chunks list
         question_answer_chain = create_stuff_documents_chain(llm, prompt)
         response = question_answer_chain.invoke({
@@ -103,7 +98,7 @@ def query_report_for_request(requestId: str, module: str = "basic", model: str =
         })
 
         raw_answer = response.strip()
-        spinner.stop()
+        print("LLM is answered")
         # Parse using json_repair to be extremely robust
         import json_repair
         try:

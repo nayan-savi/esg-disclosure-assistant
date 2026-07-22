@@ -122,7 +122,10 @@
             </div>
             <div>
               <div class="text-xs font-medium text-gray-500 uppercase">Framework</div>
-              <div class="text-sm font-semibold text-emerald-700 mt-1 truncate" [title]="request()?.frameworkName || ''">
+              <div
+                class="text-sm font-semibold text-emerald-700 mt-1 truncate"
+                [title]="request()?.frameworkName || ''"
+              >
                 {{ request()?.frameworkName || 'VSME' }}
               </div>
             </div>
@@ -176,7 +179,8 @@
                       />
                     </svg>
                     {{
-                    (request()?.reportData && (request()?.reportData?.length || request()?.reportData?.questionnaire_data))
+                      request()?.reportData &&
+                      (request()?.reportData?.length || request()?.reportData?.questionnaire_data)
                         ? 'Re-generate ESG Report'
                         : 'Generate ESG Report'
                     }}
@@ -246,14 +250,10 @@
                         stroke="currentColor"
                         class="w-4.5 h-4.5"
                       >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          [attr.d]="svgs.eye"
-                        />
+                        <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.eye" />
                       </svg>
                     </button>
-                     <a
+                    <a
                       [href]="
                         'http://localhost:8000/esg/requests/' + request()?.id + '/files/' + doc.name
                       "
@@ -555,7 +555,10 @@
             </div>
           </div>
         </div>
-      } @else if (request()?.reportData && (request()?.reportData?.length || request()?.reportData?.questionnaire_data)) {
+      } @else if (
+        request()?.reportData &&
+        (request()?.reportData?.length || request()?.reportData?.questionnaire_data)
+      ) {
         <div
           class="bg-white rounded-xl border border-gray-200/80 shadow-sm overflow-hidden mt-8 p-8 transition-all animate-fadeIn font-sans"
         >
@@ -581,7 +584,9 @@
                       class="inline-flex items-center gap-1 px-2 py-0.5 text-[11px] font-semibold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100/80 font-mono"
                     >
                       <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                      {{ reportStats()?.answered }}/{{ reportStats()?.total }} ({{ reportStats()?.percentage }}%) answered
+                      {{ reportStats()?.answered }}/{{ reportStats()?.total }} ({{
+                        reportStats()?.percentage
+                      }}%) answered
                     </span>
                   }
                 </div>
@@ -633,9 +638,22 @@
 
           <!-- Search Bar -->
           <div class="mt-4 relative font-sans">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.637 10.637z" />
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2.5"
+                stroke="currentColor"
+                class="w-4 h-4"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.637 10.637z"
+                />
               </svg>
             </div>
             <input
@@ -708,7 +726,10 @@
                   </tr>
                 } @empty {
                   <tr>
-                    <td colspan="3" class="py-8 text-center text-sm text-gray-400 font-medium font-sans">
+                    <td
+                      colspan="3"
+                      class="py-8 text-center text-sm text-gray-400 font-medium font-sans"
+                    >
                       No matching metrics or questions found.
                     </td>
                   </tr>
@@ -965,122 +986,390 @@
             <!-- Section: Resource & Utilities Consumption -->
             <div class="space-y-4">
               <div>
-                <h3 class="text-sm font-bold text-gray-900 mt-0">Resource & Utilities Consumption</h3>
+                <h3 class="text-sm font-bold text-gray-900 mt-0">
+                  Resource & Utilities Consumption
+                </h3>
                 <p class="text-[11px] text-gray-400 mt-0.5">
-                  Yearly operational utilities consumption tracking (Electricity, Natural Gas, Water, & Waste)
+                  Yearly operational utilities consumption tracking (Electricity, Natural Gas,
+                  Water, & Waste)
                 </p>
               </div>
 
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Electricity Card -->
-                <div class="bg-white border border-gray-200/80 rounded-xl p-5 shadow-sm space-y-4 relative overflow-hidden group">
-                  <div class="absolute right-0 top-0 w-24 h-24 bg-amber-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform duration-300"></div>
+                <div
+                  class="bg-white border border-gray-200/80 rounded-xl p-5 shadow-sm space-y-4 relative overflow-hidden group"
+                >
+                  <div
+                    class="absolute right-0 top-0 w-24 h-24 bg-amber-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform duration-300"
+                  ></div>
                   <div class="flex justify-between items-start">
-                    <span class="text-[10px] font-extrabold text-amber-600 uppercase tracking-widest block">Power Grid</span>
+                    <span
+                      class="text-[10px] font-extrabold text-amber-600 uppercase tracking-widest block"
+                      >Power Grid</span
+                    >
                     <span class="p-2 bg-amber-100/60 rounded-lg text-amber-600">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2.5"
+                        stroke="currentColor"
+                        class="w-4 h-4"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+                        />
                       </svg>
                     </span>
                   </div>
                   <div class="space-y-1">
-                    <h4 class="text-[11px] font-bold text-gray-400 my-0 uppercase tracking-wider">Electricity</h4>
+                    <h4 class="text-[11px] font-bold text-gray-400 my-0 uppercase tracking-wider">
+                      Electricity
+                    </h4>
                     <div class="flex items-baseline gap-1">
                       <span class="text-lg font-black text-gray-900">
-                        {{ formatConsumption(normalizedReportJson().environment?.electricity?.consumption) }}
+                        {{
+                          formatConsumption(
+                            normalizedReportJson().environment?.electricity?.consumption
+                          )
+                        }}
                       </span>
-                      <span class="text-[9px] text-gray-500 font-bold uppercase" *ngIf="normalizedReportJson().environment?.electricity?.consumption">
+                      <span
+                        class="text-[9px] text-gray-500 font-bold uppercase"
+                        *ngIf="normalizedReportJson().environment?.electricity?.consumption"
+                      >
                         {{ normalizedReportJson().environment?.electricity?.unit || 'kWh' }}
                       </span>
                     </div>
                   </div>
                   <div class="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
-                    <div class="bg-amber-500 h-full rounded-full transition-all duration-500" [style.width.%]="normalizedReportJson().environment?.electricity?.consumption ? 85 : 0"></div>
+                    <div
+                      class="bg-amber-500 h-full rounded-full transition-all duration-500"
+                      [style.width.%]="
+                        normalizedReportJson().environment?.electricity?.consumption ? 85 : 0
+                      "
+                    ></div>
                   </div>
                 </div>
 
                 <!-- Natural Gas Card -->
-                <div class="bg-white border border-gray-200/80 rounded-xl p-5 shadow-sm space-y-4 relative overflow-hidden group">
-                  <div class="absolute right-0 top-0 w-24 h-24 bg-orange-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform duration-300"></div>
+                <div
+                  class="bg-white border border-gray-200/80 rounded-xl p-5 shadow-sm space-y-4 relative overflow-hidden group"
+                >
+                  <div
+                    class="absolute right-0 top-0 w-24 h-24 bg-orange-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform duration-300"
+                  ></div>
                   <div class="flex justify-between items-start">
-                    <span class="text-[10px] font-extrabold text-orange-600 uppercase tracking-widest block">Gas Utilities</span>
+                    <span
+                      class="text-[10px] font-extrabold text-orange-600 uppercase tracking-widest block"
+                      >Gas Utilities</span
+                    >
                     <span class="p-2 bg-orange-100/60 rounded-lg text-orange-600">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2.5"
+                        stroke="currentColor"
+                        class="w-4 h-4"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z"
+                        />
                       </svg>
                     </span>
                   </div>
                   <div class="space-y-1">
-                    <h4 class="text-[11px] font-bold text-gray-400 my-0 uppercase tracking-wider">Natural Gas</h4>
+                    <h4 class="text-[11px] font-bold text-gray-400 my-0 uppercase tracking-wider">
+                      Natural Gas
+                    </h4>
                     <div class="flex items-baseline gap-1">
                       <span class="text-lg font-black text-gray-900">
-                        {{ formatConsumption(normalizedReportJson().environment?.naturalGas?.consumption) }}
+                        {{
+                          formatConsumption(
+                            normalizedReportJson().environment?.naturalGas?.consumption
+                          )
+                        }}
                       </span>
-                      <span class="text-[9px] text-gray-500 font-bold uppercase" *ngIf="normalizedReportJson().environment?.naturalGas?.consumption">
+                      <span
+                        class="text-[9px] text-gray-500 font-bold uppercase"
+                        *ngIf="normalizedReportJson().environment?.naturalGas?.consumption"
+                      >
                         {{ normalizedReportJson().environment?.naturalGas?.unit || 'kWh' }}
                       </span>
                     </div>
                   </div>
                   <div class="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
-                    <div class="bg-orange-500 h-full rounded-full transition-all duration-500" [style.width.%]="normalizedReportJson().environment?.naturalGas?.consumption ? 65 : 0"></div>
+                    <div
+                      class="bg-orange-500 h-full rounded-full transition-all duration-500"
+                      [style.width.%]="
+                        normalizedReportJson().environment?.naturalGas?.consumption ? 65 : 0
+                      "
+                    ></div>
                   </div>
                 </div>
 
                 <!-- Water Card -->
-                <div class="bg-white border border-gray-200/80 rounded-xl p-5 shadow-sm space-y-4 relative overflow-hidden group">
-                  <div class="absolute right-0 top-0 w-24 h-24 bg-sky-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform duration-300"></div>
+                <div
+                  class="bg-white border border-gray-200/80 rounded-xl p-5 shadow-sm space-y-4 relative overflow-hidden group"
+                >
+                  <div
+                    class="absolute right-0 top-0 w-24 h-24 bg-sky-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform duration-300"
+                  ></div>
                   <div class="flex justify-between items-start">
-                    <span class="text-[10px] font-extrabold text-sky-600 uppercase tracking-widest block">Water Supply</span>
+                    <span
+                      class="text-[10px] font-extrabold text-sky-600 uppercase tracking-widest block"
+                      >Water Supply</span
+                    >
                     <span class="p-2 bg-sky-100/60 rounded-lg text-sky-600">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.105-11.25 11.25-11.25 11.25S3 17.605 3 10.5a7.5 7.5 0 1115 0z" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2.5"
+                        stroke="currentColor"
+                        class="w-4 h-4"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M19.5 10.5c0 7.105-11.25 11.25-11.25 11.25S3 17.605 3 10.5a7.5 7.5 0 1115 0z"
+                        />
                       </svg>
                     </span>
                   </div>
                   <div class="space-y-1">
-                    <h4 class="text-[11px] font-bold text-gray-400 my-0 uppercase tracking-wider">Water</h4>
+                    <h4 class="text-[11px] font-bold text-gray-400 my-0 uppercase tracking-wider">
+                      Water
+                    </h4>
                     <div class="flex items-baseline gap-1">
                       <span class="text-lg font-black text-gray-900">
-                        {{ formatConsumption(normalizedReportJson().environment?.water?.consumption) }}
+                        {{
+                          formatConsumption(normalizedReportJson().environment?.water?.consumption)
+                        }}
                       </span>
-                      <span class="text-[9px] text-gray-500 font-bold uppercase" *ngIf="normalizedReportJson().environment?.water?.consumption">
+                      <span
+                        class="text-[9px] text-gray-500 font-bold uppercase"
+                        *ngIf="normalizedReportJson().environment?.water?.consumption"
+                      >
                         {{ normalizedReportJson().environment?.water?.unit || 'm³' }}
                       </span>
                     </div>
                   </div>
                   <div class="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
-                    <div class="bg-sky-500 h-full rounded-full transition-all duration-500" [style.width.%]="normalizedReportJson().environment?.water?.consumption ? 45 : 0"></div>
+                    <div
+                      class="bg-sky-500 h-full rounded-full transition-all duration-500"
+                      [style.width.%]="
+                        normalizedReportJson().environment?.water?.consumption ? 45 : 0
+                      "
+                    ></div>
                   </div>
                 </div>
 
                 <!-- Waste Management Card -->
-                <div class="bg-white border border-gray-200/80 rounded-xl p-5 shadow-sm space-y-4 relative overflow-hidden group">
-                  <div class="absolute right-0 top-0 w-24 h-24 bg-emerald-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform duration-300"></div>
+                <div
+                  class="bg-white border border-gray-200/80 rounded-xl p-5 shadow-sm space-y-4 relative overflow-hidden group"
+                >
+                  <div
+                    class="absolute right-0 top-0 w-24 h-24 bg-emerald-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform duration-300"
+                  ></div>
                   <div class="flex justify-between items-start">
-                    <span class="text-[10px] font-extrabold text-emerald-600 uppercase tracking-widest block">Waste Output</span>
+                    <span
+                      class="text-[10px] font-extrabold text-emerald-600 uppercase tracking-widest block"
+                      >Waste Output</span
+                    >
                     <span class="p-2 bg-emerald-100/60 rounded-lg text-emerald-600">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2.5"
+                        stroke="currentColor"
+                        class="w-4 h-4"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                        />
                       </svg>
                     </span>
                   </div>
                   <div class="space-y-1">
-                    <h4 class="text-[11px] font-bold text-gray-400 my-0 uppercase tracking-wider">Waste Generated</h4>
+                    <h4 class="text-[11px] font-bold text-gray-400 my-0 uppercase tracking-wider">
+                      Waste Generated
+                    </h4>
                     <div class="flex items-baseline gap-1">
                       <span class="text-lg font-black text-gray-900">
-                        {{ formatConsumption(normalizedReportJson().environment?.waste?.generated) }}
+                        {{
+                          formatConsumption(normalizedReportJson().environment?.waste?.generated)
+                        }}
                       </span>
-                      <span class="text-[9px] text-gray-500 font-bold uppercase" *ngIf="normalizedReportJson().environment?.waste?.generated">
+                      <span
+                        class="text-[9px] text-gray-500 font-bold uppercase"
+                        *ngIf="normalizedReportJson().environment?.waste?.generated"
+                      >
                         {{ normalizedReportJson().environment?.waste?.unit || 'tonnes' }}
                       </span>
                     </div>
                   </div>
                   <div class="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
-                    <div class="bg-emerald-500 h-full rounded-full transition-all duration-500" [style.width.%]="normalizedReportJson().environment?.waste?.recycledPercentage || (normalizedReportJson().environment?.waste?.generated ? 30 : 0)"></div>
+                    <div
+                      class="bg-emerald-500 h-full rounded-full transition-all duration-500"
+                      [style.width.%]="
+                        normalizedReportJson().environment?.waste?.recycledPercentage ||
+                        (normalizedReportJson().environment?.waste?.generated ? 30 : 0)
+                      "
+                    ></div>
                   </div>
                 </div>
               </div>
             </div>
+
+            <!-- Interactive Monthly Utility Consumption Visualizers -->
+            @if (getMonthlyElectricityData().length || getMonthlyWaterData().length) {
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                
+                <!-- Monthly Electricity & Renewable % Visualizer -->
+                @if (getMonthlyElectricityData().length) {
+                  <div class="bg-white border border-gray-200/80 rounded-xl p-6 shadow-sm space-y-4">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <h3 class="text-sm font-bold text-gray-900">Monthly Electricity Consumption</h3>
+                        <p class="text-[11px] text-gray-400 mt-0.5">
+                          Monthly power usage (kWh) & renewable energy share (%)
+                        </p>
+                      </div>
+                      <span class="px-2.5 py-1 text-[10px] font-extrabold bg-amber-50 text-amber-700 rounded-full border border-amber-200">
+                        12 Months Tracked
+                      </span>
+                    </div>
+
+                    <!-- Bar Chart Grid -->
+                    <div class="h-44 pt-6 pb-2 flex items-end justify-between gap-1.5 border-b border-gray-100 px-1">
+                      @for (item of getMonthlyElectricityData(); track item.month) {
+                        <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end group relative cursor-pointer">
+                          <!-- Floating Tooltip -->
+                          <div class="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-10 bg-slate-900 text-white text-[10px] py-1 px-2 rounded shadow-lg whitespace-nowrap z-20 pointer-events-none">
+                            <span class="font-bold">{{ item.month }}:</span> {{ item.consumption | number }} kWh
+                            <span *ngIf="item.renewablePercentage" class="text-amber-300 block font-normal">({{ item.renewablePercentage }}% renewable)</span>
+                          </div>
+
+                          <!-- Bar -->
+                          <div
+                            class="w-full max-w-[28px] bg-gradient-to-t from-amber-500 to-amber-400 rounded-t group-hover:brightness-110 transition-all duration-300 relative shadow-sm"
+                            [style.height.%]="getElectricityBarHeight(item.consumption)"
+                          >
+                            <span *ngIf="item.renewablePercentage" class="absolute -top-4 left-1/2 -translate-x-1/2 text-[9px] font-bold text-amber-700">
+                              {{ item.renewablePercentage }}%
+                            </span>
+                          </div>
+                          <!-- Month Label -->
+                          <span class="text-[10px] font-semibold text-gray-500 group-hover:text-amber-600 transition-colors">
+                            {{ item.month }}
+                          </span>
+                        </div>
+                      }
+                    </div>
+
+                    <div class="flex justify-between items-center text-[11px] text-gray-500 pt-1">
+                      <span class="inline-flex items-center gap-1.5 font-medium">
+                        <span class="w-2.5 h-2.5 bg-amber-500 rounded-sm"></span> Electricity (kWh)
+                      </span>
+                      <span class="font-bold text-gray-700">
+                        Peak: {{ getMaxMonthlyElectricity() | number }} kWh
+                      </span>
+                    </div>
+                  </div>
+                }
+
+                <!-- Monthly Water Consumption & Stewardship Visualizer -->
+                @if (getMonthlyWaterData().length) {
+                  <div class="bg-white border border-gray-200/80 rounded-xl p-6 shadow-sm space-y-4">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <h3 class="text-sm font-bold text-gray-900">Monthly Water Stewardship (m³)</h3>
+                        <p class="text-[11px] text-gray-400 mt-0.5">
+                          12-month breakdown: Withdrawn vs Consumed vs Recycled vs Discharged
+                        </p>
+                      </div>
+                      <span class="px-2.5 py-1 text-[10px] font-extrabold bg-sky-50 text-sky-700 rounded-full border border-sky-200">
+                        {{ getMonthlyWaterData().length }} Months Active
+                      </span>
+                    </div>
+
+                    <!-- Multi-Bar Chart Grid -->
+                    <div class="h-44 pt-6 pb-2 flex items-end justify-between gap-1 border-b border-gray-100 px-1">
+                      @for (item of getMonthlyWaterData(); track item.month) {
+                        <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end group relative cursor-pointer">
+                          <!-- Floating Tooltip -->
+                          <div class="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-16 bg-slate-900 text-white text-[10px] py-1.5 px-2.5 rounded-lg shadow-xl whitespace-nowrap z-30 pointer-events-none">
+                            <span class="font-bold text-slate-200 block border-b border-slate-700 pb-0.5 mb-1">{{ item.month }} Water Report</span>
+                            <span class="block text-sky-300">Withdrawn: {{ item.withdrawn | number }} m³</span>
+                            <span class="block text-indigo-300">Consumed: {{ item.consumption | number }} m³</span>
+                            <span *ngIf="item.recycled" class="block text-emerald-300">Recycled: {{ item.recycled | number }} m³</span>
+                            <span *ngIf="item.discharged" class="block text-rose-300">Discharged: {{ item.discharged | number }} m³</span>
+                          </div>
+
+                          <!-- Grouped Bars -->
+                          <div class="w-full flex items-end justify-center gap-0.5 h-full">
+                            <div
+                              class="w-1 bg-sky-400 rounded-t group-hover:opacity-80 transition-all shadow-sm"
+                              [style.height.%]="getWaterBarHeight(item.withdrawn)"
+                              title="Withdrawn"
+                            ></div>
+                            <div
+                              class="w-1 bg-indigo-500 rounded-t group-hover:opacity-80 transition-all shadow-sm"
+                              [style.height.%]="getWaterBarHeight(item.consumption)"
+                              title="Consumed"
+                            ></div>
+                            <div
+                              *ngIf="item.recycled"
+                              class="w-1 bg-emerald-500 rounded-t group-hover:opacity-80 transition-all shadow-sm"
+                              [style.height.%]="getWaterBarHeight(item.recycled)"
+                              title="Recycled"
+                            ></div>
+                            <div
+                              *ngIf="item.discharged"
+                              class="w-1 bg-rose-400 rounded-t group-hover:opacity-80 transition-all shadow-sm"
+                              [style.height.%]="getWaterBarHeight(item.discharged)"
+                              title="Discharged"
+                            ></div>
+                          </div>
+
+                          <!-- Month Label -->
+                          <span class="text-[10px] font-semibold text-gray-500 group-hover:text-sky-600 transition-colors">
+                            {{ item.month }}
+                          </span>
+                        </div>
+                      }
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="flex flex-wrap justify-between items-center text-[11px] text-gray-500 pt-1">
+                      <span class="inline-flex items-center gap-1 font-medium">
+                        <span class="w-2.5 h-2.5 bg-sky-400 rounded-sm"></span> Withdrawn
+                      </span>
+                      <span class="inline-flex items-center gap-1 font-medium">
+                        <span class="w-2.5 h-2.5 bg-indigo-500 rounded-sm"></span> Consumed
+                      </span>
+                      <span class="inline-flex items-center gap-1 font-medium">
+                        <span class="w-2.5 h-2.5 bg-emerald-500 rounded-sm"></span> Recycled
+                      </span>
+                      <span class="inline-flex items-center gap-1 font-medium">
+                        <span class="w-2.5 h-2.5 bg-rose-400 rounded-sm"></span> Discharged
+                      </span>
+                    </div>
+                  </div>
+                }
+
+              </div>
+            }
 
             <!-- Grid: Social Indicators & Workforce Charts -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1218,36 +1507,48 @@
                 </div>
               </div>
 
-              <!-- Accidents Card -->
+              <!-- Accidents & Incidents Grid Card -->
               <div class="bg-white border border-gray-200/80 rounded-xl p-5 shadow-sm space-y-3">
-                <span
-                  class="text-[10px] font-extrabold text-indigo-500 uppercase tracking-widest block"
-                  >Health & Safety</span
-                >
-                <h4 class="text-xs font-bold text-gray-700">Workplace Accidents</h4>
-                <div class="flex items-baseline gap-2">
-                  <span
-                    class="text-2xl font-black"
-                    [class.text-red-600]="normalizedReportJson().social.workplaceAccidents > 0"
-                    [class.text-emerald-600]="
-                      normalizedReportJson().social.workplaceAccidents === 0 ||
-                      normalizedReportJson().social.workplaceAccidents === '0'
-                    "
-                  >
-                    {{
-                      normalizedReportJson().social.workplaceAccidents !== null
-                        ? normalizedReportJson().social.workplaceAccidents
-                        : 'Not Disclosed'
-                    }}
-                  </span>
-                  <span class="text-xs text-gray-500">incidents</span>
+                <span class="text-[10px] font-extrabold text-indigo-500 uppercase tracking-widest block">
+                  Health, Safety & Human Rights
+                </span>
+                <h4 class="text-xs font-bold text-gray-700">Incidents & Safety</h4>
+                
+                <div class="grid grid-cols-2 gap-2 pt-1">
+                  <!-- Environmental & Safety Incidents -->
+                  <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-100 space-y-1">
+                    <span class="text-[10px] text-gray-500 font-semibold block">Logged Incidents</span>
+                    <div class="flex items-baseline gap-1">
+                      <span
+                        class="text-xl font-black"
+                        [class.text-amber-600]="getIncidentsCount() > 0"
+                        [class.text-emerald-600]="getIncidentsCount() == 0"
+                      >
+                        {{ getIncidentsCount() }}
+                      </span>
+                      <span class="text-[9px] text-gray-400 font-bold uppercase">cases</span>
+                    </div>
+                  </div>
+
+                  <!-- Workplace Accidents -->
+                  <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-100 space-y-1">
+                    <span class="text-[10px] text-gray-500 font-semibold block">Accidents</span>
+                    <div class="flex items-baseline gap-1">
+                      <span
+                        class="text-xl font-black text-emerald-600"
+                      >
+                        {{ normalizedReportJson().social?.workplaceAccidents || '0' }}
+                      </span>
+                      <span class="text-[9px] text-gray-400 font-bold uppercase">cases</span>
+                    </div>
+                  </div>
                 </div>
-                <span class="text-[10px] text-gray-400 block">
+
+                <span class="text-[10px] text-gray-500 block pt-1">
                   {{
-                    normalizedReportJson().social.workplaceAccidents > 0
-                      ? 'Requires safety performance audit.'
-                      : 'Zero
-            incident report compliance.'
+                    getIncidentsCount() > 0
+                      ? getIncidentsCount() + ' incident register case(s) logged and tracked.'
+                      : 'Zero environmental & safety incident record.'
                   }}
                 </span>
               </div>
@@ -1714,8 +2015,8 @@
         </div>
         <p class="text-sm text-gray-500 break-words">
           Are you sure you want to delete the document
-          <span class="font-semibold text-gray-900 break-all">"{{ docToDelete() }}"</span>? This action cannot
-          be undone.
+          <span class="font-semibold text-gray-900 break-all">"{{ docToDelete() }}"</span>? This
+          action cannot be undone.
         </p>
         <div class="flex justify-end gap-3 pt-2">
           <button
@@ -1897,50 +2198,76 @@
     <!-- Modal panel -->
     <div
       class="relative z-10 bg-slate-900 rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-700/60 transition-all duration-300"
-      [ngClass]="isFullScreen() ? 'w-full h-full rounded-none border-0' : 'w-[96vw] max-w-[1300px] h-[92vh] max-h-[950px]'"
+      [ngClass]="
+        isFullScreen()
+          ? 'w-full h-full rounded-none border-0'
+          : 'w-[96vw] max-w-[1300px] h-[92vh] max-h-[950px]'
+      "
       (click)="$event.stopPropagation()"
     >
       <!-- Header / Control Bar -->
-      <div class="flex flex-wrap items-center justify-between px-5 py-3 bg-slate-900 border-b border-slate-800 flex-shrink-0 text-white gap-3 select-none">
-        
+      <div
+        class="flex flex-wrap items-center justify-between px-5 py-3 bg-slate-900 border-b border-slate-800 flex-shrink-0 text-white gap-3 select-none"
+      >
         <!-- Left: File Badge & Title -->
         <div class="flex items-center gap-3 min-w-0">
-          <div 
+          <div
             class="px-2.5 py-1 rounded-md text-xs font-black uppercase tracking-wider flex items-center gap-1.5 shadow-sm"
             [ngClass]="{
               'bg-blue-600 text-white': viewDocumentFileType() === 'docx',
               'bg-red-600 text-white': viewDocumentFileType() === 'pdf',
               'bg-emerald-600 text-white': viewDocumentFileType() === 'text',
               'bg-purple-600 text-white': viewDocumentFileType() === 'image',
-              'bg-slate-700 text-slate-200': viewDocumentFileType() === 'unknown'
+              'bg-slate-700 text-slate-200': viewDocumentFileType() === 'unknown',
             }"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="w-4 h-4"
+            >
               <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.document" />
             </svg>
             <span>{{ viewDocumentFileType() }}</span>
           </div>
           <div class="min-w-0">
-            <h3 class="text-sm md:text-base font-bold text-slate-100 truncate max-w-xs md:max-w-md" [title]="viewDocumentName() || ''">
+            <h3
+              class="text-sm md:text-base font-bold text-slate-100 truncate max-w-xs md:max-w-md"
+              [title]="viewDocumentName() || ''"
+            >
               {{ viewDocumentName() }}
             </h3>
-            <p class="text-[11px] text-slate-400 font-medium hidden sm:block">ESG Assistant Document Viewer</p>
+            <p class="text-[11px] text-slate-400 font-medium hidden sm:block">
+              ESG Assistant Document Viewer
+            </p>
           </div>
         </div>
 
         <!-- Center: Zoom & Toolbar Controls -->
-        <div class="flex items-center gap-1 bg-slate-800/90 border border-slate-700/80 rounded-lg p-1 text-slate-300">
+        <div
+          class="flex items-center gap-1 bg-slate-800/90 border border-slate-700/80 rounded-lg p-1 text-slate-300"
+        >
           <!-- Zoom Out -->
           <button
             (click)="zoomOut()"
             class="p-1.5 hover:text-white hover:bg-slate-700 rounded transition-colors cursor-pointer border-none bg-transparent"
             title="Zoom Out (-20%)"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="w-4 h-4"
+            >
               <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
             </svg>
           </button>
-          
+
           <!-- Zoom Display / Reset -->
           <button
             (click)="resetZoom()"
@@ -1949,14 +2276,21 @@
           >
             {{ zoomLevel() }}%
           </button>
-          
+
           <!-- Zoom In -->
           <button
             (click)="zoomIn()"
             class="p-1.5 hover:text-white hover:bg-slate-700 rounded transition-colors cursor-pointer border-none bg-transparent"
             title="Zoom In (+20%)"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="w-4 h-4"
+            >
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
           </button>
@@ -1971,8 +2305,19 @@
               class="p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors cursor-pointer border-none bg-transparent inline-flex items-center justify-center"
               title="Copy Document Text"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-4 h-4">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v9.25c0 .621-.504 1.125-1.125 1.125z" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.8"
+                stroke="currentColor"
+                class="w-4 h-4"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v9.25c0 .621-.504 1.125-1.125 1.125z"
+                />
               </svg>
             </button>
           }
@@ -1983,8 +2328,19 @@
             class="p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors cursor-pointer border-none bg-transparent inline-flex items-center justify-center"
             title="Print Document"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-4 h-4">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m11.32-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231a1.125 1.125 0 01-1.12-1.227L6.34 18m11.32 0h-11.32m12.375-9H4.125c-.621 0-1.125.504-1.125 1.125v7.5c0 .621.504 1.125 1.125 1.125h1.5M16.5 9V4.875c0-.621-.504-1.125-1.125-1.125H8.625c-.621 0-1.125.504-1.125 1.125V9m9 0H6.75" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.8"
+              stroke="currentColor"
+              class="w-4 h-4"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m11.32-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231a1.125 1.125 0 01-1.12-1.227L6.34 18m11.32 0h-11.32m12.375-9H4.125c-.621 0-1.125.504-1.125 1.125v7.5c0 .621.504 1.125 1.125 1.125h1.5M16.5 9V4.875c0-.621-.504-1.125-1.125-1.125H8.625c-.621 0-1.125.504-1.125 1.125V9m9 0H6.75"
+              />
             </svg>
           </button>
 
@@ -1995,12 +2351,34 @@
             [title]="isFullScreen() ? 'Exit Full Screen' : 'Full Screen'"
           >
             @if (isFullScreen()) {
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-4 h-4">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.8"
+                stroke="currentColor"
+                class="w-4 h-4"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25"
+                />
               </svg>
             } @else {
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-4 h-4">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.8"
+                stroke="currentColor"
+                class="w-4 h-4"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
+                />
               </svg>
             }
           </button>
@@ -2013,8 +2391,19 @@
             class="p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors inline-flex items-center justify-center"
             title="Open raw file in new tab"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-4 h-4">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.8"
+              stroke="currentColor"
+              class="w-4 h-4"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+              />
             </svg>
           </a>
 
@@ -2025,7 +2414,14 @@
             class="p-2 text-slate-300 hover:text-emerald-400 hover:bg-slate-800 rounded-lg transition-colors inline-flex items-center justify-center"
             title="Download Document"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-4 h-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.8"
+              stroke="currentColor"
+              class="w-4 h-4"
+            >
               <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.download" />
             </svg>
           </a>
@@ -2038,23 +2434,46 @@
             class="p-2 text-slate-400 hover:text-white hover:bg-red-600/80 rounded-lg transition-colors border-none bg-transparent cursor-pointer inline-flex items-center justify-center"
             title="Close Viewer (ESC)"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="w-5 h-5"
+            >
               <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.close" />
             </svg>
           </button>
         </div>
-
       </div>
 
       <!-- Main Canvas Container -->
       <div class="flex-1 bg-slate-900/90 relative overflow-hidden flex flex-col doc-viewer-scroll">
-        
         <!-- Loading Overlay -->
         @if (isDocLoading()) {
-          <div class="absolute inset-0 z-30 bg-slate-900/80 backdrop-blur-sm flex flex-col items-center justify-center text-white">
-            <svg class="animate-spin h-10 w-10 text-blue-500 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          <div
+            class="absolute inset-0 z-30 bg-slate-900/80 backdrop-blur-sm flex flex-col items-center justify-center text-white"
+          >
+            <svg
+              class="animate-spin h-10 w-10 text-blue-500 mb-4"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
             </svg>
             <p class="text-sm font-semibold text-slate-200">Loading document formatting...</p>
             <p class="text-xs text-slate-400 mt-1">Preparing high-precision layout preview</p>
@@ -2064,9 +2483,22 @@
         <!-- Error State Alert -->
         @if (docLoadError()) {
           <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
-            <div class="w-16 h-16 bg-red-950/60 text-red-400 rounded-2xl flex items-center justify-center mb-4 border border-red-800/40">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
-                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.warningTriangle" />
+            <div
+              class="w-16 h-16 bg-red-950/60 text-red-400 rounded-2xl flex items-center justify-center mb-4 border border-red-800/40"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-8 h-8"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  [attr.d]="svgs.warningTriangle"
+                />
               </svg>
             </div>
             <h4 class="text-base font-bold text-slate-100">Unable to preview document</h4>
@@ -2083,7 +2515,14 @@
                 [download]="viewDocumentName()!"
                 class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg transition-colors inline-flex items-center gap-1.5"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  class="w-3.5 h-3.5"
+                >
                   <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.download" />
                 </svg>
                 Download File
@@ -2094,8 +2533,10 @@
 
         <!-- DOCX Viewer Container -->
         @if (viewDocumentFileType() === 'docx' && !docLoadError()) {
-          <div class="flex-1 overflow-auto p-4 md:p-8 flex justify-center doc-viewer-scroll bg-slate-800/50">
-            <div 
+          <div
+            class="flex-1 overflow-auto p-4 md:p-8 flex justify-center doc-viewer-scroll bg-slate-800/50"
+          >
+            <div
               class="w-full transition-transform duration-200 ease-out origin-top flex justify-center"
               [style.transform]="'scale(' + zoomLevel() / 100 + ')'"
             >
@@ -2107,7 +2548,7 @@
         <!-- PDF Viewer Container -->
         @if (viewDocumentFileType() === 'pdf' && !docLoadError()) {
           <div class="flex-1 overflow-hidden relative bg-slate-900">
-            <div 
+            <div
               class="w-full h-full transition-transform duration-200 ease-out origin-top"
               [style.transform]="'scale(' + zoomLevel() / 100 + ')'"
             >
@@ -2123,18 +2564,22 @@
         <!-- Text / Code Viewer Container -->
         @if (viewDocumentFileType() === 'text' && !docLoadError()) {
           <div class="flex-1 overflow-auto p-4 md:p-8 doc-viewer-scroll bg-slate-950">
-            <div 
+            <div
               class="max-w-4xl mx-auto bg-slate-900 border border-slate-800 rounded-xl shadow-2xl p-6 transition-transform duration-200 ease-out origin-top"
               [style.transform]="'scale(' + zoomLevel() / 100 + ')'"
             >
-              <pre class="font-mono text-xs md:text-sm text-slate-200 leading-relaxed whitespace-pre-wrap break-words select-text">{{ docTextContent() }}</pre>
+              <pre
+                class="font-mono text-xs md:text-sm text-slate-200 leading-relaxed whitespace-pre-wrap break-words select-text"
+                >{{ docTextContent() }}</pre>
             </div>
           </div>
         }
 
         <!-- Image Viewer Container -->
         @if (viewDocumentFileType() === 'image' && !docLoadError()) {
-          <div class="flex-1 overflow-auto p-6 flex items-center justify-center doc-viewer-scroll bg-slate-950">
+          <div
+            class="flex-1 overflow-auto p-6 flex items-center justify-center doc-viewer-scroll bg-slate-950"
+          >
             <img
               [src]="viewDocumentUrl()!"
               [alt]="viewDocumentName()!"
@@ -2154,9 +2599,7 @@
             ></iframe>
           </div>
         }
-
       </div>
-
     </div>
   </div>
 }

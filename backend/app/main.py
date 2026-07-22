@@ -888,7 +888,7 @@ def get_report_json(requestId: str, db: Session = Depends(get_db)):
                 report_json = py_json.load(jf)
                 # Enrich cached report json with database questionnaire answers using utility class
                 from app.core.utils import ReportUtility
-                return ReportUtility.enrich_report_json_from_db(report_json, db_report_data)
+                return ReportUtility.enrich_report_json_from_db(report_json, db_report_data, requestId)
         except Exception as e:
             print(f"Warning: Failed to read cached report_data.json: {e}")
 

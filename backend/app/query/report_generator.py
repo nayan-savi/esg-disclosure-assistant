@@ -241,7 +241,7 @@ Format the output as a raw JSON with these categories: company_details, environm
 Include specific numbers, units (like kWh, m3, tonnes), policies, and metrics.
 If a value is not in the context, mark it as null.
 Return ONLY valid raw JSON without code fences or extra text."""),
-        ("human", "Extract facts from the following context:\n\n{context}\n\nInput Request: Extract all company info, electricity, natural gas, water consumption, waste, Scope 1/2/3, employees counts (total, permanent, temporary, male, female), training hours, workplace accidents, policies, findings, and suggestions.")
+        ("human", "Extract facts from the following context:\n\n{context}\n\nInput Request: Extract all company info, total electricity, monthly electricity consumption breakdown (e.g. Jan-Dec kWh values), total natural gas, monthly natural gas consumption breakdown, total water, monthly water consumption breakdown, waste, Scope 1/2/3, employees counts (total, permanent, temporary, male, female), training hours, workplace accidents, total incident count from Incident Registers / Human Rights Incident Registers (e.g., count entries like HR-2026-001, HR-2026-002), policies, findings, and suggestions.")
     ])
 
     question_answer_chain = create_stuff_documents_chain(llm, raw_extraction_prompt)

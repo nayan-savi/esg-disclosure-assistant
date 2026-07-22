@@ -115,15 +115,18 @@ The final JSON must contain only plain text strings inside arrays.
   "environment": {
     "electricity": {
       "consumption": 0,
-      "unit": "kWh"
+      "unit": "kWh",
+      "monthlyElectricityConsumption": []
     },
     "naturalGas": {
       "consumption": 0,
-      "unit": "m3"
+      "unit": "m3",
+      "monthlyNaturalGasConsumption":[]
     },
     "water": {
       "consumption": 0,
-      "unit": "m3"
+      "unit": "m3",
+      "monthlyWaterConsumption":[]
     },
     "waste": {
       "generated": 0,
@@ -153,6 +156,7 @@ The final JSON must contain only plain text strings inside arrays.
     },
     "trainingHours": 0,
     "workplaceAccidents": 0,
+    "incidents": 0,
     "policies": []
   },
   "governance": {
@@ -171,8 +175,10 @@ The final JSON must contain only plain text strings inside arrays.
 
 - Extract company information into the company section.
 - Generate a concise executiveSummary using the available ESG information.
-- Move utility bill data into the environment section.
-- Move HR information into the social section.
+- Move utility bill data into the environment section (including monthlyElectricityConsumption, monthlyNaturalGasConsumption, and monthlyWaterConsumption arrays if available).
+- Move HR and health/safety/incident information into the social section:
+  - Count all logged entries/rows in any Incident Register, Human Rights Incident Register (e.g. HR-2026-001 through HR-2026-004 = 4 incidents), or Health & Safety Register, and set social.incidents to this total numeric integer (e.g., 4).
+  - If no incidents are logged or reported, set social.incidents to 0.
 - Move governance and compliance policies into the governance section.
 - Convert ESG observations into findings.
 - Convert improvement actions into recommendations.
