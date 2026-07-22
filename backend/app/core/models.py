@@ -20,7 +20,7 @@ class GeminiProvider(BaseModelProvider):
     def get_embeddings(self):
         from langchain_google_genai import GoogleGenerativeAIEmbeddings
         api_key = os.getenv("GEMINI_API_KEY")
-        return GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-2", google_api_key=api_key)
+        return GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001", google_api_key=api_key)
         
     def get_llm(self, temperature: float = 0.0):
         from langchain_google_genai import ChatGoogleGenerativeAI
