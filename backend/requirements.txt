@@ -1,3 +1,4 @@
+json-repair
 langchain-chroma
 langchain-core
 langchain-classic

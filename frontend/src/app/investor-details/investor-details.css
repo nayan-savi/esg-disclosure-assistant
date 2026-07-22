@@ -1,1 +1,50 @@
 /* Styles for Investor Details component */
+
+/* Document Viewer & docx-preview styling */
+.docx-render-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 4rem;
+}
+
+.docx-render-container .docx-wrapper {
+  background: transparent !important;
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+}
+
+.docx-render-container .docx-wrapper > section.docx {
+  background: #ffffff !important;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.08) !important;
+  border-radius: 6px !important;
+  border: 1px solid #e2e8f0 !important;
+  box-sizing: border-box;
+  margin-bottom: 2rem !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.docx-render-container .docx-wrapper > section.docx:hover {
+  box-shadow: 0 20px 35px -8px rgba(15, 23, 42, 0.16) !important;
+}
+
+/* Custom Scrollbar for Document Viewer Canvas */
+.doc-viewer-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.doc-viewer-scroll::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+.doc-viewer-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+.doc-viewer-scroll::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

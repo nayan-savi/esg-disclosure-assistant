@@ -3,4 +3,9 @@ documents/
 esg_report/
 rag_chroma_db/
 .env
-**/__pycache__/**
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/

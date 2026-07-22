@@ -439,68 +439,30 @@ def view_request_file(requestId: str, filename: str, db: Session = Depends(get_d
             
         ext = os.path.splitext(filename)[1].lower()
         
-        if ext == ".pdf":
-            return FileResponse(file_path, media_type="application/pdf", content_disposition_type="inline")
-        elif ext in [".txt", ".log", ".csv"]:
-            return FileResponse(file_path, media_type="text/plain", content_disposition_type="inline")
-        elif ext == ".docx":
-            try:
-                import docx2txt
-                text_content = docx2txt.process(file_path)
-                import html
-                escaped_text = html.escape(text_content)
-                paragraphs = escaped_text.split("\n\n")
-                formatted_paragraphs = "".join([
-                    f"<p style='margin-bottom: 16px;'>{p.strip().replace(chr(10), '<br>')}</p>" 
-                    for p in paragraphs if p.strip()
-                ])
-                
-                html_content = f"""
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                    <title>{html.escape(filename)}</title>
-                    <style>
-                        body {{
-                            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-                            line-height: 1.6;
-                            color: #1f2937;
-                            max-width: 800px;
-                            margin: 0 auto;
-                            padding: 30px 20px;
-                            background-color: #f9fafb;
-                        }}
-                        .container {{
-                            background: #ffffff;
-                            padding: 40px;
-                            border-radius: 12px;
-                            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-                            border: 1px solid #e5e7eb;
-                        }}
-                        h1 {{
-                            font-size: 22px;
-                            font-weight: 700;
-                            color: #111827;
-                            margin-bottom: 24px;
-                            border-bottom: 2px solid #059669;
-                            padding-bottom: 12px;
-                        }}
-                    </style>
-                </head>
-                <body>
-                    <div class="container">
-                        <h1>{html.escape(filename)}</h1>
-                        {formatted_paragraphs}
-                    </div>
-                </body>
-                </html>
-                """
-                return HTMLResponse(content=html_content)
-            except Exception as e:
-                raise HTTPException(status_code=500, detail=f"Failed to read docx document: {str(e)}")
-        else:
-            return FileResponse(file_path, filename=filename, content_disposition_type="inline")
+        media_types = {
+            ".pdf": "application/pdf",
+            ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            ".doc": "application/msword",
+            ".txt": "text/plain; charset=utf-8",
+            ".log": "text/plain; charset=utf-8",
+            ".csv": "text/csv; charset=utf-8",
+            ".json": "application/json",
+            ".png": "image/png",
+            ".jpg": "image/jpeg",
+            ".jpeg": "image/jpeg",
+            ".webp": "image/webp",
+            ".svg": "image/svg+xml"
+        }
+        media_type = media_types.get(ext, "application/octet-stream")
+        
+        return FileResponse(
+            file_path,
+            media_type=media_type,
+            headers={
+                "Content-Disposition": f'inline; filename="{filename}"',
+                "Access-Control-Allow-Origin": "*"
+            }
+        )
     except HTTPException as he:
         raise he
     except Exception as e:
@@ -953,3 +915,8 @@ def health_check():
         "status": "healthy" if db_connected else "unhealthy",
         "database": "connected" if db_connected else "disconnected"
     }
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=False)

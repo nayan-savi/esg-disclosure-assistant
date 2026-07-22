@@ -29,7 +29,7 @@ def query_report_for_request(requestId: str, module: str = "basic", model: str =
         q_path = os.path.join(base_dir, "questionnaires", q_file)
         if not os.path.exists(q_path):
             q_path = os.path.join(base_dir, "questionnaires", "basic.txt")
-            
+
         with open(q_path, "r", encoding="utf-8") as f:
             questionnaire_text = f.read()
 
@@ -41,22 +41,25 @@ def query_report_for_request(requestId: str, module: str = "basic", model: str =
         db = Chroma(persist_directory=chroma_dir, embedding_function=embeddings)
 
         # 2. Compile targeted queries directly from questionnaire text to ensure full context coverage
+        ignore_headings = ("B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10", "B11", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9")
         targeted_queries = []
         for line in questionnaire_text.split("\n"):
             line = line.strip()
             # Skip empty lines, the module title line, and very short labels
-            if line and not line.endswith("Questionnaire") and len(line) > 5:
+            if line and not line.startswith(ignore_headings) and not line.endswith("Questionnaire") and len(line) > 5:
                 targeted_queries.append(line)
 
         # 3. Retrieve top matches from Chroma for each keyword query to build a unified context
         unique_docs = {}
         for q_str in targeted_queries:
-            docs = db.similarity_search(q_str, k=2)
-            for doc in docs:
+            docs = db.similarity_search_with_score(q_str, k=2)
+            for doc, score in docs:
+                print(f"Question: {q_str} Score: {score}")
+                print(f"Source: {doc.metadata['source']}")
                 unique_docs[doc.page_content] = doc
 
         retrieved_docs = list(unique_docs.values())
-        
+
         # Keep top 15 most relevant chunks to stay within model context size limits and keep retrieval crisp
         if len(retrieved_docs) > 15:
             retrieved_docs = retrieved_docs[:15]
@@ -92,7 +95,7 @@ def query_report_for_request(requestId: str, module: str = "basic", model: str =
                     if key in parsed_json and isinstance(parsed_json[key], list):
                         parsed_json = parsed_json[key]
                         break
-            
+
             if isinstance(parsed_json, list):
                 # Ensure the keys are mapped to what Angular template expects (question, answer, score)
                 # Angular template uses item.question, item.answer, item.score (or confidence_score)

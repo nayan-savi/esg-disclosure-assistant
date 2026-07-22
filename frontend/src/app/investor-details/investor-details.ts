@@ -202,20 +202,108 @@ export class InvestorDetails implements OnInit {
     }
   }
 
-  // Document viewer modal
+  // Document viewer modal states & controls
   isViewDocModalOpen = signal(false);
   viewDocumentUrl = signal<SafeResourceUrl | null>(null);
   viewDocumentRawUrl = signal<string | null>(null);
   viewDocumentName = signal<string | null>(null);
+  viewDocumentFileType = signal<'docx' | 'pdf' | 'text' | 'image' | 'unknown'>('unknown');
+  isDocLoading = signal<boolean>(false);
+  docLoadError = signal<string | null>(null);
+  docTextContent = signal<string | null>(null);
+  zoomLevel = signal<number>(100);
+  isFullScreen = signal<boolean>(false);
 
   onViewDocument(filename: string) {
     const req = this.request();
     if (!req) return;
+
     const rawUrl = `http://localhost:8000/esg/requests/${req.id}/files/${encodeURIComponent(filename)}/view`;
-    this.viewDocumentRawUrl.set(rawUrl);
-    this.viewDocumentUrl.set(this.sanitizer.bypassSecurityTrustResourceUrl(rawUrl));
+    const ext = filename.split('.').pop()?.toLowerCase() || '';
+
     this.viewDocumentName.set(filename);
-    this.isViewDocModalOpen.set(true);
+    this.viewDocumentRawUrl.set(rawUrl);
+    this.docLoadError.set(null);
+    this.docTextContent.set(null);
+    this.zoomLevel.set(100);
+    this.isFullScreen.set(false);
+    this.isDocLoading.set(true);
+
+    if (ext === 'docx' || ext === 'doc') {
+      this.viewDocumentFileType.set('docx');
+      this.viewDocumentUrl.set(null);
+      this.isViewDocModalOpen.set(true);
+
+      fetch(rawUrl)
+        .then(res => {
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+          return res.arrayBuffer();
+        })
+        .then(arrayBuffer => {
+          this.isDocLoading.set(false);
+          setTimeout(() => {
+            const container = document.getElementById('docx-render-container');
+            if (container) {
+              container.innerHTML = '';
+              import('docx-preview').then(docxModule => {
+                docxModule.renderAsync(arrayBuffer, container, undefined, {
+                  className: 'docx-preview-style',
+                  inWrapper: true,
+                  ignoreWidth: false,
+                  ignoreHeight: false,
+                  breakPages: true,
+                  ignoreLastRenderedPageBreak: true
+                }).catch(err => {
+                  console.error('Error rendering docx:', err);
+                  this.docLoadError.set('Could not render document formatting cleanly.');
+                });
+              }).catch(err => {
+                console.error('Failed to load docx-preview package:', err);
+                this.docLoadError.set('Document preview engine failed to initialize.');
+              });
+            }
+          }, 80);
+        })
+        .catch(err => {
+          console.error('Error fetching docx file:', err);
+          this.isDocLoading.set(false);
+          this.docLoadError.set('Failed to load document file from server.');
+        });
+    } else if (ext === 'pdf') {
+      this.viewDocumentFileType.set('pdf');
+      this.viewDocumentUrl.set(this.sanitizer.bypassSecurityTrustResourceUrl(rawUrl));
+      this.isDocLoading.set(false);
+      this.isViewDocModalOpen.set(true);
+    } else if (['txt', 'csv', 'log', 'json', 'xml', 'md'].includes(ext)) {
+      this.viewDocumentFileType.set('text');
+      this.viewDocumentUrl.set(null);
+      this.isViewDocModalOpen.set(true);
+
+      fetch(rawUrl)
+        .then(res => {
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+          return res.text();
+        })
+        .then(text => {
+          this.docTextContent.set(text);
+          this.isDocLoading.set(false);
+        })
+        .catch(err => {
+          console.error('Error fetching text file:', err);
+          this.isDocLoading.set(false);
+          this.docLoadError.set('Failed to read document text contents.');
+        });
+    } else if (['png', 'jpg', 'jpeg', 'webp', 'gif', 'svg'].includes(ext)) {
+      this.viewDocumentFileType.set('image');
+      this.viewDocumentUrl.set(this.sanitizer.bypassSecurityTrustResourceUrl(rawUrl));
+      this.isDocLoading.set(false);
+      this.isViewDocModalOpen.set(true);
+    } else {
+      this.viewDocumentFileType.set('unknown');
+      this.viewDocumentUrl.set(this.sanitizer.bypassSecurityTrustResourceUrl(rawUrl));
+      this.isDocLoading.set(false);
+      this.isViewDocModalOpen.set(true);
+    }
   }
 
   closeViewDocModal() {
@@ -223,6 +311,83 @@ export class InvestorDetails implements OnInit {
     this.viewDocumentUrl.set(null);
     this.viewDocumentRawUrl.set(null);
     this.viewDocumentName.set(null);
+    this.docTextContent.set(null);
+    this.docLoadError.set(null);
+    this.isDocLoading.set(false);
+  }
+
+  zoomIn() {
+    this.zoomLevel.update(z => Math.min(z + 20, 200));
+  }
+
+  zoomOut() {
+    this.zoomLevel.update(z => Math.max(z - 20, 50));
+  }
+
+  resetZoom() {
+    this.zoomLevel.set(100);
+  }
+
+  toggleFullScreen() {
+    this.isFullScreen.update(f => !f);
+  }
+
+  printDocument() {
+    const rawUrl = this.viewDocumentRawUrl();
+    if (!rawUrl) return;
+    if (this.viewDocumentFileType() === 'pdf') {
+      const printWin = window.open(rawUrl, '_blank');
+      printWin?.print();
+    } else if (this.viewDocumentFileType() === 'docx') {
+      const container = document.getElementById('docx-render-container');
+      if (container) {
+        const printWin = window.open('', '_blank');
+        if (printWin) {
+          printWin.document.write(`
+            <!DOCTYPE html>
+            <html>
+              <head>
+                <title>${this.viewDocumentName() || 'Document'}</title>
+                <style>
+                  body { margin: 20px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+                  .docx-wrapper { padding: 0; background: none; }
+                  .docx { box-shadow: none !important; border: none !important; margin: 0 !important; }
+                </style>
+              </head>
+              <body>${container.innerHTML}</body>
+            </html>
+          `);
+          printWin.document.close();
+          printWin.focus();
+          setTimeout(() => { printWin.print(); }, 500);
+        }
+      }
+    } else if (this.viewDocumentFileType() === 'text') {
+      const text = this.docTextContent() || '';
+      const printWin = window.open('', '_blank');
+      if (printWin) {
+        printWin.document.write(`
+          <!DOCTYPE html>
+          <html>
+            <head><title>${this.viewDocumentName() || 'Document'}</title></head>
+            <body><pre style="font-family: monospace; white-space: pre-wrap; word-break: break-all;">${text}</pre></body>
+          </html>
+        `);
+        printWin.document.close();
+        printWin.focus();
+        setTimeout(() => { printWin.print(); }, 200);
+      }
+    } else {
+      window.open(rawUrl, '_blank');
+    }
+  }
+
+  copyTextContent() {
+    const text = this.docTextContent();
+    if (text) {
+      navigator.clipboard.writeText(text);
+      this.showNotification('Document text copied to clipboard', 'success');
+    }
   }
 
 

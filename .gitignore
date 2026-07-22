@@ -9,4 +9,9 @@ backend/esg_report/
 backend/rag_chroma_db/
 backend/.env
 backend/.venv/
-backend/__pycache__/
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
