@@ -160,7 +160,7 @@ export class InvestorDetails implements OnInit {
 
     this.isUploading.set(true);
     try {
-      await this.esgService.uploadDocuments(req.year, files, req.model || 'gemini-3.5', req.id);
+      await this.esgService.uploadDocuments(req.year, files, req.model || 'gemini-3.5', req.id, req.name, req.frameworkName);
       // Re-fetch request data to refresh UI details
       const updated = this.esgService.getRequestById(req.id);
       this.request.set(updated);

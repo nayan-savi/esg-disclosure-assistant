@@ -2,6 +2,7 @@ import { Component, signal, inject, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { EsgService } from '../services/esg.service';
 import { SVGS } from '../constants/svgs';
+import { ESG_FRAMEWORKS } from '../constants/frameworks';
 
 @Component({
   selector: 'app-investors',
@@ -11,6 +12,7 @@ import { SVGS } from '../constants/svgs';
 })
 export class Investors {
   svgs = SVGS;
+  frameworks = ESG_FRAMEWORKS;
   private esgService = inject(EsgService);
   
   requests = this.esgService.getRequests();
@@ -31,6 +33,7 @@ export class Investors {
   selectedYear = signal(2026);
   selectedModelEngine = signal<string>('gemini-3.5');
   selectedReportName = signal<string>('');
+  selectedFramework = signal<string>('VSME (Voluntary Sustainability Reporting Standard for SMEs)');
   selectedFiles = signal<File[]>([]);
 
   onFileSelected(event: any) {
@@ -50,6 +53,7 @@ export class Investors {
     const year = this.selectedYear();
     const model = this.selectedModelEngine();
     const reportName = this.selectedReportName();
+    const frameworkName = this.selectedFramework();
     
     if (!reportName.trim()) {
       alert('Please enter a name for the report.');
@@ -63,10 +67,11 @@ export class Investors {
 
     this.isUploading.set(true);
     try {
-      await this.esgService.uploadDocuments(year, files, model, undefined, reportName);
+      await this.esgService.uploadDocuments(year, files, model, undefined, reportName, frameworkName);
       // Reset state
       this.selectedFiles.set([]);
       this.selectedReportName.set('');
+      this.selectedFramework.set('VSME (Voluntary Sustainability Reporting Standard for SMEs)');
       this.isUploadModalOpen.set(false);
     } catch (err) {
       console.error('Upload failed:', err);

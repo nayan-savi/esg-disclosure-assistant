@@ -13,6 +13,7 @@ export interface EsgRequest {
   generatedReports?: string[];
   model?: string;
   name?: string;
+  frameworkName?: string;
 }
 
 @Injectable({
@@ -48,7 +49,14 @@ export class EsgService {
     return this.requestsList().find(r => r.id === id);
   }
 
-  async uploadDocuments(year: number, files: File[], model: string = 'gemini-3.5', requestId?: string, name?: string): Promise<any> {
+  async uploadDocuments(
+    year: number,
+    files: File[],
+    model: string = 'gemini-3.5',
+    requestId?: string,
+    name?: string,
+    frameworkName: string = 'VSME (Voluntary Sustainability Reporting Standard for SMEs)'
+  ): Promise<any> {
     const activeRequestId = requestId || `req_${Date.now()}`;
     const formData = new FormData();
     formData.append('requestId', activeRequestId);
@@ -56,6 +64,9 @@ export class EsgService {
     formData.append('model', model);
     if (name) {
       formData.append('name', name);
+    }
+    if (frameworkName) {
+      formData.append('frameworkName', frameworkName);
     }
     files.forEach((file) => {
       formData.append('files', file, file.name);

@@ -104,6 +104,7 @@ async def upload_documents(
     year: int = Form(...),
     model: str = Form("gemini-3.5"),
     name: str = Form(None),
+    frameworkName: str = Form("VSME (Voluntary Sustainability Reporting Standard for SMEs)"),
     files: List[UploadFile] = File(...),
     background_tasks: BackgroundTasks = None,
     db: Session = Depends(get_db)
@@ -153,14 +154,15 @@ async def upload_documents(
         total_files_count = len(all_files)
         
         insert_query = text("""
-            INSERT INTO upload_request (request_id, folder_path, total_files, status, model, name)
-            VALUES (:request_id, :folder_path, :total_files, :status, :model, :name)
+            INSERT INTO upload_request (request_id, folder_path, total_files, status, model, name, framework_name)
+            VALUES (:request_id, :folder_path, :total_files, :status, :model, :name, :framework_name)
             ON CONFLICT (request_id) DO UPDATE SET
                 folder_path = EXCLUDED.folder_path,
                 total_files = EXCLUDED.total_files,
                 status = EXCLUDED.status,
                 model = EXCLUDED.model,
                 name = COALESCE(EXCLUDED.name, upload_request.name),
+                framework_name = COALESCE(EXCLUDED.framework_name, upload_request.framework_name),
                 updated_at = CURRENT_TIMESTAMP
         """)
         
@@ -172,7 +174,8 @@ async def upload_documents(
                 "total_files": total_files_count,
                 "status": "Pending Review",
                 "model": model,
-                "name": name
+                "name": name,
+                "framework_name": frameworkName
             }
         )
         db.commit()
@@ -200,7 +203,7 @@ def get_upload_requests(db: Session = Depends(get_db)):
     try:
         # Fetch all records from upload_request sorted by created_at descending
         query = text("""
-            SELECT request_id, folder_path, total_files, status, created_at, report_data, model, name
+            SELECT request_id, folder_path, total_files, status, created_at, report_data, model, name, framework_name
             FROM upload_request
             ORDER BY created_at DESC
         """)
@@ -219,6 +222,7 @@ def get_upload_requests(db: Session = Depends(get_db)):
             report_data = row.report_data
             model_val = row.model if hasattr(row, 'model') else 'gemini-3.5'
             name_val = row.name if hasattr(row, 'name') and row.name is not None else ""
+            framework_val = row.framework_name if hasattr(row, 'framework_name') and row.framework_name is not None else "VSME (Voluntary Sustainability Reporting Standard for SMEs)"
             
             # Format request ID back to string (e.g. req_12345)
             req_id_str = f"req_{req_id_num}"
@@ -280,7 +284,8 @@ def get_upload_requests(db: Session = Depends(get_db)):
                 "reportData": parsed_report,
                 "generatedReports": generated_reports,
                 "model": model_val,
-                "name": name_val
+                "name": name_val,
+                "frameworkName": framework_val
             })
             
         return requests_list

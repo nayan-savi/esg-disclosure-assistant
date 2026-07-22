@@ -60,6 +60,9 @@ def init_db():
             conn.execute(text("""
                 ALTER TABLE upload_request ADD COLUMN IF NOT EXISTS name VARCHAR(255);
             """))
+            conn.execute(text("""
+                ALTER TABLE upload_request ADD COLUMN IF NOT EXISTS framework_name VARCHAR(255) DEFAULT 'VSME (Voluntary Sustainability Reporting Standard for SMEs)';
+            """))
         print("Database tables checked/created successfully.")
     except Exception as e:
         print(f"Failed to initialize database tables: {e}")

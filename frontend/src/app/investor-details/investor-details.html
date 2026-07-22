@@ -108,7 +108,7 @@
         <div class="p-8 space-y-8">
           <!-- Metadata Grid -->
           <div
-            class="grid grid-cols-1 sm:grid-cols-3 gap-6 bg-gray-50 p-5 rounded-lg border border-gray-100"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 bg-gray-50 p-5 rounded-lg border border-gray-100"
           >
             <div>
               <div class="text-xs font-medium text-gray-500 uppercase">Submission Date</div>
@@ -119,6 +119,12 @@
             <div>
               <div class="text-xs font-medium text-gray-500 uppercase">Request ID</div>
               <div class="text-sm font-mono text-gray-700 mt-1">{{ request()?.id }}</div>
+            </div>
+            <div>
+              <div class="text-xs font-medium text-gray-500 uppercase">Framework</div>
+              <div class="text-sm font-semibold text-emerald-700 mt-1 truncate" [title]="request()?.frameworkName || ''">
+                {{ request()?.frameworkName || 'VSME' }}
+              </div>
             </div>
             <div>
               <div class="text-xs font-medium text-gray-500 uppercase">Number of Files</div>
