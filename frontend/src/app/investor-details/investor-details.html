@@ -1240,35 +1240,48 @@
                   <div class="bg-white border border-gray-200/80 rounded-xl p-6 shadow-sm space-y-4">
                     <div class="flex justify-between items-start">
                       <div>
-                        <h3 class="text-sm font-bold text-gray-900">Monthly Electricity Consumption</h3>
+                        <h3 class="text-sm font-bold text-gray-900">Monthly Electricity & Renewable Share</h3>
                         <p class="text-[11px] text-gray-400 mt-0.5">
-                          Monthly power usage (kWh) & renewable energy share (%)
+                          Side-by-side: Power usage (kWh) vs Renewable share (%)
                         </p>
                       </div>
                       <span class="px-2.5 py-1 text-[10px] font-extrabold bg-amber-50 text-amber-700 rounded-full border border-amber-200">
-                        12 Months Tracked
+                        {{ getMonthlyElectricityData().length }} Months Active
                       </span>
                     </div>
 
-                    <!-- Bar Chart Grid -->
-                    <div class="h-44 pt-6 pb-2 flex items-end justify-between gap-1.5 border-b border-gray-100 px-1">
+                    <!-- Dual Bar Chart Grid -->
+                    <div class="h-44 pt-6 pb-2 flex items-end justify-between gap-1 border-b border-gray-100 px-1">
                       @for (item of getMonthlyElectricityData(); track item.month) {
                         <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end group relative cursor-pointer">
                           <!-- Floating Tooltip -->
-                          <div class="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-10 bg-slate-900 text-white text-[10px] py-1 px-2 rounded shadow-lg whitespace-nowrap z-20 pointer-events-none">
-                            <span class="font-bold">{{ item.month }}:</span> {{ item.consumption | number }} kWh
-                            <span *ngIf="item.renewablePercentage" class="text-amber-300 block font-normal">({{ item.renewablePercentage }}% renewable)</span>
+                          <div class="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-16 bg-slate-900 text-white text-[10px] py-1.5 px-2.5 rounded-lg shadow-xl whitespace-nowrap z-30 pointer-events-none">
+                            <span class="font-bold text-slate-200 block border-b border-slate-700 pb-0.5 mb-1">{{ item.month }} Electricity Report</span>
+                            <span class="block text-amber-300">⚡ Usage: {{ item.consumption | number }} kWh</span>
+                            <span *ngIf="item.renewablePercentage" class="block text-emerald-300">🌱 Renewable: {{ item.renewablePercentage }}% ({{ getCleanElectricityKwh(item.consumption, item.renewablePercentage) | number }} kWh clean)</span>
                           </div>
 
-                          <!-- Bar -->
-                          <div
-                            class="w-full max-w-[28px] bg-gradient-to-t from-amber-500 to-amber-400 rounded-t group-hover:brightness-110 transition-all duration-300 relative shadow-sm"
-                            [style.height.%]="getElectricityBarHeight(item.consumption)"
-                          >
-                            <span *ngIf="item.renewablePercentage" class="absolute -top-4 left-1/2 -translate-x-1/2 text-[9px] font-bold text-amber-700">
-                              {{ item.renewablePercentage }}%
-                            </span>
+                          <!-- Grouped Bars -->
+                          <div class="w-full flex items-end justify-center gap-1 h-full">
+                            <!-- Bar 1: Electricity Usage (kWh) -->
+                            <div
+                              class="w-1.5 bg-amber-500 rounded-t group-hover:opacity-80 transition-all shadow-sm"
+                              [style.height.%]="getElectricityBarHeight(item.consumption)"
+                              title="Electricity Usage (kWh)"
+                            ></div>
+                            <!-- Bar 2: Renewable Share (%) -->
+                            <div
+                              *ngIf="item.renewablePercentage"
+                              class="w-1.5 bg-emerald-500 rounded-t group-hover:opacity-80 transition-all shadow-sm relative"
+                              [style.height.%]="item.renewablePercentage"
+                              title="Renewable Share (%)"
+                            >
+                              <span class="absolute -top-3 left-1/2 -translate-x-1/2 text-[8px] font-black text-emerald-700">
+                                {{ item.renewablePercentage }}%
+                              </span>
+                            </div>
                           </div>
+
                           <!-- Month Label -->
                           <span class="text-[10px] font-semibold text-gray-500 group-hover:text-amber-600 transition-colors">
                             {{ item.month }}
@@ -1277,9 +1290,13 @@
                       }
                     </div>
 
+                    <!-- Legend -->
                     <div class="flex justify-between items-center text-[11px] text-gray-500 pt-1">
                       <span class="inline-flex items-center gap-1.5 font-medium">
-                        <span class="w-2.5 h-2.5 bg-amber-500 rounded-sm"></span> Electricity (kWh)
+                        <span class="w-2.5 h-2.5 bg-amber-500 rounded-sm"></span> Usage (kWh)
+                      </span>
+                      <span class="inline-flex items-center gap-1.5 font-medium">
+                        <span class="w-2.5 h-2.5 bg-emerald-500 rounded-sm"></span> Renewable Share (%)
                       </span>
                       <span class="font-bold text-gray-700">
                         Peak: {{ getMaxMonthlyElectricity() | number }} kWh

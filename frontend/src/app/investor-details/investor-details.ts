@@ -652,6 +652,12 @@ export class InvestorDetails implements OnInit {
     return Math.round((num / max) * 100);
   }
 
+  getCleanElectricityKwh(consumption: any, percentage: any): number {
+    const c = parseFloat(consumption) || 0;
+    const p = parseFloat(percentage) || 0;
+    return Math.round((c * p) / 100);
+  }
+
   getMonthlyWaterData() {
     const json = this.normalizedReportJson();
     return json?.environment?.water?.monthlyWaterConsumption || [];

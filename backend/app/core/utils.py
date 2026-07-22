@@ -163,22 +163,51 @@ class ReportUtility:
                 elec["unit"] = "kWh" if "kwh" in str(val).lower() else "MWh"
 
         # Parse monthly electricity consumption
-        if not elec.get("monthlyElectricityConsumption") or len(elec.get("monthlyElectricityConsumption")) == 0:
-            month_val = find_val(["monthly report"]) or find_val(["monthly electricity"]) or find_val(["electricity", "jan"])
-            if month_val:
-                import re
-                months_data = []
-                pattern = r"(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[^\d]*([\d,]+)(?:\s*kWh)?(?:\s*\(([\d\.]+)%\)?)?"
-                for m in re.finditer(pattern, str(month_val), re.IGNORECASE):
-                    month = m.group(1).capitalize()
-                    cons = int(m.group(2).replace(",", ""))
-                    ren = float(m.group(3)) if m.group(3) else None
-                    item = {"month": month, "consumption": cons}
-                    if ren is not None:
-                        item["renewablePercentage"] = ren
-                    months_data.append(item)
-                if months_data:
-                    elec["monthlyElectricityConsumption"] = months_data
+        existing_elec = elec.get("monthlyElectricityConsumption") or []
+        if len(existing_elec) < 12:
+            elec_months = []
+            if request_id:
+                import os, docx
+                req_str = str(request_id)
+                base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "documents", req_str if req_str.startswith("req_") else f"req_{req_str}"))
+                if os.path.exists(base_dir):
+                    for f in os.listdir(base_dir):
+                        if ("energy" in f.lower() or "ghg" in f.lower() or "b3_" in f.lower()) and f.endswith(".docx"):
+                            filepath = os.path.join(base_dir, f)
+                            try:
+                                doc = docx.Document(filepath)
+                                for table in doc.tables:
+                                    for row in table.rows:
+                                        cells = [c.text.strip() for c in row.cells]
+                                        if len(cells) >= 3 and cells[0] in ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]:
+                                            try:
+                                                m = cells[0]
+                                                c_val = int(cells[1].replace(",", ""))
+                                                r_val = float(cells[2].replace("%", "").strip())
+                                                elec_months.append({"month": m, "consumption": c_val, "renewablePercentage": r_val})
+                                            except Exception:
+                                                pass
+                            except Exception:
+                                pass
+
+            if elec_months and len(elec_months) == 12:
+                elec["monthlyElectricityConsumption"] = elec_months
+            else:
+                month_val = find_val(["monthly report"]) or find_val(["monthly electricity"]) or find_val(["electricity", "jan"])
+                if month_val:
+                    import re
+                    months_data = []
+                    pattern = r"(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[^\d]*([\d,]+)(?:\s*kWh)?(?:\s*\(([\d\.]+)%\)?)?"
+                    for m in re.finditer(pattern, str(month_val), re.IGNORECASE):
+                        month = m.group(1).capitalize()
+                        cons = int(m.group(2).replace(",", ""))
+                        ren = float(m.group(3)) if m.group(3) else None
+                        item = {"month": month, "consumption": cons}
+                        if ren is not None:
+                            item["renewablePercentage"] = ren
+                        months_data.append(item)
+                    if months_data:
+                        elec["monthlyElectricityConsumption"] = months_data
                 
         # naturalGas
         if "naturalGas" not in env:
