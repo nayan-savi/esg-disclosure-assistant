@@ -61,7 +61,7 @@ def query_report_for_request(requestId: str, module: str = "basic", model: str =
         # 3. Retrieve top matches from Chroma for each keyword query to build a unified context
         unique_docs = {}
         for index, q_str in enumerate(targeted_queries):
-            docs = db.similarity_search_with_score(q_str, k=2)
+            docs = db.similarity_search_with_score(q_str, k=1)
             for doc, score in docs:
                 print(f"Question {index + 1}: {q_str}")
                 print(f"Score: {score}")
@@ -87,6 +87,7 @@ def query_report_for_request(requestId: str, module: str = "basic", model: str =
             ("human", "{input}"),
         ])
 
+        print("LLM Invoke stuff-documents chain directly with the combined context chunks list")
         # 6. Invoke stuff-documents chain directly with the combined context chunks list
         question_answer_chain = create_stuff_documents_chain(llm, prompt)
         response = question_answer_chain.invoke({
@@ -95,7 +96,7 @@ def query_report_for_request(requestId: str, module: str = "basic", model: str =
         })
 
         raw_answer = response.strip()
-
+        print("LLM answer:", raw_answer)
         # Parse using json_repair to be extremely robust
         import json_repair
         try:
