@@ -63,6 +63,19 @@ def init_db():
             conn.execute(text("""
                 ALTER TABLE upload_request ADD COLUMN IF NOT EXISTS framework_name VARCHAR(255) DEFAULT 'VSME (Voluntary Sustainability Reporting Standard for SMEs)';
             """))
+            conn.execute(text("""
+                CREATE TABLE IF NOT EXISTS framework_document (
+                    id BIGSERIAL PRIMARY KEY,
+                    doc_id VARCHAR(100) UNIQUE NOT NULL,
+                    framework_name VARCHAR(255) NOT NULL,
+                    description TEXT,
+                    file_name VARCHAR(255) NOT NULL,
+                    file_path VARCHAR(500) NOT NULL,
+                    file_size VARCHAR(50),
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );
+            """))
         print("Database tables checked/created successfully.")
     except Exception as e:
         print(f"Failed to initialize database tables: {e}")

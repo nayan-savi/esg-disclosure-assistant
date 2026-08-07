@@ -4,7 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from db.session import verify_connection, init_db, get_db
 from sqlalchemy import text
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
+from datetime import datetime
 from contextlib import asynccontextmanager
 import os
 import shutil
@@ -912,6 +913,133 @@ def get_questionnaires():
         "basic": parse_questionnaire_file(basic_path),
         "comprehensive": parse_questionnaire_file(comprehensive_path)
     }
+
+@app.post("/esg/frameworks/upload")
+async def upload_framework_document(
+    frameworkName: str = Form(...),
+    description: Optional[str] = Form(None),
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db)
+):
+    try:
+        doc_id = f"fw_{int(time.time() * 1000)}"
+        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "framework_documents", doc_id))
+        os.makedirs(base_dir, exist_ok=True)
+
+        file_path = os.path.join(base_dir, file.filename)
+        contents = await file.read()
+        with open(file_path, "wb") as f:
+            f.write(contents)
+
+        file_size_bytes = len(contents)
+        if file_size_bytes >= 1024 * 1024:
+            file_size_str = f"{file_size_bytes / (1024 * 1024):.1f} MB"
+        elif file_size_bytes >= 1024:
+            file_size_str = f"{file_size_bytes / 1024:.1f} KB"
+        else:
+            file_size_str = f"{file_size_bytes} B"
+
+        now_str = datetime.now().strftime("%b %d, %Y")
+
+        try:
+            db.execute(
+                text("""
+                    INSERT INTO framework_document (doc_id, framework_name, description, file_name, file_path, file_size, created_at, updated_at)
+                    VALUES (:doc_id, :framework_name, :description, :file_name, :file_path, :file_size, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+                """),
+                {
+                    "doc_id": doc_id,
+                    "framework_name": frameworkName,
+                    "description": description or "",
+                    "file_name": file.filename,
+                    "file_path": file_path,
+                    "file_size": file_size_str
+                }
+            )
+            db.commit()
+        except Exception as db_err:
+            print(f"Warning: DB insertion for framework_document failed, using filesystem: {db_err}")
+            db.rollback()
+
+        return {
+            "status": "SUCCESS",
+            "docId": doc_id,
+            "frameworkName": frameworkName,
+            "description": description or "",
+            "fileName": file.filename,
+            "fileSize": file_size_str,
+            "uploadedAt": now_str
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to upload framework document: {str(e)}")
+
+@app.get("/esg/frameworks")
+def get_framework_documents(db: Session = Depends(get_db)):
+    try:
+        rows = db.execute(text("SELECT doc_id, framework_name, description, file_name, file_size, created_at FROM framework_document ORDER BY created_at DESC")).fetchall()
+        result = []
+        for r in rows:
+            created_val = r.created_at.strftime("%b %d, %Y") if hasattr(r.created_at, "strftime") else str(r.created_at)
+            result.append({
+                "docId": r.doc_id,
+                "frameworkName": r.framework_name,
+                "description": r.description or "",
+                "fileName": r.file_name,
+                "fileSize": r.file_size or "N/A",
+                "uploadedAt": created_val
+            })
+        return result
+    except Exception as e:
+        print(f"Warning: Failed to fetch framework documents from DB: {e}")
+        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "framework_documents"))
+        result = []
+        if os.path.exists(base_dir):
+            for d in os.listdir(base_dir):
+                folder_path = os.path.join(base_dir, d)
+                if os.path.isdir(folder_path):
+                    files = os.listdir(folder_path)
+                    if files:
+                        fname = files[0]
+                        fpath = os.path.join(folder_path, fname)
+                        fsize = f"{os.path.getsize(fpath) / 1024:.1f} KB"
+                        result.append({
+                            "docId": d,
+                            "frameworkName": "Standard Framework",
+                            "description": "",
+                            "fileName": fname,
+                            "fileSize": fsize,
+                            "uploadedAt": "Recent"
+                        })
+        return result
+
+@app.delete("/esg/frameworks/{docId}")
+def delete_framework_document(docId: str, db: Session = Depends(get_db)):
+    try:
+        db.execute(text("DELETE FROM framework_document WHERE doc_id = :doc_id"), {"doc_id": docId})
+        db.commit()
+    except Exception as db_err:
+        print(f"Warning: DB deletion failed: {db_err}")
+
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "framework_documents", docId))
+    if os.path.exists(base_dir):
+        import shutil
+        shutil.rmtree(base_dir, ignore_errors=True)
+
+    return {"status": "SUCCESS", "message": "Framework document deleted successfully"}
+
+@app.get("/esg/frameworks/{docId}/download")
+def download_framework_document(docId: str, db: Session = Depends(get_db)):
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "framework_documents", docId))
+    if not os.path.exists(base_dir):
+        raise HTTPException(status_code=404, detail="Framework document folder not found")
+
+    files = os.listdir(base_dir)
+    if not files:
+        raise HTTPException(status_code=404, detail="Framework file not found")
+
+    file_name = files[0]
+    file_path = os.path.join(base_dir, file_name)
+    return FileResponse(file_path, filename=file_name, media_type="application/octet-stream")
 
 @app.get("/")
 def read_root():

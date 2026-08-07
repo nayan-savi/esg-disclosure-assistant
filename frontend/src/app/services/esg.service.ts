@@ -16,11 +16,24 @@ export interface EsgRequest {
   frameworkName?: string;
 }
 
+export interface FrameworkDocument {
+  docId: string;
+  frameworkName: string;
+  description?: string;
+  fileName: string;
+  fileSize: string;
+  uploadedAt: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class EsgService {
   private http = inject(HttpClient);
+
+  // Hostname for API calls
+  readonly hostname = 'http://localhost:8000';
+  // readonly hostname = 'https://esg-backend-457991646639.asia-south1.run.app';
 
   // Default list of requests
   private requestsList = signal<EsgRequest[]>([]);
@@ -32,7 +45,7 @@ export class EsgService {
   async loadRequests() {
     try {
       const data = await firstValueFrom(
-        this.http.get<EsgRequest[]>('http://localhost:8000/esg/requests')
+        this.http.get<EsgRequest[]>(`${this.hostname}/esg/requests`)
       );
       this.requestsList.set(data || []);
     } catch (error) {
@@ -76,7 +89,7 @@ export class EsgService {
     let response: any = null;
     try {
       response = await firstValueFrom(
-        this.http.post('http://localhost:8000/esg/upload', formData)
+        this.http.post(`${this.hostname}/esg/upload`, formData)
       );
       // Reload list from backend on success
       await this.loadRequests();
@@ -131,7 +144,7 @@ export class EsgService {
     let response: any = null;
     try {
       response = await firstValueFrom(
-        this.http.delete(`http://localhost:8000/esg/requests/${id}`)
+        this.http.delete(`${this.hostname}/esg/requests/${id}`)
       );
       await this.loadRequests();
     } catch (error) {
@@ -145,7 +158,7 @@ export class EsgService {
     let response: any = null;
     try {
       response = await firstValueFrom(
-        this.http.delete(`http://localhost:8000/esg/requests/${requestId}/files/${filename}`)
+        this.http.delete(`${this.hostname}/esg/requests/${requestId}/files/${filename}`)
       );
       await this.loadRequests();
     } catch (error) {
@@ -169,7 +182,7 @@ export class EsgService {
   async updateRequestModel(requestId: string, model: string): Promise<any> {
     try {
       const response = await firstValueFrom(
-        this.http.put(`http://localhost:8000/esg/requests/${requestId}/model?model=${model}`, {})
+        this.http.put(`${this.hostname}/esg/requests/${requestId}/model?model=${model}`, {})
       );
       await this.loadRequests();
       return response;
@@ -183,7 +196,7 @@ export class EsgService {
     let response: any = null;
     try {
       response = await firstValueFrom(
-        this.http.post(`http://localhost:8000/esg/report/generate?requestId=${requestId}&module=${module}&model=${model}`, {})
+        this.http.post(`${this.hostname}/esg/report/generate?requestId=${requestId}&module=${module}&model=${model}`, {})
       );
       await this.loadRequests();
     } catch (error) {
@@ -201,13 +214,13 @@ export class EsgService {
   }
 
   downloadReport(requestId: string): void {
-    window.open(`http://localhost:8000/esg/requests/${requestId}/report/download`, '_blank');
+    window.open(`${this.hostname}/esg/requests/${requestId}/report/download`, '_blank');
   }
 
   async downloadReportBlob(requestId: string, filename?: string): Promise<Blob> {
     const url = filename
-      ? `http://localhost:8000/esg/requests/${requestId}/report/download?filename=${filename}`
-      : `http://localhost:8000/esg/requests/${requestId}/report/download`;
+      ? `${this.hostname}/esg/requests/${requestId}/report/download?filename=${filename}`
+      : `${this.hostname}/esg/requests/${requestId}/report/download`;
     return await firstValueFrom(
       this.http.get(url, {
         responseType: 'blob'
@@ -215,15 +228,52 @@ export class EsgService {
     );
   }
 
+
+
   async getQuestionnaires(): Promise<any> {
     return await firstValueFrom(
-      this.http.get('http://localhost:8000/esg/questionnaires')
+      this.http.get(`${this.hostname}/esg/questionnaires`)
     );
   }
 
   async getReportNormalizedJson(requestId: string): Promise<any> {
     return await firstValueFrom(
-      this.http.get(`http://localhost:8000/esg/requests/${requestId}/report/json`)
+      this.http.get(`${this.hostname}/esg/requests/${requestId}/report/json`)
     );
+  }
+
+  async uploadFrameworkDocument(frameworkName: string, file: File, description?: string): Promise<any> {
+    const formData = new FormData();
+    formData.append('frameworkName', frameworkName);
+    formData.append('file', file, file.name);
+    if (description) {
+      formData.append('description', description);
+    }
+
+    return await firstValueFrom(
+      this.http.post(`${this.hostname}/esg/frameworks/upload`, formData)
+    );
+  }
+
+  async getFrameworkDocuments(): Promise<FrameworkDocument[]> {
+    try {
+      const data = await firstValueFrom(
+        this.http.get<FrameworkDocument[]>(`${this.hostname}/esg/frameworks`)
+      );
+      return data || [];
+    } catch (error) {
+      console.warn('Failed to load framework documents:', error);
+      return [];
+    }
+  }
+
+  async deleteFrameworkDocument(docId: string): Promise<any> {
+    return await firstValueFrom(
+      this.http.delete(`${this.hostname}/esg/frameworks/${docId}`)
+    );
+  }
+
+  downloadFrameworkDocument(docId: string): void {
+    window.open(`${this.hostname}/esg/frameworks/${docId}/download`, '_blank');
   }
 }

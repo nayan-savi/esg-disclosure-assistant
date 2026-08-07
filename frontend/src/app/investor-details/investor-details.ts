@@ -15,7 +15,7 @@ import { SVGS } from '../constants/svgs';
 export class InvestorDetails implements OnInit {
   svgs = SVGS;
   private route = inject(ActivatedRoute);
-  private esgService = inject(EsgService);
+  public esgService = inject(EsgService);
   private sanitizer = inject(DomSanitizer);
   
   requestId = signal<string | null>(null);
@@ -218,7 +218,7 @@ export class InvestorDetails implements OnInit {
     const req = this.request();
     if (!req) return;
 
-    const rawUrl = `http://localhost:8000/esg/requests/${req.id}/files/${encodeURIComponent(filename)}/view`;
+    const rawUrl = `${this.esgService.hostname}/esg/requests/${req.id}/files/${encodeURIComponent(filename)}/view`;
     const ext = filename.split('.').pop()?.toLowerCase() || '';
 
     this.viewDocumentName.set(filename);
@@ -482,7 +482,7 @@ export class InvestorDetails implements OnInit {
     }, 100);
 
     const model = req.model || 'gemini-3.5';
-    const url = `http://localhost:8000/esg/report/generate/stream?requestId=${req.id}&module=${this.selectedModule()}&model=${model}`;
+    const url = `${this.esgService.hostname}/esg/report/generate/stream?requestId=${req.id}&module=${this.selectedModule()}&model=${model}`;
     const eventSource = new EventSource(url);
 
     eventSource.onmessage = (event) => {

@@ -4,16 +4,23 @@
     class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-xl border border-gray-200/80 shadow-sm font-sans"
   >
     <div>
-      <h1 class="text-2xl font-bold text-gray-900 tracking-tight">VSME Questionnaire Directory</h1>
+      <div class="flex items-center gap-2">
+        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Admin Management Portal</h1>
+        <span class="px-2.5 py-0.5 text-xs font-extrabold bg-emerald-100 text-emerald-800 rounded-full">
+          Frameworks & Standards
+        </span>
+      </div>
       <p class="text-sm text-gray-500 mt-1">
-        Review standard ESG VSME questionnaires, compliance modules, and disclosure indicators.
+        Upload standard ESG disclosure frameworks, regulatory rules, and review questionnaire directories.
       </p>
     </div>
 
-    <!-- Search Bar -->
-    <div class="relative w-full md:w-80">
-      <div
-        class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"
+    <!-- Header Actions -->
+    <div class="flex items-center gap-3 w-full md:w-auto">
+      <!-- Upload Framework Document Button -->
+      <button
+        (click)="openUploadModal()"
+        class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-sm font-bold rounded-lg shadow-sm hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer border-none font-sans"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -26,24 +33,18 @@
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
-            d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
           />
         </svg>
-      </div>
-      <input
-        type="text"
-        [ngModel]="searchQuery()"
-        (ngModelChange)="searchQuery.set($event)"
-        placeholder="Search questions or sections..."
-        class="w-full pl-9 pr-4 py-2 text-sm bg-gray-50 border border-gray-200 hover:border-gray-300 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 rounded-lg transition-all outline-none font-sans"
-      />
+        Upload Framework Document
+      </button>
     </div>
   </div>
 
   <!-- Loading State -->
   @if (isLoading()) {
     <div
-      class="flex flex-col items-center justify-center py-20 bg-white rounded-xl border border-gray-200 shadow-sm space-y-4"
+      class="flex flex-col items-center justify-center py-20 bg-white rounded-xl border border-gray-200 shadow-sm space-y-4 font-sans"
     >
       <svg
         class="animate-spin h-8 w-8 text-emerald-600"
@@ -61,7 +62,7 @@
         ></circle>
         <path class="opacity-75" fill="currentColor" [attr.d]="svgs.spinner"></path>
       </svg>
-      <span class="text-sm font-semibold text-gray-500 font-sans">Loading questionnaires...</span>
+      <span class="text-sm font-semibold text-gray-500">Loading admin data & frameworks...</span>
     </div>
   }
 
@@ -89,102 +90,646 @@
     </div>
   }
 
-  <!-- Content State -->
+  <!-- Main Admin Content Area -->
   @else {
-    <div class="bg-white rounded-xl border border-gray-200/80 shadow-sm overflow-hidden">
-      <!-- Tabs Switcher -->
-      <div class="flex border-b border-gray-200 bg-white p-1 font-sans">
+    <div class="bg-white rounded-xl border border-gray-200/80 shadow-sm overflow-hidden font-sans">
+      <!-- Main Category Switcher (Questionnaires vs Framework Documents) -->
+      <div class="flex border-b border-gray-200 bg-gray-50/50 p-1">
         <button
-          (click)="activeTab.set('basic')"
+          (click)="mainViewTab.set('questionnaires')"
           [ngClass]="{
-            'border-emerald-500 text-emerald-600 bg-emerald-50/10 font-bold':
-              activeTab() === 'basic',
-            'border-transparent text-gray-500 hover:text-gray-700': activeTab() !== 'basic',
+            'bg-white text-emerald-700 shadow-sm font-bold': mainViewTab() === 'questionnaires',
+            'text-gray-500 hover:text-gray-800 font-medium': mainViewTab() !== 'questionnaires'
           }"
-          class="flex-1 py-3.5 text-center text-sm font-medium border-b-2 transition-all cursor-pointer bg-transparent border-none"
+          class="flex-1 py-3 px-4 rounded-lg text-sm transition-all cursor-pointer bg-transparent border-none flex items-center justify-center gap-2"
         >
-          OPTION A: Basic Module Questions
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            class="w-4 h-4 text-emerald-600"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.document" />
+          </svg>
+          Questionnaires Directory
         </button>
+
         <button
-          (click)="activeTab.set('comprehensive')"
+          (click)="mainViewTab.set('frameworks')"
           [ngClass]="{
-            'border-emerald-500 text-emerald-600 bg-emerald-50/10 font-bold':
-              activeTab() === 'comprehensive',
-            'border-transparent text-gray-500 hover:text-gray-700': activeTab() !== 'comprehensive',
+            'bg-white text-emerald-700 shadow-sm font-bold': mainViewTab() === 'frameworks',
+            'text-gray-500 hover:text-gray-800 font-medium': mainViewTab() !== 'frameworks'
           }"
-          class="flex-1 py-3.5 text-center text-sm font-medium border-b-2 transition-all cursor-pointer bg-transparent border-none"
+          class="flex-1 py-3 px-4 rounded-lg text-sm transition-all cursor-pointer bg-transparent border-none flex items-center justify-center gap-2"
         >
-          OPTION B: Comprehensive Module Questions
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            class="w-4 h-4 text-emerald-600"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"
+            />
+          </svg>
+          Uploaded Framework Documents
+          <span
+            class="ml-1 px-2 py-0.5 text-xs font-bold bg-emerald-100 text-emerald-800 rounded-full"
+          >
+            {{ frameworkDocs().length }}
+          </span>
         </button>
       </div>
 
-      <!-- No Results State -->
-      @if (getFilteredSections().length === 0) {
-        <div class="flex flex-col items-center justify-center py-20 bg-white space-y-3 font-sans">
-          <div class="p-3 bg-gray-50 rounded-full text-gray-400">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-8 h-8"
+      <!-- VIEW 1: FRAMEWORK DOCUMENTS REPOSITORY -->
+      @if (mainViewTab() === 'frameworks') {
+        <div class="p-6">
+          <div class="flex justify-between items-center pb-4 border-b border-gray-100">
+            <div>
+              <h2 class="text-base font-bold text-gray-900">ESG Framework Standards Directory</h2>
+              <p class="text-xs text-gray-500 mt-0.5">
+                Official ESG reporting framework standards, guidelines, and reference documents uploaded by Admins.
+              </p>
+            </div>
+            <button
+              (click)="openUploadModal()"
+              class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold rounded-lg border border-emerald-200 transition-all flex items-center gap-1.5 cursor-pointer"
             >
-              <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.document" />
-            </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                class="w-3.5 h-3.5"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+              Add New Framework
+            </button>
           </div>
-          <span class="text-base font-bold text-gray-800">No matching questions found</span>
-          <span class="text-xs text-gray-500">Try adjusting your keywords or search query.</span>
-        </div>
-      }
 
-      <!-- Grid Layout -->
-      @else {
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-8 font-sans animate-fadeIn">
-          @for (sec of getFilteredSections(); track sec.title) {
-            <div
-              class="bg-gray-50/50 hover:bg-gray-50 rounded-xl border border-gray-200/80 p-6 flex flex-col justify-between transition-all duration-200 hover:shadow-sm"
-            >
-              <div class="space-y-4">
-                <!-- Section Header -->
-                <div class="flex items-center gap-2.5 pb-3 border-b border-gray-200">
-                  <div
-                    class="p-1.5 bg-emerald-50 rounded-lg text-emerald-600 flex items-center justify-center"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="2"
-                      stroke="currentColor"
-                      class="w-4 h-4"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        [attr.d]="svgs.badgeCheck"
-                      />
-                    </svg>
-                  </div>
-                  <h3 class="text-sm font-extrabold text-gray-900">{{ sec.title }}</h3>
-                </div>
-
-                <!-- Questions List -->
-                <ul class="space-y-2.5 pl-0 mt-2 list-none">
-                  @for (qst of sec.questions; track qst) {
-                    <li class="flex items-start gap-2.5 text-xs text-gray-600 leading-relaxed">
-                      <span
-                        class="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-1.5 flex-shrink-0"
-                      ></span>
-                      <span>{{ qst }}</span>
-                    </li>
-                  }
-                </ul>
+          <!-- Empty State for Framework Documents -->
+          @if (getFilteredFrameworkDocs().length === 0) {
+            <div class="flex flex-col items-center justify-center py-16 bg-gray-50/50 rounded-xl border border-dashed border-gray-300 my-6 space-y-3">
+              <div class="p-3 bg-emerald-50 text-emerald-600 rounded-full">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-8 h-8"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m6.75 12l-3-3m0 0l-3 3m3-3v6m-1.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+                  />
+                </svg>
               </div>
+              <h3 class="text-base font-bold text-gray-900">No Framework Documents Uploaded</h3>
+              <p class="text-xs text-gray-500 max-w-md text-center">
+                Upload ESG reporting standards (e.g. VSME, ESRS, GRI, IFRS S1/S2, TCFD) to build standard disclosure knowledge.
+              </p>
+              <button
+                (click)="openUploadModal()"
+                class="mt-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg shadow-sm transition-all cursor-pointer border-none"
+              >
+                Upload Framework Document
+              </button>
+            </div>
+          }
+
+          <!-- Grid of Uploaded Framework Documents -->
+          @else {
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 my-6 animate-fadeIn">
+              @for (doc of getFilteredFrameworkDocs(); track doc.docId) {
+                <div
+                  class="bg-white hover:bg-gray-50/80 rounded-xl border border-gray-200/90 p-5 flex flex-col justify-between space-y-4 transition-all duration-200 hover:shadow-md hover:border-emerald-200 group"
+                >
+                  <div class="space-y-3">
+                    <!-- Framework Name Pill -->
+                    <div class="flex items-start justify-between gap-2">
+                      <span
+                        class="px-2.5 py-1 text-xs font-extrabold bg-emerald-50 text-emerald-800 rounded-md border border-emerald-200/80 block leading-tight"
+                      >
+                        {{ doc.frameworkName }}
+                      </span>
+                      <span class="text-[11px] font-semibold text-gray-400 flex-shrink-0">
+                        {{ doc.uploadedAt }}
+                      </span>
+                    </div>
+
+                    <!-- File Name & Size -->
+                    <div class="flex items-center gap-2.5 pt-1">
+                      <div class="p-2 bg-slate-100 group-hover:bg-emerald-100 text-slate-600 group-hover:text-emerald-700 rounded-lg transition-colors">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="2"
+                          stroke="currentColor"
+                          class="w-5 h-5"
+                        >
+                          <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.document" />
+                        </svg>
+                      </div>
+                      <div class="min-w-0 flex-1">
+                        <h4 class="text-xs font-bold text-gray-900 truncate" [title]="doc.fileName">
+                          {{ doc.fileName }}
+                        </h4>
+                        <span class="text-[11px] text-gray-400 font-medium block">
+                          Size: {{ doc.fileSize }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <!-- Optional Description -->
+                    @if (doc.description) {
+                      <p class="text-xs text-gray-600 bg-gray-50 p-2.5 rounded-lg border border-gray-100 line-clamp-2">
+                        {{ doc.description }}
+                      </p>
+                    }
+                  </div>
+
+                  <!-- Card Action Buttons -->
+                  <div class="flex items-center justify-between border-t border-gray-100 pt-3 text-xs">
+                    <button
+                      (click)="downloadFrameworkDoc(doc.docId, $event)"
+                      class="text-emerald-700 hover:text-emerald-800 font-bold flex items-center gap-1.5 cursor-pointer bg-transparent border-none p-0"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        class="w-4 h-4"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
+                        />
+                      </svg>
+                      Download Document
+                    </button>
+
+                    <button
+                      (click)="deleteFrameworkDoc(doc.docId, $event)"
+                      class="text-gray-400 hover:text-red-600 font-semibold p-1 rounded transition-colors cursor-pointer bg-transparent border-none"
+                      title="Delete Framework Document"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        class="w-4 h-4"
+                      >
+                        <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.trash" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              }
             </div>
           }
         </div>
       }
+
+      <!-- VIEW 2: QUESTIONNAIRES DIRECTORY -->
+      @if (mainViewTab() === 'questionnaires') {
+        <!-- Search Questionnaires Sub-Header & Framework Selector -->
+        <div class="p-5 bg-white border-b border-gray-100 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-base font-bold text-gray-900">Search Questionnaire Directory</h2>
+              @if (selectedQuestionnaireFramework()) {
+                <span class="px-2.5 py-0.5 text-xs font-extrabold bg-emerald-100 text-emerald-800 rounded-full border border-emerald-200">
+                  {{ selectedQuestionnaireFramework() }}
+                </span>
+              }
+            </div>
+            <p class="text-xs text-gray-500 mt-0.5">Select reporting framework standard and filter disclosure questions.</p>
+          </div>
+
+          <!-- Controls in the Same Line: Framework Dropdown & Search Input -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
+            <!-- Framework Selector Dropdown -->
+            <div class="flex items-center gap-2 sm:w-72">
+              <label class="text-xs font-bold text-gray-600 whitespace-nowrap hidden sm:inline">Framework:</label>
+              <select
+                [ngModel]="selectedQuestionnaireFramework()"
+                (ngModelChange)="selectedQuestionnaireFramework.set($event)"
+                class="w-full px-3 py-2 text-xs font-semibold bg-gray-50 border border-gray-200 hover:border-gray-300 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 rounded-lg transition-all outline-none font-sans text-gray-800"
+              >
+                @for (fw of questionnaireFrameworkOptions; track fw) {
+                  <option [value]="fw">{{ fw }}</option>
+                }
+              </select>
+            </div>
+
+            <!-- Search Input Bar -->
+            <div class="relative w-full sm:w-64">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  class="w-4 h-4"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+                  />
+                </svg>
+              </div>
+              <input
+                type="text"
+                [ngModel]="searchQuery()"
+                (ngModelChange)="searchQuery.set($event)"
+                placeholder="Search questions or sections..."
+                class="w-full pl-9 pr-4 py-2 text-xs bg-gray-50 border border-gray-200 hover:border-gray-300 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 rounded-lg transition-all outline-none font-sans"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabs Switcher (Basic vs Comprehensive) -->
+        <div class="flex border-b border-gray-200 bg-white p-1">
+          <button
+            (click)="activeTab.set('basic')"
+            [ngClass]="{
+              'border-emerald-500 text-emerald-600 bg-emerald-50/10 font-bold':
+                activeTab() === 'basic',
+              'border-transparent text-gray-500 hover:text-gray-700': activeTab() !== 'basic',
+            }"
+            class="flex-1 py-3 text-center text-sm font-medium border-b-2 transition-all cursor-pointer bg-transparent border-none"
+          >
+            OPTION A: Basic Module Questions
+          </button>
+          <button
+            (click)="activeTab.set('comprehensive')"
+            [ngClass]="{
+              'border-emerald-500 text-emerald-600 bg-emerald-50/10 font-bold':
+                activeTab() === 'comprehensive',
+              'border-transparent text-gray-500 hover:text-gray-700': activeTab() !== 'comprehensive',
+            }"
+            class="flex-1 py-3 text-center text-sm font-medium border-b-2 transition-all cursor-pointer bg-transparent border-none"
+          >
+            OPTION B: Comprehensive Module Questions
+          </button>
+        </div>
+
+        <!-- No Results State -->
+        @if (getFilteredSections().length === 0) {
+          <div class="flex flex-col items-center justify-center py-20 bg-white space-y-3">
+            <div class="p-3 bg-gray-50 rounded-full text-gray-400">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-8 h-8"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.document" />
+              </svg>
+            </div>
+            <span class="text-base font-bold text-gray-800">No matching questions found</span>
+            <span class="text-xs text-gray-500">Try adjusting your keywords or search query.</span>
+          </div>
+        }
+
+        <!-- Grid Layout for Questionnaires -->
+        @else {
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-8 animate-fadeIn">
+            @for (sec of getFilteredSections(); track sec.title) {
+              <div
+                class="bg-gray-50/50 hover:bg-gray-50 rounded-xl border border-gray-200/80 p-6 flex flex-col justify-between transition-all duration-200 hover:shadow-sm"
+              >
+                <div class="space-y-4">
+                  <!-- Section Header -->
+                  <div class="flex items-center gap-2.5 pb-3 border-b border-gray-200">
+                    <div
+                      class="p-1.5 bg-emerald-50 rounded-lg text-emerald-600 flex items-center justify-center"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        class="w-4 h-4"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          [attr.d]="svgs.badgeCheck"
+                        />
+                      </svg>
+                    </div>
+                    <h3 class="text-sm font-extrabold text-gray-900">{{ sec.title }}</h3>
+                  </div>
+
+                  <!-- Questions List -->
+                  <ul class="space-y-2.5 pl-0 mt-2 list-none">
+                    @for (qst of sec.questions; track qst) {
+                      <li class="flex items-start gap-2.5 text-xs text-gray-600 leading-relaxed">
+                        <span
+                          class="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-1.5 flex-shrink-0"
+                        ></span>
+                        <span>{{ qst }}</span>
+                      </li>
+                    }
+                  </ul>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      }
     </div>
   }
 </div>
+
+<!-- ========================================================================= -->
+<!-- UPLOAD FRAMEWORK DOCUMENT MODAL POPUP -->
+<!-- ========================================================================= -->
+@if (isUploadModalOpen()) {
+  <div
+    class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 font-sans animate-fadeIn"
+    (click)="closeUploadModal()"
+  >
+    <div
+      class="bg-white rounded-2xl border border-gray-200 shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]"
+      (click)="$event.stopPropagation()"
+    >
+      <!-- Modal Header -->
+      <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-emerald-100 text-emerald-700 rounded-xl">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="w-5 h-5"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"
+              />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-gray-900">Upload Framework Document</h3>
+            <p class="text-xs text-gray-500">Provide framework standard document & details for Admin repository.</p>
+          </div>
+        </div>
+        <button
+          (click)="closeUploadModal()"
+          class="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer bg-transparent border-none"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            class="w-5 h-5"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Body Form -->
+      <div class="p-6 space-y-5 overflow-y-auto">
+        <!-- Error Alert -->
+        @if (uploadError()) {
+          <div class="p-3.5 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl flex items-start gap-2.5">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="w-4 h-4 flex-shrink-0 mt-0.5 text-red-600"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.warningTriangle" />
+            </svg>
+            <span>{{ uploadError() }}</span>
+          </div>
+        }
+
+        <!-- Success Alert -->
+        @if (uploadSuccess()) {
+          <div class="p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl flex items-center gap-2.5">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="w-4 h-4 text-emerald-600"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.badgeCheck" />
+            </svg>
+            <span class="font-semibold">{{ uploadSuccess() }}</span>
+          </div>
+        }
+
+        <!-- 1. Framework Name Field -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-gray-700">
+            Framework Name <span class="text-red-500">*</span>
+          </label>
+          <select
+            [ngModel]="selectedFrameworkName()"
+            (ngModelChange)="selectedFrameworkName.set($event)"
+            class="w-full px-3.5 py-2.5 text-sm bg-gray-50 border border-gray-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all font-sans text-gray-800"
+          >
+            @for (fw of frameworkOptions; track fw) {
+              <option [value]="fw">{{ fw }}</option>
+            }
+          </select>
+          <p class="text-[11px] text-gray-400">Select standard ESG framework standard or custom name.</p>
+        </div>
+
+        <!-- Custom Framework Name Input (If "Other Custom Framework" selected) -->
+        @if (selectedFrameworkName() === 'Other Custom Framework') {
+          <div class="space-y-1.5 animate-fadeIn">
+            <label class="block text-xs font-bold text-gray-700">
+              Custom Framework Standard Name <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              [ngModel]="customFrameworkName()"
+              (ngModelChange)="customFrameworkName.set($event)"
+              placeholder="e.g., EU Taxonomy Regulation, Standard XYZ..."
+              class="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all font-sans text-gray-800"
+            />
+          </div>
+        }
+
+        <!-- 2. Framework Notes / Description (Optional) -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-gray-700">
+            Description / Notes <span class="text-gray-400 font-normal">(Optional)</span>
+          </label>
+          <textarea
+            [ngModel]="frameworkDescription()"
+            (ngModelChange)="frameworkDescription.set($event)"
+            rows="2"
+            placeholder="Add brief description, version notes, or reporting guidelines..."
+            class="w-full px-3.5 py-2 text-sm bg-gray-50 border border-gray-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all font-sans text-gray-800 resize-none"
+          ></textarea>
+        </div>
+
+        <!-- 3. File Upload Zone -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-gray-700">
+            Framework Document File <span class="text-red-500">*</span>
+          </label>
+
+          @if (!selectedFile()) {
+            <div
+              (drop)="onFileDrop($event)"
+              (dragover)="onDragOver($event)"
+              class="border-2 border-dashed border-gray-300 hover:border-emerald-500 bg-gray-50/60 hover:bg-emerald-50/20 rounded-2xl p-6 text-center transition-all cursor-pointer group"
+              (click)="fileInput.click()"
+            >
+              <input
+                #fileInput
+                type="file"
+                class="hidden"
+                accept=".pdf,.docx,.doc,.txt,.json,.xlsx"
+                (change)="onFileSelected($event)"
+              />
+              <div class="flex flex-col items-center gap-2">
+                <div class="p-3 bg-emerald-100/60 text-emerald-600 rounded-full group-hover:scale-110 transition-transform">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-6 h-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+                    />
+                  </svg>
+                </div>
+                <span class="text-xs font-bold text-gray-800">
+                  Click to select framework file or drag & drop here
+                </span>
+                <span class="text-[11px] text-gray-400">
+                  Supports PDF, DOCX, DOC, TXT, JSON, XLSX
+                </span>
+              </div>
+            </div>
+          } @else {
+            <!-- Selected File Badge -->
+            <div class="p-3.5 bg-emerald-50/80 border border-emerald-200 rounded-xl flex items-center justify-between">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="p-2 bg-emerald-200/60 text-emerald-800 rounded-lg">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    class="w-5 h-5"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="svgs.document" />
+                  </svg>
+                </div>
+                <div class="min-w-0">
+                  <span class="block text-xs font-bold text-gray-900 truncate">
+                    {{ selectedFile()?.name }}
+                  </span>
+                  <span class="block text-[11px] text-gray-500 font-medium">
+                    {{ ((selectedFile()?.size || 0) / (1024 * 1024)).toFixed(2) }} MB
+                  </span>
+                </div>
+              </div>
+
+              <button
+                (click)="removeSelectedFile()"
+                class="p-1.5 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors cursor-pointer bg-transparent border-none"
+                title="Remove file"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  class="w-4 h-4"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Modal Footer Actions -->
+      <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/50 flex justify-end gap-3">
+        <button
+          (click)="closeUploadModal()"
+          class="px-4 py-2 text-xs font-bold text-gray-600 hover:text-gray-800 bg-white border border-gray-200 hover:border-gray-300 rounded-xl transition-all cursor-pointer"
+        >
+          Cancel
+        </button>
+
+        <button
+          (click)="handleUploadFramework()"
+          [disabled]="isUploading()"
+          class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 disabled:opacity-50 text-white text-xs font-bold rounded-xl shadow-sm transition-all cursor-pointer border-none flex items-center gap-2"
+        >
+          @if (isUploading()) {
+            <svg
+              class="animate-spin h-3.5 w-3.5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path class="opacity-75" fill="currentColor" [attr.d]="svgs.spinner"></path>
+            </svg>
+            Uploading...
+          } @else {
+            Upload Framework Document
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+}
